@@ -1,0 +1,15 @@
+/** Globales **/
+img {
+	max-width: 100%;
+}
+
+.form-header{
+	flex-basis: calc(60% - 1rem);
+}
+
+.contenedor-anuncios{
+	display: flex;
+}
+.anuncio{
+	flex-basis: calc(40% - 1rem);
+}

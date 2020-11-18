@@ -1,0 +1,64 @@
+[07-Sep-2020 17:57:35 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[07-Sep-2020 17:57:35 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[07-Sep-2020 17:57:35 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[07-Sep-2020 17:57:35 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:10:53 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[08-Sep-2020 09:10:53 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[08-Sep-2020 09:10:53 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:10:53 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:10:53 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:12:02 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[08-Sep-2020 09:12:02 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[08-Sep-2020 09:12:02 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:12:02 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:12:02 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:14:00 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[08-Sep-2020 09:14:00 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[08-Sep-2020 09:14:00 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:14:00 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[08-Sep-2020 09:14:00 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:20:22 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[08-Sep-2020 09:20:22 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:20:22 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:20:22 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:40:26 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[08-Sep-2020 09:40:26 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:40:26 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:40:26 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[08-Sep-2020 09:40:45 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[08-Sep-2020 09:40:45 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:40:45 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[08-Sep-2020 09:40:45 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[09-Sep-2020 22:51:01 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[09-Sep-2020 22:51:01 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 17
+[09-Sep-2020 22:51:01 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 29
+[09-Sep-2020 22:51:01 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 29
+[09-Sep-2020 22:51:01 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[09-Sep-2020 22:51:06 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[09-Sep-2020 22:51:06 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 17
+[09-Sep-2020 22:51:06 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 29
+[09-Sep-2020 22:51:06 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/rolUsuario.php on line 29
+[09-Sep-2020 22:51:06 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[10-Nov-2020 19:59:13 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[10-Nov-2020 19:59:13 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[10-Nov-2020 19:59:13 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[10-Nov-2020 19:59:13 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[14-Nov-2020 11:32:55 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[14-Nov-2020 11:32:55 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[14-Nov-2020 11:32:55 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:32:55 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:32:55 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[14-Nov-2020 11:33:04 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[14-Nov-2020 11:33:04 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[14-Nov-2020 11:33:04 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:33:04 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:33:04 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[14-Nov-2020 11:33:10 America/Santiago] PHP Notice:  Undefined index: rol in /home/enterpri/public_html/enterprisechile.cl/menu15/views/datatableajax/datosPaginacion.php on line 100
+[14-Nov-2020 11:33:10 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 16
+[14-Nov-2020 11:33:10 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:33:10 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/persona.php on line 36
+[14-Nov-2020 11:33:10 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120
+[14-Nov-2020 12:50:31 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 16
+[14-Nov-2020 12:50:31 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[14-Nov-2020 12:50:31 America/Santiago] PHP Warning:  Division by zero in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/usuario.php on line 28
+[14-Nov-2020 12:50:31 America/Santiago] PHP Warning:  A non-numeric value encountered in /home/enterpri/public_html/enterprisechile.cl/menu15/controllers/globales.php on line 120

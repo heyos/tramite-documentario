@@ -1,0 +1,79 @@
+[15-Dec-2019 14:10:52 Europe/Berlin] PHP Parse error:  syntax error, unexpected ',' in C:\xampp\htdocs\table_on_table\models\model.php on line 11
+[15-Dec-2019 14:12:11 Europe/Berlin] PHP Parse error:  syntax error, unexpected ',' in C:\xampp\htdocs\table_on_table\models\model.php on line 11
+[15-Dec-2019 14:12:51 Europe/Berlin] PHP Notice:  Undefined variable: respuesta in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 40
+[15-Dec-2019 17:27:59 Europe/Berlin] PHP Notice:  Undefined variable: tabla in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 53
+[15-Dec-2019 17:28:00 Europe/Berlin] PHP Notice:  Undefined variable: error in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 71
+[15-Dec-2019 17:28:58 Europe/Berlin] PHP Notice:  Undefined variable: error in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 56
+[15-Dec-2019 20:44:56 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 46
+[15-Dec-2019 20:45:56 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 46
+[22-Dec-2019 17:16:43 Europe/Berlin] PHP Notice:  Undefined variable: validarRut in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 235
+[22-Dec-2019 17:19:11 Europe/Berlin] PHP Notice:  Undefined variable: validarRut in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 235
+[22-Dec-2019 17:21:58 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 235
+[22-Dec-2019 17:22:23 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 235
+[22-Dec-2019 17:24:45 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 235
+[22-Dec-2019 17:37:27 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 235
+[22-Dec-2019 19:27:53 Europe/Berlin] PHP Notice:  Undefined index: table in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 279
+[22-Dec-2019 19:28:57 Europe/Berlin] PHP Notice:  Undefined index: table in C:\xampp\htdocs\table_on_table\controllers\controller.php on line 279
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined index: numPaginador in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 170
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 22
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 207
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 46
+[23-Dec-2019 14:13:55 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 279
+[23-Dec-2019 14:26:23 Europe/Berlin] PHP Notice:  Undefined index: numPaginador in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 170
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 22
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 207
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 46
+[23-Dec-2019 14:26:24 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 279
+[23-Dec-2019 14:28:05 Europe/Berlin] PHP Notice:  Undefined variable: respuesta in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 52
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined index: numPaginador in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 170
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 22
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 207
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 46
+[23-Dec-2019 14:30:13 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 279
+[23-Dec-2019 14:32:13 Europe/Berlin] PHP Notice:  Undefined variable: respuesta in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 52
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined index: numPaginador in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 170
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 22
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 207
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 46
+[23-Dec-2019 14:32:49 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 279
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined index: numPaginador in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 170
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 22
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined variable: table in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 207
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 46
+[23-Dec-2019 14:39:56 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 279
+[03-Jan-2020 05:05:23 Europe/Berlin] PHP Notice:  Undefined variable: respuesta in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 75
+[03-Jan-2020 05:06:25 Europe/Berlin] PHP Notice:  Undefined variable: respuesta in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 75
+[03-Jan-2020 05:12:58 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 76
+[03-Jan-2020 05:13:01 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 76
+[03-Jan-2020 05:13:01 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 76
+[03-Jan-2020 05:13:03 Europe/Berlin] PHP Notice:  Array to string conversion in C:\xampp\htdocs\table_on_table\views\ajax\persona.php on line 76

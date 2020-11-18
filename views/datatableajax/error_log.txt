@@ -1,0 +1,56 @@
+[15-Dec-2019 15:25:56 Europe/Berlin] PHP Notice:  Undefined index: xRutPer in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 73
+[23-Dec-2019 14:13:15 Europe/Berlin] PHP Notice:  Undefined index: rol in C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php on line 78
+[23-Dec-2019 14:13:15 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 16
+[23-Dec-2019 14:13:15 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 35
+[23-Dec-2019 14:13:15 Europe/Berlin] PHP Warning:  Division by zero in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 35
+[23-Dec-2019 14:13:15 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 120
+[23-Dec-2019 14:13:38 Europe/Berlin] PHP Notice:  Undefined index: rol in C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php on line 78
+[23-Dec-2019 14:13:38 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 16
+[23-Dec-2019 14:13:38 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 35
+[23-Dec-2019 14:13:38 Europe/Berlin] PHP Warning:  Division by zero in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 35
+[23-Dec-2019 14:13:38 Europe/Berlin] PHP Warning:  A non-numeric value encountered in C:\xampp\htdocs\table_on_table\controllers\globales.php on line 120
+[23-Dec-2019 14:40:00 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:40:00 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 179
+[23-Dec-2019 14:40:00 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 182
+[23-Dec-2019 14:40:00 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:40:00 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'TablaCustomModel' not found in C:\xampp\htdocs\table_on_table\controllers\persona.php:198
+Stack trace:
+#0 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(60): Persona::mostrarDetalleInfoPersonaCtr(Array)
+#1 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(87): Ajax->mostrarDataAjax()
+#2 {main}
+  thrown in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:48:27 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php on line 62
+[23-Dec-2019 14:48:27 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:48:27 Europe/Berlin] PHP Notice:  Undefined variable: term in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 195
+[23-Dec-2019 14:48:27 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'TablaCustomModel' not found in C:\xampp\htdocs\table_on_table\controllers\persona.php:198
+Stack trace:
+#0 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(63): Persona::mostrarDetalleInfoPersonaCtr(Array)
+#1 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(91): Ajax->mostrarDataAjax()
+#2 {main}
+  thrown in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:48:31 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 177
+[23-Dec-2019 14:48:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'TablaCustomModel' not found in C:\xampp\htdocs\table_on_table\controllers\persona.php:198
+Stack trace:
+#0 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(63): Persona::mostrarDetalleInfoPersonaCtr(Array)
+#1 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(91): Ajax->mostrarDataAjax()
+#2 {main}
+  thrown in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:50:57 Europe/Berlin] PHP Fatal error:  Uncaught Error: Class 'TablaCustomModel' not found in C:\xampp\htdocs\table_on_table\controllers\persona.php:198
+Stack trace:
+#0 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(64): Persona::mostrarDetalleInfoPersonaCtr(Array)
+#1 C:\xampp\htdocs\table_on_table\views\datatableajax\datosPaginacion.php(92): Ajax->mostrarDataAjax()
+#2 {main}
+  thrown in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 198
+[23-Dec-2019 14:51:42 Europe/Berlin] PHP Warning:  count(): Parameter must be an array or an object that implements Countable in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 199
+[23-Dec-2019 14:51:42 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 214
+[23-Dec-2019 14:55:36 Europe/Berlin] PHP Notice:  Undefined index: id in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 214
+[02-Jan-2020 03:49:34 Europe/Berlin] PHP Notice:  Undefined index: tabla in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 47
+[02-Jan-2020 03:49:34 Europe/Berlin] PHP Notice:  Undefined index: tipo in C:\xampp\htdocs\table_on_table\models\persona.php on line 14
+[02-Jan-2020 07:35:28 Europe/Berlin] PHP Notice:  Undefined index: xRutPer in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 85
+[03-Jan-2020 01:39:19 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 24
+[03-Jan-2020 01:39:19 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 58
+[03-Jan-2020 02:33:52 Europe/Berlin] PHP Notice:  Undefined variable: sql in C:\xampp\htdocs\table_on_table\models\direccion_contacto.php on line 64
+[03-Jan-2020 02:35:09 Europe/Berlin] PHP Notice:  Undefined index: xRutPer in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 248
+[03-Jan-2020 02:35:09 Europe/Berlin] PHP Notice:  Undefined index: xRazSoc in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 249
+[03-Jan-2020 02:35:09 Europe/Berlin] PHP Notice:  Undefined index: xRutPer in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 248
+[03-Jan-2020 02:35:09 Europe/Berlin] PHP Notice:  Undefined index: xRazSoc in C:\xampp\htdocs\table_on_table\controllers\persona.php on line 249
