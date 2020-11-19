@@ -4,6 +4,103 @@ require_once 'conexion.php';
 
 class Model {
 
+    /******************************************
+    //OLD FUNCTIONS
+    ******************************************/
+    public static function guardarDatosMdl($tabla,$columns,$values){
+
+        $respuesta = false;
+
+        $sql = sprintf("INSERT INTO %s (%s) VALUES (%s) ", $tabla,$columns,$values);
+        $query = Conexion::conectar()->prepare($sql);
+
+        if($query -> execute()){
+            $respuesta = true;
+        }else{
+            $respuesta = false;
+        }
+
+        return $respuesta;
+
+        $query -> close();
+
+        $query = null;
+    }
+
+    public static function actualizarDatosMdl($tabla,$set,$column,$value){
+
+        $respuesta = false;
+        $sql = sprintf("UPDATE %s SET %s WHERE %s = '%s' ",$tabla,$set,$column,$value);
+        $query = Conexion::conectar()->prepare($sql);
+
+        if($query -> execute()){
+            $respuesta = true;
+        }else{
+            $respuesta = false;
+        }
+
+        return $respuesta;
+
+        $query -> close();
+
+        $query = null;
+    }
+
+    public static function detalleDatosMdl($tabla,$campo,$valor){
+
+        $sql = sprintf("SELECT * FROM %s WHERE %s = '%s' ",$tabla,$campo,$valor);
+        $query = Conexion::conectar()->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $query -> close();
+
+        $query = null;
+    }
+
+    public static function detalleDatosCustomMdl($tabla,$array){
+
+        $where = "";
+        foreach ($array as $column => $value) {
+            $where .= sprintf(" %s = '%s' AND ",$column,$value);
+        }
+
+        $where = substr($where, 0,-5);
+        $sql = sprintf("SELECT * FROM %s WHERE %s ",$tabla,$where);
+
+        $query = Conexion::conectar()->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $query -> close();
+
+        $query = null;
+    }
+
+    public static function eliminarDatoMdl($tabla,$campo,$valor){
+
+        $sql = sprintf("DELETE FROM %s WHERE %s = '%s' ",$tabla,$campo,$valor);
+        $query = Conexion::conectar()->prepare($sql);
+
+        if($query -> execute()){
+            $respuesta = true;
+        }else{
+            $respuesta = false;
+        }
+
+        return $respuesta;
+
+        $query -> close();
+
+        $query = null;
+    }
+
+    /******************************************
+    //FIN OLD FUNCTIONS
+    ******************************************/
+
     static public function all($params){
 
         $where = "";
@@ -24,21 +121,21 @@ class Model {
                 foreach ($params['join'] as $val) {
 
                     $str = "";
-                    
+
                     switch (count($val)) {
                         case 3:
-                            
+
                             $str = sprintf(" %s ON %s = %s ",$val[0],$val[1],$val[2]);
-                            
+
                             break;
-                            
+
                         default:
                             $str = $val[0];
                             break;
                     }
-                    
+
                     $join .= sprintf(" %s ",$str);
-                    
+
                 }
 
             }elseif (!empty($params['join'])) {
@@ -71,9 +168,9 @@ class Model {
                             $value = $val[2];
 
                             $str = sprintf(" %s %s '%s'",$column,$signo,$value);
-                            
+
                             break;
-                            
+
                         case 2:
                             $column = $val[0];
                             $value = $val[1];
@@ -84,7 +181,7 @@ class Model {
                             $str = $val[0];
                             break;
                     }
-                    
+
                     $where .= sprintf(" %s AND",$str);
                 }
 
@@ -108,7 +205,7 @@ class Model {
             }else{
                 $where .= sprintf(" %s ",$params['search']);
             }
-            
+
         }
 
         if(!empty($where)){
@@ -148,7 +245,7 @@ class Model {
 
         $data = [];
         //echo $sql;
-        
+
         if($query -> execute()){
 
             $data = $query -> fetchAll();
@@ -157,8 +254,8 @@ class Model {
 
         $query = null;
 
-        return $data;       
-        
+        return $data;
+
     }
 
     static public function firstOrAll($table, $params, $data){
@@ -170,7 +267,7 @@ class Model {
             if(is_array($params['where'])){
 
                 if(count($params['where']) > 0){
-                    
+
                     foreach ($params['where'] as $val) {
 
                         $str = "";
@@ -183,24 +280,24 @@ class Model {
                                 $column = $val[0];
                                 $signo = $val[1];
                                 $value = $val[2];
-                                
+
                                 $str = sprintf(" %s %s '%s'",$column,$signo,$value);
-                                
+
                                 break;
-                                
+
                             case 2:
                                 $column = $val[0];
                                 $value = $val[1];
-                                
+
                                 $str = sprintf(" %s = '%s'",$column,$value);
                                 break;
                         }
-                        
+
                         $where .= sprintf(" %s AND",$str);
                     }
 
                     $where = substr($where, 0,-3);
-                                      
+
                 }
 
                 if(!empty($where)){
@@ -213,7 +310,7 @@ class Model {
             }
 
         }
-        
+
         $sql = sprintf("SELECT * FROM %s WHERE deleted = '0' %s",$table,$where);
 
         if(array_key_exists('order',$params) && array_key_exists('dir',$params)){
@@ -223,18 +320,18 @@ class Model {
         $stmt = Conexion::conectar()->prepare($sql);
 
         if($stmt -> execute()){
-            
+
             switch ($data) {
                 case 'first':
                     return $stmt -> fetch();
                     break;
-                
+
                 default://all
                     return $stmt -> fetchAll();
                     break;
             }
-            
-            
+
+
         }else{
             echo $stmt->errorInfo()[2];
         }
@@ -258,11 +355,11 @@ class Model {
                 return self::update($table,$params);
 
             }elseif(array_key_exists('id',$params)){
-                
+
                 unset($params['id']);
-                
+
                 return self::create($table,$params);
-                 
+
             }else{
                 return self::create($table,$params);
             }
@@ -287,9 +384,9 @@ class Model {
         $columns = '';
         $values = '';
         $id = 0;
-        
+
         if(count($params) > 0){
-            
+
             foreach ($params as $key => $item) {
 
                 if($item == ''){
@@ -301,7 +398,7 @@ class Model {
                 }
 
                 $columns .= $key.', ';
-                
+
             }
 
             $columns = substr($columns, 0,-2);
@@ -319,7 +416,7 @@ class Model {
             }else {
                 echo $query -> errorInfo()[2];
             }
-        
+
         }else{
             echo "DB :>> Parametros invalidos";
         }
@@ -336,13 +433,13 @@ class Model {
 
         $columns = '';
         $values = '';
-       
+
         $id = 0;
 
         $response = 0;
 
         if(array_key_exists('id',$params)){
-            
+
             $id = $params['id'];
 
             unset($params['id']);
@@ -381,12 +478,12 @@ class Model {
             }else{
                 echo "DB >> ID no puede ser 0";
             }
-        
+
         }else{
             echo "DB >> no existe un ID";
         }
-        
-        
+
+
         $con = null;
         $query = null;
 
@@ -406,7 +503,7 @@ class Model {
                 $sql = sprintf("DELETE FROM %s WHERE id = :id ",$table);
                 break;
             default:
-                
+
                 break;
         }
 

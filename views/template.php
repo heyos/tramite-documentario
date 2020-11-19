@@ -39,6 +39,8 @@ $enlaces = new Enlaces();
 	<link rel="stylesheet" type="text/css" href="views/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="views/css/custom.css">
 	<link rel="stylesheet" type="text/css" href="views/css/sweetalert.css">
+	<link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/dataTables.bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/responsive.bootstrap.min.css">
 	<link rel="stylesheet" href="views/css/styles.css">
 
 	<!--[if lt IE 9]>
@@ -53,22 +55,25 @@ $enlaces = new Enlaces();
 	<?php
 
 		$enlaces -> enlaceController();
-	
+
 	?>
-	
+
 	<!-- Pixel Admin's javascripts -->
 	<script src="views/js/jquery-2.0.3.min.js"></script>
 	<script src="views/assets/javascripts/jquery-ui-extras.min.js"></script>
 	<script src="views/assets/javascripts/bootstrap.min.js"></script>
 	<script src="views/js/select2.min.js"></script>
 	<script src="views/assets/javascripts/pixel-admin.js"></script>
-	<!-- <script src="views/js/jquery-ui-1-11-4/jquery-ui.min.js"></script> -->
+	<script src="views/js/datatables.net/js/jquery.dataTables.min.js"></script>
+  <script src="views/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+  <script src="views/js/datatables.net-bs/js/dataTables.responsive.min.js"></script>
+  <script src="views/js/datatables.net-bs/js/responsive.bootstrap.min.js"></script>
 	<script src="views/js/jquery.alphanum.js"></script>
 	<script src="views/js/sweetalert.min.js"></script>
 	<script src="views/js/jquery_Rut_min.js"></script>
 
 	<script src="views/mainJs/default.js"></script>
-		
+
 	<?php
 
 		$script = new File();
