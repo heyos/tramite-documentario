@@ -11,6 +11,12 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
 
 <body class="<?php echo $theme; ?> main-menu-animated main-navbar-fixed main-menu-fixed <?php echo $vistaMenu; ?>">
 
+  <div id="preloader">
+    <div class="text-center " id="status">
+        <img src="views/images/Preloader.gif" alt="Preloader" class="img-responsive" style="margin: 0 auto">
+    </div>
+  </div>
+
     <div id="main-wrapper">
 
         <div id="main-navbar" class="navbar navbar-inverse" role="navigation">
@@ -22,8 +28,8 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                 <div class="navbar-header">
 
                     <a href="index.php?action=inicio" class="navbar-brand">
-                        <?php  
-                            $e = new Empresa(); 
+                        <?php
+                            $e = new Empresa();
                             $imagen = $e -> datosEmpresaController("foto");
 
                             $imagen = ($imagen=='')?'main-navbar-logo.png':$imagen;
@@ -31,9 +37,9 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                             $nombreEmpresa = ($nombreEmpresa == '')?'Empresa':$nombreEmpresa;
                         ?>
                         <div><img src="views/images/empresa/<?php echo $imagen;  ?>"></div>
-                        
-                        <?php 
-                            
+
+                        <?php
+
                             echo $nombreEmpresa;
                         ?>
                     </a>
@@ -45,14 +51,14 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
 
                 <div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
                     <div>
-                    
+
                         <?php
 
                             if($vistaMenu == "no-main-menu"){
                                 $navbar = new Menu();
                                 $navbar-> listarNavBarMenuController();
                             }
-                            
+
                         ?>
 
                         <div class="right clearfix">
@@ -110,7 +116,7 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                                         <a href="#" class="notifications-link">MORE NOTIFICATIONS</a>
                                     </div> <!-- / .dropdown-menu -->
                                 </li>
-                                
+
                                 <li class="nav-icon-btn nav-icon-btn-success dropdown">
                                     <a href="mail.ru" class="dropdown-toggle" data-toggle="dropdown">
                                         <span class="label">10</span>
@@ -119,7 +125,7 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                                     </a>
 
                                     <!-- MESSAGES -->
-                                    
+
                                     <div class="dropdown-menu widget-messages-alt no-padding" style="width: 300px;">
                                         <div class="messages-list" id="main-navbar-messages">
 
@@ -229,7 +235,7 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                                 </li>
 
 
-                                
+
 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">

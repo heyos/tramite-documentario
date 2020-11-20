@@ -1,5 +1,5 @@
 init.push(function () {
-
+    
     $(".validar").alphanum();
     $(".validarNumero").numeric({
         allowMinus   : false,
@@ -31,7 +31,7 @@ init.push(function () {
                     $("#img-empresa").html(respuesta.contenido);
                     $("#imagenName").val(respuesta.imagenName);
                     $("#oldImagenName").val(respuesta.imagenName);
-                
+
                 },
                 error: function(){
                     alert("error del sistema");
@@ -39,7 +39,7 @@ init.push(function () {
 
             });
 
-        
+
         }else{
             $.growl.warning({ title: "Un momento..!", message: "Solo se admite formato jpg!" });
         }
@@ -87,7 +87,7 @@ init.push(function () {
     //CONFIGURAR EMPRESA
 
     $("input[name=theme]").click(function(){ //temas
-        
+
         var id = $(this).val();
 
         $('.panel-theme input[name=theme]').removeAttr("checked");
@@ -99,7 +99,7 @@ init.push(function () {
     });
 
     $("input[name=viewMenu]").click(function(){ //temas
-        
+
         var id = $(this).val();
 
         $('.panel-menu input[name=viewMenu]').removeAttr("checked");
@@ -122,7 +122,7 @@ init.push(function () {
                 data: str,
                 dataType:"json",
                 success: function(response){
-                    
+
                     if(response.respuesta == false){
 
                         swal("Error..!",response.mensaje,"error");
@@ -136,8 +136,8 @@ init.push(function () {
                             location.reload();
                         });
                     }
-                        
-                    
+
+
 
                 },
                 error: function(){

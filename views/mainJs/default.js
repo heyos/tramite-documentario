@@ -1,14 +1,20 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+})
 
 init.push(function () {
-	
+
 	$('#main-navbar-notifications').slimScroll({ height: 250 });
 	$('#main-navbar-messages').slimScroll({ height: 250 });
-	
+
+	$('.alpha').alpha();
+	$('.alphanum').alphanum();
+	$('.numeric').numeric();
 
 	//para generar un slider dentro de un div
 	//$('#contenido').slimScroll({ height: 250, alwaysVisible: true, color: '#888',allowPageScroll: true });
 
-	
+
 
 
 	//grafica
@@ -16,7 +22,7 @@ init.push(function () {
 	//accionData('phpAjaxVentas.php','grafica',str);
 
 	//detalle venta
-/*	
+/*
 	$('#detalle-diario').on('click',function (e){
 
 		e.preventDefault();
@@ -30,7 +36,7 @@ init.push(function () {
 	});
 
 */
-   
+
 
     $('.calendar').datepicker({
         format: 'dd-mm-yyyy',
@@ -77,10 +83,10 @@ function cargarData(term,accion,div){
         url: "views/datatableajax/datosPaginacion",
         data: str,
         success: function(data) {
-            
+
             $('#loading').hide();
             $('#'+div).html(data);
-                
+
         }
     });
 }
@@ -94,6 +100,179 @@ function resetFormulario(form){
 
     $('#'+form+' div').removeClass('has-error');
 
-    
 }
 
+function resetFormularioNew(form){
+
+    $(form+' input[type=text]').val('');
+    $(form+' input[type=email]').val('');
+    $(form+' select').val('');
+    $(form+' .select2').val(null).trigger('change');
+
+    $(form+' div').removeClass('has-error');
+
+}
+
+function preloader(){
+    $('#status').fadeIn();
+    $('#preloader').fadeIn('slow')
+}
+
+function hidePreloader(){
+    $('#status').fadeOut(); // will first fade out the loading animation
+    $('#preloader').fadeOut('slow')
+}
+
+function blockPage(){
+    $.blockUI({
+        message: '<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Cargando ...</div>',
+        overlayCSS: {
+            backgroundColor: '#FFF',
+            opacity: 0.8,
+            cursor: 'wait'
+        },
+        css: {
+            border: 0,
+            padding: 0,
+
+        }
+    });
+
+}
+
+function unBlockPage(){
+    $.unblockUI();
+}
+
+function notification(title,message,type){
+
+    switch(type){
+        case 'success':
+            $.growl.notice({ title: title, message: message, size: 'large' });
+            break;
+        case 'error':
+            $.growl.error({ title: title, message: message, size: 'large' });
+            break;
+
+        case 'warning':
+            $.growl.warning({ title: title, message: message, size: 'large' });
+            break;
+
+        default:
+            $.growl({ title: title, message: message, size: 'large' });
+            break;
+    }
+
+}
+
+function cargarDataModal(url,type,str,modal,form){
+
+    if(type == ''){
+        type = 'POST';
+    }
+
+    $.ajax({
+        beforeSend:function(){
+            blockPage();
+        },
+        url: url,
+        cache: false,
+        type: type,
+        dataType: "json",
+        data: str,
+        success: function(response){
+
+            unBlockPage();
+
+            if(response.respuesta == true){
+
+                var data = response.data;
+
+                $.each(data,function(e){
+
+                    if($(form+ ' input[type=checkbox][name="'+e+'"]').length > 0){
+
+                        if(data[e] == '1'){
+                            $(form+' div.switcher').addClass('checked');
+                            $(form+' #'+e).prop('checked',true);
+                        }else{
+                            $(form+' div.switcher').removeClass('checked');
+                            $(form+' #'+e).prop('checked',false);
+                        }
+
+                    }else{
+                        $(form+' #'+e).val(data[e]);
+                    }
+                });
+
+                $(modal).modal('show');
+
+            }else{
+                notification('Error..!', response.message,'error');
+            }
+
+        },
+        error: function(e){
+            unBlockPage();
+            // msgErrorsForm(e);
+
+        }
+
+    });
+
+}
+
+function deleteRow(url,table,slug=null){
+
+    var str = 'slug='+slug;
+
+    bootbox.dialog({
+        message: "Esta seguro de eliminar este registro?",
+        title: "Eliminar Registro",
+        buttons: {
+            cancel: {
+                label: "Cancelar",
+                className: "btn-secondary"
+            },
+            confirm: {
+                label: "Ok",
+                className: "btn-success",
+                callback: function() {
+
+                    $.ajax({
+                        beforeSend:function(){
+                            blockPage();
+                        },
+                        url: url,
+                        cache: false,
+                        type: "DELETE",
+                        dataType: "json",
+                        data: str,
+                        success: function(response){
+
+                            if(response.respuesta==false){
+                                unBlockPage();
+                                notification('Advertencia..!', response.message,'error');
+                            }else{
+
+                                table.draw();
+                                notification('Exito..!', 'Registro eliminado exitosamente','success');
+
+                            }
+
+                        },
+                        error: function(e){
+                            unBlockPage();
+                            console.log(e);
+                        }
+
+                    });
+
+                }
+            }
+
+        },
+        className: "bootbox-sm modal-dialog-centered-custom"
+    });
+
+}

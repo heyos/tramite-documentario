@@ -17,18 +17,33 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
 
 <div id="content-wrapper">
-
+    <input type="hidden" class="mantenimiento" value="<?php echo $mantenimiento; ?>">
     <div class="page-header">
         <h1 class="text-center text-left-sm">
             <?php $enlaces -> pageHeaderController(); ?>
         </h1>
     </div>
-    
+
     <div class="panel panel-default">
 
         <div class="panel-body">
-            
-            Aqui tu codigo
+
+          <div class="form-group">
+              <button type="button" class="btn btn-primary btn-registrar">Registrar Tipo Documento</button>
+          </div>
+
+
+          <table class="table primary-table table-default table-condensed dt-responsive table-bordered table-striped tablaTipoDocumento" style="width:100%">
+            <thead>
+              <tr>
+                <th style="width:5% !important">#</th>
+                <th style="width:70% !important">Descripcion</th>
+                <th style="width:25% !important"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
 
         </div>
 
@@ -36,6 +51,32 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
 </div> <!-- / #content-wrapper -->
 
+<!-- MODAL AGREGAR TIPO DOCUMENTO -->
+<div id="modalTipoDoc" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="formRol" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Descripcion</label>
+                        <div class="col-sm-6">
+                            <input name="descripcion" id="descripcion" class="form-control alphanum" type="text" required>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" id="id" class="form-control" value="0" required>
+                </form>
+            </div> <!-- / .modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="guardarRol" class="btn btn-primary">Guardar</button>
+            </div>
+        </div> <!-- / .modal-content -->
+    </div> <!-- / .modal-dialog -->
+</div> <!-- /.modal -->
 
 
 <?php
