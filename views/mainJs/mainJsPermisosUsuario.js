@@ -1,7 +1,9 @@
-
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
 
 init.push(function () {
-    
+
 
 
 });
@@ -22,7 +24,7 @@ function clickPermiso(idMenu,accion,value,idSub,rol){
         success: function(respuesta){
 
             if(respuesta.respuesta ==  true){
-                
+
                 switch(accion){
                     case "acceso":
 

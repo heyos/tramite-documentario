@@ -55,7 +55,7 @@ class DatatableTipoDocumento  {
           $button =  "
                 <div class='btn-group'>
                   <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$row["id"]."'><i class='fas fa-edit'></i></button>
-                  <button title='Agregar Roles' class='btn btn-info btnAddRol btn-sm' id='".$row["id"]."'><i class='fas fa-bars'></i></button>
+                  <button title='Agregar Roles' class='btn btn-info btnAddRol btn-sm' id='".$row["id"]."' descripcion='".$descripcion."' ><i class='fas fa-bars'></i></button>
                   <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$row["id"]."'><i class='fa fa-times'></i></button>
                 </div>
           ";

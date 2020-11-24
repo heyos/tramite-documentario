@@ -1,3 +1,7 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 var contenedor = 'contenidoTablas';
 var datosTabla = 'dataTablaLogica';
 
@@ -6,7 +10,7 @@ init.push(function () {
     $('.alphanum').alphanum({
         allow:'_'
     });
-    
+
 
     $('.checkbox_val > input').switcher();
 
@@ -69,10 +73,10 @@ init.push(function () {
                         $("#modal-alert").modal("show");
 
                         cargarData('',datosTabla,contenedor);
-                        
+
                     }
 
-                    
+
                 },
                 error: function(){
                     alert("Error General del Sistema");
@@ -111,11 +115,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarData(num,datosTabla,contenedor);
         }
-    
+
     });
 
     $("body").on("click","#listadoOk a",function (e){
@@ -132,7 +136,7 @@ init.push(function () {
         }
 
     });
-    
+
 });
 
 function generarInputs(){
@@ -147,7 +151,7 @@ function generarInputs(){
 
         if(tab[i] == 'TAB_DESC'){
             display = 'style="display:none"';
-        }  
+        }
 
         var selectedString = 'selected';
         var selectedNumerico = '';
@@ -237,8 +241,8 @@ function cargarDataFormulario(tabla){
 
                 $('#myModalLabel').html("Editar Tabla Logica");
                 $('#modalTabla').modal("show");
-                
-                
+
+
             }
 
         },
@@ -266,7 +270,7 @@ function eliminarTabla(id){
                 callback: function() {
 
                     var str = 'tipoRegistro=delete&term='+id;
-                    
+
                     $.ajax({
                         url: "views/ajax/tablaLogica",
                         cache: false,
@@ -299,9 +303,9 @@ function eliminarTabla(id){
                                 var datosTabla = 'dataTablaLogica';
 
                                 cargarData('',datosTabla,contenedor);
-                                
+
                             }
-                        
+
                         console.log(response);
 
                         },
@@ -313,9 +317,9 @@ function eliminarTabla(id){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }

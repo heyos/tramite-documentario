@@ -1,3 +1,7 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 var accion = 'dataTabla';
 var contenedor = 'contenidoDatosTabla';
 
@@ -61,7 +65,7 @@ init.push(function () {
                         $("#modal-alert").modal("show");
 
                         cargarDatosTabla('',accion,contenedor);
-                        
+
                     }
 
                 },
@@ -102,11 +106,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarDatosTabla(num,accion,contenedor);
         }
-    
+
     });
 
     $("body").on("click","#listadoOk a",function (e){
@@ -131,7 +135,7 @@ function resetForm(){
 
     $('#inputs').html('');
     $('#accion').val('add');
-    
+
 }
 
 function mostrarInputsTabla(tabla){
@@ -145,7 +149,7 @@ function mostrarInputsTabla(tabla){
         dataType: 'json',
         data: str,
         success: function(response) {
-            
+
             $('#inputs').html(response.contenido);
             $('#cidtabla').val(tabla);
 
@@ -154,8 +158,8 @@ function mostrarInputsTabla(tabla){
 
             $('.alphanum').alphanum();
             $('.numeric').numeric();
-            
-        
+
+
         },
         error: function(){
             alert('Error General del Sistema');
@@ -175,16 +179,16 @@ function cargarDataFormulario(tabla,codigo){
         dataType: 'json',
         data: str,
         success: function(response) {
-            
+
             $('#inputs').html(response.contenido);
             $('#cidtabla').val(tabla);
-            
+
             $('#myModalLabel').html("Registrar Datos en Tabla: <strong>"+tabla+"</strong>");
             $('#modalTabla').modal("show");
-            
+
             $('.alphanum').alphanum();
             $('.numeric').numeric();
-        
+
         },
         error: function(){
             alert('Error General del Sistema');
@@ -219,10 +223,10 @@ function cargarDatosTabla(term,accion,div){
         url: "views/datatableajax/datosPaginacion",
         data: str,
         success: function(data) {
-            
+
             $('#loading').hide();
             $('#'+div).html(data);
-                
+
         }
     });
 
@@ -277,9 +281,9 @@ function eliminarTabla(id,tbl){
                                 var accion = 'dataTabla';
 
                                 cargarDatosTabla('',accion,contenedor);
-                                
+
                             }
-                        
+
                         },
                         error: function(){
                             alert("Error General del Sistema");
@@ -289,9 +293,9 @@ function eliminarTabla(id,tbl){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }

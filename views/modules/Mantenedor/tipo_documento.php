@@ -52,7 +52,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 </div> <!-- / #content-wrapper -->
 
 <!-- MODAL AGREGAR TIPO DOCUMENTO -->
-<div id="modalTipoDoc" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+<div id="modalReg" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,7 +60,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                 <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
             <div class="modal-body">
-                <form id="formRol" class="form-horizontal">
+                <form id="formTipoDoc" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Descripcion</label>
                         <div class="col-sm-6">
@@ -69,14 +69,58 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                     <input type="hidden" name="id" id="id" class="form-control" value="0" required>
                 </form>
-            </div> <!-- / .modal-body -->
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" id="guardarRol" class="btn btn-primary">Guardar</button>
+                <button type="button" id="guardar" class="btn btn-primary">Guardar</button>
             </div>
-        </div> <!-- / .modal-content -->
-    </div> <!-- / .modal-dialog -->
-</div> <!-- /.modal -->
+        </div>
+    </div>
+</div>
+
+<!-- MODAL AGREGA QUITAR ROL A TIPO DE DOCUMENTO -->
+<div id="modalLista" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+              <div class="row text-center">
+
+                <div class="col-sm-6">
+                  <div class="panel panel-primary">
+                    <div class="panel-heading"><strong>Roles disponibles</strong></div>
+                    <div class="panel-body slimScroll" style="height:200px">
+                      <div class="list-group disponibles">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="panel panel-success">
+                    <div class="panel-heading"><strong>Roles permitidos para firmar</strong></div>
+                    <div class="panel-body slimScroll" style="height:200px">
+                      <div class="list-group ocupados">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <!-- <button type="button" id="guardar" class="btn btn-primary">Guardar</button> -->
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <?php

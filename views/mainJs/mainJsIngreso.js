@@ -1,12 +1,15 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
 
-    
-    $("#signin-form_id").validate({ 
+    $("#signin-form_id").validate({
         focusInvalid: true,
         submitHandler: function(){
 
             var str = $("#signin-form_id").serialize();
-            
+
             $.ajax({
 
                 cache: false,
@@ -42,12 +45,12 @@ init.push(function () {
                 }
 
             });
-        
+
             return false;
         },
         errorPlacement: function () {
 
-        } 
+        }
     });
 
     $("#btn-ingresar").click(function(){
@@ -59,4 +62,3 @@ init.push(function () {
 
 
 });
-

@@ -1,10 +1,13 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
 
-    
     $('.validarTexto').alpha();
     $('.validarTextoNum').alphanum();
     $('.validarNum').numeric();
-    
+
     $("#rol_usuario").select2({
         placeholder: "Seleccionar un Rol"
     });
@@ -20,7 +23,7 @@ init.push(function () {
 
     });
 
-    
+
     //ROL USUARIO
     $("#formRol").validate({
         submitHandler: function(){
@@ -105,7 +108,7 @@ init.push(function () {
                 success: function(response){
 
                     var term = $("#term").val();
-                
+
                     if(response.respuesta == false){
 
                         $("#modal-alert").removeClass("modal-success").addClass("modal-warning");
@@ -126,11 +129,11 @@ init.push(function () {
 
                         $("#modal-alert").modal("show");
 
-                        
+
 
                         resetFormularioUsuario();
                     }
-                
+
                     console.log(response);
 
                 },
@@ -170,11 +173,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarData(num,'dataUsuario','contenidoUsuario');
         }
-    
+
     });
 
     $("body").on("click","#listadoOk a",function (e){
@@ -243,7 +246,7 @@ function eliminarUsuario(id){
                 callback: function() {
 
                     var str = 'accion=eliminar&term='+id;
-                    
+
                     $.ajax({
                         url: "views/ajax/usuario",
                         cache: false,
@@ -273,10 +276,10 @@ function eliminarUsuario(id){
                                 $("#modal-alert").modal("show");
 
                                 cargarData('','dataUsuario','contenidoUsuario');
-                                
+
                             }
-                        
-                            
+
+
 
                         },
                         error: function(){
@@ -287,9 +290,9 @@ function eliminarUsuario(id){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }

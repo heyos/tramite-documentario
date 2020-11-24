@@ -1,3 +1,7 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 var contenedor = 'contenidoTablas';
 var datosTabla = 'dataPaciente';
 
@@ -25,7 +29,7 @@ init.push(function () {
     $('#nRutPer').Rut({
         on_error: function () {
             $('#nRutPer').parent().addClass('has-error');
-            
+
         },
         on_success: function () {
             $('#nRutPer').parent().removeClass('has-error');
@@ -61,7 +65,7 @@ init.push(function () {
                         });
 
                         $('#modalTabla').modal("hide");
-                        
+
                     }
 
                 },
@@ -102,11 +106,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarData(num,datosTabla,contenedor);
         }
-    
+
     });
 
     $("body").on("click","#listadoOk a",function (e){
@@ -132,7 +136,7 @@ init.push(function () {
                 $('#modalTablaDetalle').modal("show");
                 $('.nuevoregistro').hide();
             }
-            
+
         }
 
     });
@@ -172,7 +176,7 @@ init.push(function () {
                             resetFormulario('form-direccion');
                             $('#form-direccion input[name=accion]').val('adddireccion');
                             cargarDataDirecciones('','dataDirecciones','contenidoDirecciones');
-                            
+
                         });
 
                     }
@@ -208,7 +212,7 @@ init.push(function () {
             if(accion=='delete'){
                 eliminarElemento(term,'deletedireccion');
             }
-            
+
         }
     });
 
@@ -225,13 +229,13 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarDataDirecciones(num,'dataDirecciones','contenidoDirecciones');
         }
-    
+
     });
-    
+
 });
 
 function cargarDataFormulario(term,form='',accion=''){
@@ -295,7 +299,7 @@ function eliminarElemento(id,accion=""){
                 callback: function() {
 
                     var str = 'accion='+accion+'&id='+id;
-                    
+
                     $.ajax({
                         url: "views/ajax/persona",
                         cache: false,
@@ -324,11 +328,11 @@ function eliminarElemento(id,accion=""){
                                     }else {
                                         cargarDataDirecciones('','dataDirecciones','contenidoDirecciones');
                                     }
-                                        
+
                                 });
 
                             }
-                        
+
                         },
                         error: function(){
                             alert("Error General del Sistema");
@@ -338,11 +342,11 @@ function eliminarElemento(id,accion=""){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }
 
 function cargarDataDirecciones(term,accion,div){
@@ -368,7 +372,7 @@ function cargarDataDirecciones(term,accion,div){
         url: "views/datatableajax/datosPaginacion",
         data: str,
         success: function(data) {
-            
+
             $('#direcciones .loading').hide();
             $('#'+div).html(data);
 

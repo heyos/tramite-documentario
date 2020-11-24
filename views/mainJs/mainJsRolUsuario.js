@@ -1,5 +1,9 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
-    
+
 
     $('.validarTexto').alphanum();
 
@@ -50,14 +54,14 @@ init.push(function () {
                         $('#modalRol').modal("hide");
                         $("#modal-alert").modal("show");
 
-                        
+
                         cargarData('','dataRol','contenidoRol');
-                        
+
                         resetFormRol();
 
                     }
 
-                    
+
                 },
                 error: function(){
                     alert("Error General del Sistema");
@@ -93,7 +97,7 @@ init.push(function () {
                 if(response.respuesta == true){
 
                     cargarData('','dataRol','contenidoRol');
-                    
+
                 }
 
             },
@@ -122,11 +126,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarData(num,'dataRol','contenidoRol');
         }
-    
+
     });
 
 });
@@ -138,14 +142,14 @@ function cargarDataFormularioRol(id,checkbox){
     $('#oldNombreRol').val($('#tdRol'+id).text());
 
     $('#myModalLabel').html("Actualizar Rol Usuario");
-    
+
     //var checkbox = $('#tdmostrar'+id).text();
 
     if($('#mostrar_inicio').is(':checked')){
         $('#checkbox div').removeClass('checked');
         $('#mostrar_inicio').prop("checked",false);
     }
-    
+
     if(checkbox == '1'){
 
         $('#checkbox div').addClass('checked');
@@ -172,7 +176,7 @@ function eliminarRol(id){
                 callback: function() {
 
                     var str = 'id_rol='+id;
-                    
+
                     $.ajax({
                         url: "views/ajax/rolUsuario",
                         cache: false,
@@ -202,10 +206,10 @@ function eliminarRol(id){
                                 $("#modal-alert").modal("show");
 
                                 cargarData('','dataRol','contenidoRol');
-                                
+
                             }
-                        
-                            
+
+
 
                         },
                         error: function(){
@@ -216,11 +220,11 @@ function eliminarRol(id){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }
 
 function resetFormRol(){
@@ -266,6 +270,5 @@ function elegirInicioPagina(term,inicio,descripcion){
         }
 
     });
-  
-}
 
+}

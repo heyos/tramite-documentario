@@ -491,7 +491,7 @@ class Controller {
         }
 
         $return = array('respuesta'=>$respuestaOk,
-                            'mensaje'=>$mensajeError,
+                            'message'=>$mensajeError,
                             'contenido'=>$contenidoOk,
                             'id'=>$id);
 
@@ -499,41 +499,36 @@ class Controller {
 
     }
 
-    public static function itemDetail($datos){
+    public static function itemDetail($params){
 
-        $respuestaOk = false;
-        $mensajeError = "No se puede ejecutar la aplicacion";
-        $contenidoOk = '';
+      $respuestaOk = false;
+      $mensajeError = "No se puede ejecutar la aplicacion";
+      $contenidoOk = [];
 
-        if(array_key_exists('id',$datos) && array_key_exists('tabla',$datos)){
+      if(array_key_exists('table',$params)){
 
-            $id = Globales::sanearData($datos['id']);
-            $tabla = Globales::sanearData($datos['tabla']);
+          $tabla = Globales::sanearData($params['table']);
 
-            $datos = Model::detalleDatosMdl($tabla,'id',$id);
+          $datos = Model::firstOrAll($tabla,$params,'first');
 
-            if(count($datos) > 0){
-                if(array_key_exists('dFecNac', $datos[0])){
-                    $fecha = $datos[0]['dFecNac'];
-                    $fecha = date('d-m-Y',strtotime($fecha));
-                    $datos[0]['dFecNac'] = $fecha;
-                }
-                $respuestaOk = true;
-                $contenidoOk = $datos[0];
-            }else{
-                $mensajeError = "Parametros incorrectos.";
-            }
+          if(!empty($datos) > 0){
+
+              $respuestaOk = true;
+              $contenidoOk = $datos;
+          }else{
+              $mensajeError = "Parametros incorrectos - NULL.";
+          }
 
 
-        }else{
-            $mensajeError = "Parametros incorrectos.";
-        }
+      }else{
+          $mensajeError = "Parametros incorrectos.";
+      }
 
-        $salidaJson = array('respuesta'=>$respuestaOk,
-                            'mensaje'=>$mensajeError,
-                            'contenido'=>$contenidoOk);
+      $salidaJson = array('respuesta'=>$respuestaOk,
+                          'mensaje'=>$mensajeError,
+                          'data'=>$contenidoOk);
 
-        echo json_encode($salidaJson);
+      return $salidaJson;
 
     }
 
@@ -675,49 +670,40 @@ class Controller {
 
     }
 
-    public static function deleteItem($datos){
+    public static function deleteItem($params){
 
-        $respuestaOk = false;
-        $mensajeError = "No se puede ejecutar la aplicacion";
-        $contenidoOk = '';
+      $respuestaOk = false;
+      $mensajeError = "No se puede ejecutar la aplicacion";
 
-        if($datos['tabla'] !=''){
-            $table = $datos['tabla'] ;
-            if($datos['id']!=''){
+      if($params['table'] !=''){
 
-                $id = $datos['id'];
+          $table = $params['table'];
 
-                switch ($table) {
-                    case 'persona':
-                        $columnId = 'id';
-                        break;
+          if($params['id']!=''){
 
-                    default:
-                        $columnId = 'id';
-                        break;
-                }
+              $id = $params['id'];
+              $type = $params['type'];
 
-                $respuesta = Model::eliminarDatoMdl($table,$columnId,$id);
+              $respuesta = Model::delete($table,$id,$type);
 
-                if($respuesta ==  true){
-                    $respuestaOk = true;
-                    $mensajeError = "Se elimino exitosamente.";
-                }else{
-                    $mensajeError = "No se elimino el registro";
-                }
+              if($respuesta !=  0){
+                  $respuestaOk = true;
+                  $mensajeError = "Se elimino exitosamente.";
+              }else{
+                  $mensajeError = "No se elimino el registro";
+              }
 
-            }else{
-                $mensajeError = "Parametros inccorrectos";
-            }
+          }else{
+              $mensajeError = "Parametros inccorrectos";
+          }
 
-        }else{
-            $mensajeError = "Parametros inccorrectos";
-        }
+      }else{
+          $mensajeError = "Parametros inccorrectos";
+      }
 
-        $salidaJson = array('respuesta'=>$respuestaOk,
-                            'mensaje'=>$mensajeError,
-                            'contenido'=>$contenidoOk);
+      $salidaJson = array('respuesta'=>$respuestaOk,
+                          'message'=>$mensajeError);
 
-        echo json_encode($salidaJson);
+      return $salidaJson;
     }
 }

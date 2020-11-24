@@ -1,5 +1,9 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
-    
+
     $(".validar").alphanum();
     $(".validarNumero").numeric({
         allowMinus   : false,

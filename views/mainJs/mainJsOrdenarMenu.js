@@ -1,3 +1,7 @@
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
 
     //ORDENAR MENU
@@ -25,7 +29,7 @@ init.push(function () {
                     ordenItem[i] = i+1;
 
 
-                    
+
                 };
             }
         });
@@ -49,22 +53,21 @@ init.push(function () {
                 processData: false,
                 success: function(respuesta){
 
-                    
+
                     $("#ordenarMenu").show();
                     $("#guardarOrden").hide();
 
                     $(".bloque").css({"cursor":"default"});
-                    
+
                     $(".flecha").hide();
                     $("#itemMenu").sortable({disabled:true});
-                    
+
                 }
             });
-            
+
         };
 
     });
 
 
 });
-

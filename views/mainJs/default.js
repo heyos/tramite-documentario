@@ -1,11 +1,10 @@
-$(window).on('load', function() { // makes sure the whole site is loaded
-	hidePreloader();
-})
+
 
 init.push(function () {
 
 	$('#main-navbar-notifications').slimScroll({ height: 250 });
 	$('#main-navbar-messages').slimScroll({ height: 250 });
+	$('.slimScroll').slimScroll({ height: 250 });
 
 	$('.alpha').alpha();
 	$('.alphanum').alphanum();
@@ -124,18 +123,33 @@ function hidePreloader(){
 }
 
 function blockPage(){
-    $.blockUI({
-        message: '<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Cargando ...</div>',
-        overlayCSS: {
-            backgroundColor: '#FFF',
-            opacity: 0.8,
-            cursor: 'wait'
-        },
-        css: {
-            border: 0,
-            padding: 0,
+    // $.blockUI({
+    //     message: '<div class="semibold"><span class="ft-refresh-cw icon-spin text-left"></span>&nbsp; Cargando ...</div>',
+    //     overlayCSS: {
+    //         backgroundColor: '#808080',
+    //         opacity: 0.8,
+    //         cursor: 'wait'
+		//
+    //     },
+    //     css: {
+    //         border: 0,
+    //         padding: 0,
+		// 		},
+		// 		baseZ: 2000
+    // });
 
-        }
+		$.blockUI({
+        message: '<div class="semibold">&nbsp; Cargando ...</div>',
+        css: {
+					border: 'none',
+					padding: '15px',
+					backgroundColor: '#000',
+					'-webkit-border-radius': '10px',
+					'-moz-border-radius': '10px',
+					opacity: .5,
+					color: '#fff'
+				},
+				baseZ: 2000
     });
 
 }
@@ -205,6 +219,8 @@ function cargarDataModal(url,type,str,modal,form){
                     }
                 });
 
+								console.log(response)
+
                 $(modal).modal('show');
 
             }else{
@@ -215,6 +231,7 @@ function cargarDataModal(url,type,str,modal,form){
         error: function(e){
             unBlockPage();
             // msgErrorsForm(e);
+						console.log(e);
 
         }
 
@@ -222,9 +239,10 @@ function cargarDataModal(url,type,str,modal,form){
 
 }
 
-function deleteRow(url,table,slug=null){
+function deleteRow(url,table,params,type){
 
-    var str = 'slug='+slug;
+    var str = params != '' ? params : 'params=';
+		var $type = type != '' ? type : 'DELETE';
 
     bootbox.dialog({
         message: "Esta seguro de eliminar este registro?",
@@ -245,7 +263,7 @@ function deleteRow(url,table,slug=null){
                         },
                         url: url,
                         cache: false,
-                        type: "DELETE",
+                        type: $type,
                         dataType: "json",
                         data: str,
                         success: function(response){
@@ -259,6 +277,7 @@ function deleteRow(url,table,slug=null){
                                 notification('Exito..!', 'Registro eliminado exitosamente','success');
 
                             }
+														console.log(response);
 
                         },
                         error: function(e){

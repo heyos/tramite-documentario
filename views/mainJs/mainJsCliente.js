@@ -1,6 +1,10 @@
 var contenedor = 'contenidoTablas';
 var datosTabla = 'dataCliente';
 
+$(window).on('load', function() { // makes sure the whole site is loaded
+	hidePreloader();
+});
+
 init.push(function () {
 
     $('.alpha').alpha();
@@ -25,7 +29,7 @@ init.push(function () {
     $('#nRutPer').Rut({
         on_error: function () {
             $('#nRutPer').parent().addClass('has-error');
-            
+
         },
         on_success: function () {
             $('#nRutPer').parent().removeClass('has-error');
@@ -61,7 +65,7 @@ init.push(function () {
                         });
 
                         $('#modalTabla').modal("hide");
-                        
+
                     }
 
                 },
@@ -102,11 +106,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarData(num,datosTabla,contenedor);
         }
-    
+
     });
 
     $("body").on("click","#listadoOk a",function (e){
@@ -133,7 +137,7 @@ init.push(function () {
                 $('#modalTablaDetalle').modal("show");
                 $('.nuevoregistro').hide();
             }
-            
+
         }
 
     });
@@ -224,7 +228,7 @@ init.push(function () {
                     cargarDataContactos('','dataContactos','contenidoContactos');
                 }
             }
-            
+
         }
     });
 
@@ -241,11 +245,11 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarDataDirecciones(num,'dataDirecciones','contenidoDirecciones');
         }
-    
+
     });
 
     //CONTACTOS
@@ -283,7 +287,7 @@ init.push(function () {
                             resetFormulario('form-contacto');
                             $('#form-contacto input[name=accion]').val('addcontacto');
                             cargarDataContactos('','dataContactos','contenidoContactos');
-                            
+
                         });
 
                     }
@@ -326,7 +330,7 @@ init.push(function () {
             if(accion=='delete'){
                 eliminarElemento(term,'deletecontacto');
             }
-            
+
         }
     });
 
@@ -343,13 +347,13 @@ init.push(function () {
         e.preventDefault();
 
         var num = $(this).attr("href");
-    
+
         if(num != 0){
             cargarDataContactos(num,'dataContactos','contenidoContactos');
         }
-    
+
     });
-    
+
 });
 
 function cargarDataFormulario(term,form='',accion=''){
@@ -413,7 +417,7 @@ function eliminarElemento(id,accion=""){
                 callback: function() {
 
                     var str = 'accion='+accion+'&id='+id;
-                    
+
                     $.ajax({
                         url: "views/ajax/persona",
                         cache: false,
@@ -450,11 +454,11 @@ function eliminarElemento(id,accion=""){
                                     		cargarDataContactos('','dataContactos','contenidoContactos');
                                     		break;
                                     }
-                                        
+
                                 });
 
                             }
-                        
+
                         },
                         error: function(e){
                             console.log(e);
@@ -464,11 +468,11 @@ function eliminarElemento(id,accion=""){
 
                 }
             }
-            
+
         },
         className: "bootbox-sm"
     });
-    
+
 }
 
 function cargarDataDirecciones(term,accion,div){
@@ -494,7 +498,7 @@ function cargarDataDirecciones(term,accion,div){
         url: "views/datatableajax/datosPaginacion",
         data: str,
         success: function(data) {
-            
+
             $('#direcciones .loading').hide();
             $('#'+div).html(data);
 
@@ -525,7 +529,7 @@ function cargarDataContactos(term,accion,div){
         url: "views/datatableajax/datosPaginacion",
         data: str,
         success: function(data) {
-            
+
             $('#contactos .loading').hide();
             $('#'+div).html(data);
 
