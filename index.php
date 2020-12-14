@@ -35,15 +35,15 @@ require_once "controllers/persona.php";
 require_once 'vendor/autoload.php';
 
 $template = new Template();
-$template -> templateController();
+//$template -> templateController();
 
 
-exit();
+//exit();
 // create a writer
 $writer = new SetaPDF_Core_Writer_Http('simple.pdf', true); //nombre como se guardara
 // create a new document instance
 $document = SetaPDF_Core_Document::loadByFilename(
-    '../files-firma/laboratory-Report.pdf', $writer
+    '../files-firma/test.pdf', $writer
 );
 
 // create a signer instance
@@ -63,7 +63,7 @@ $signer->addSignatureField(
 $signer->setReason("Just for testing");
 $signer->setLocation('setasign.com');
 
-$tmpDocument = $signer->preSign(new SetaPDF_Core_Writer_TempFile());
+//$tmpDocument = $signer->preSign(new SetaPDF_Core_Writer_TempFile());
 
 // read certificate and private key from the PFX file
 $pkcs12 = array();
@@ -140,10 +140,10 @@ $visibleAppearance->setShowFormat(
 // define the appearance
 $signer->setAppearance($visibleAppearance);
 
-$signature = $signer->createSignature($tmpDocument, $module);
+//$signature = $signer->createSignature($tmpDocument, $module);
 
 // sign the document and send the final document to the initial writer
-//$signer->sign($module);
+$signer->sign($module);
 
 // save the signature
-$signer->saveSignature($tmpDocument, $signature);
+//$signer->saveSignature($tmpDocument, $signature);
