@@ -13,7 +13,7 @@ $enlaces = new Enlaces();
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title>Tramite Documentario - <?php $enlaces -> titlePageController(); ?></title>
+	<title><?php $enlaces -> titlePageController(); ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
 	<meta name="description" content="sistema Medinort"/>
@@ -28,7 +28,8 @@ $enlaces = new Enlaces();
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin" rel="stylesheet" type="text/css">
 
 	<!-- Pixel Admin's stylesheets -->
-	<link href="views/css/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<!-- <link href="views/css/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
+	<link href="views/assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="views/assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
 	<link href="views/assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
 	<link href="views/assets/stylesheets/pages.min.css" rel="stylesheet" type="text/css">
@@ -39,8 +40,8 @@ $enlaces = new Enlaces();
 	<link rel="stylesheet" type="text/css" href="views/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="views/css/custom.css">
 	<link rel="stylesheet" type="text/css" href="views/css/sweetalert.css">
-	<link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/dataTables.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/responsive.bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/dataTables.bootstrap.min.css"> -->
+	<!-- <link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/responsive.bootstrap.min.css"> -->
 	<link rel="stylesheet" href="views/css/styles.css">
 
 	<!-- Pixel Admin's javascripts -->
@@ -49,10 +50,11 @@ $enlaces = new Enlaces();
 	<script src="views/assets/javascripts/bootstrap.min.js"></script>
 	<script src="views/js/select2.min.js"></script>
 	<script src="views/assets/javascripts/pixel-admin.min.js"></script>
-	<script src="views/js/datatables.net/js/jquery.dataTables.min.js"></script>
-  <script src="views/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+	<!-- <script src="views/js/jquery.dataTables.js"></script> -->
+	<!-- <script src="views/js/datatables.net/js/jquery.dataTables.min.js"></script> -->
+  <!-- <script src="views/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
   <script src="views/js/datatables.net-bs/js/dataTables.responsive.min.js"></script>
-  <script src="views/js/datatables.net-bs/js/responsive.bootstrap.min.js"></script>
+  <script src="views/js/datatables.net-bs/js/responsive.bootstrap.min.js"></script> -->
 	<script src="views/js/jquery.alphanum.js"></script>
 	<script src="views/js/sweetalert.min.js"></script>
 	<script src="views/js/jquery_Rut_min.js"></script>
@@ -65,11 +67,15 @@ $enlaces = new Enlaces();
 </head>
 
 <script>var init = [];</script>
-<!-- Demo script --> <script src="views/assets/demo/demo.js"></script> <!-- / Demo script -->
+<!-- Demo script -->
+<script src="views/assets/demo/demo.js"></script>
+<!-- / Demo script -->
 
 	<?php
 
 		$enlaces -> enlaceController();
+
+
 
 	?>
 	<!-- PRELOADER -->

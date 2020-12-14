@@ -16,7 +16,7 @@ class Enlaces{
 
             $enlaces = "";
             $url = "";
-            
+
         }
 
         $datosController = array("id_rol"=>$rol,"url"=>$url);
@@ -31,9 +31,9 @@ class Enlaces{
             $dir = $respuesta[1];
             $dir = str_replace(" ", "_", $dir);
             $module = "views/modules/".$dir."/".$enlaces.".php";
-            
-        }else{
 
+        }else{
+          
             //acceso sub menu
             $respuesta = EnlacesModels::enlaceSubModel($datosController,"sub_menu AS s, detalle_sub_m AS d");
 
@@ -54,6 +54,7 @@ class Enlaces{
 
                 }else{
                     $module = "views/modules/ingreso.php";
+
                 }
 
             }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="salir"){
@@ -63,11 +64,9 @@ class Enlaces{
             }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="inicio"){
 
                 $module = "views/modules/inicio.php";
-                
 
             }else{
                 $module = "views/modules/ingreso.php";
-                
             }
 
         }
@@ -107,7 +106,7 @@ class Enlaces{
 
             $enlaces = "";
             $url = "";
-            
+
         }
 
         $datos = array('id_rol'=>$rol,
@@ -127,7 +126,7 @@ class Enlaces{
         }
 
         $datos["id_menu"] = $idMenu;
-        
+
         $respuesta = EnlacesModels::mantenimientoDatosModel($datos,"detalle_menu AS d, menu AS m");
         $mantenimiento = false;
 
@@ -192,7 +191,7 @@ class Enlaces{
 
         }
 
-        
+
         echo $contenido;
 
     }

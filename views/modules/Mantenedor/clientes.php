@@ -23,22 +23,22 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
             <?php $enlaces -> pageHeaderController(); ?>
         </h1>
     </div>
-    
+
     <div class="panel panel-default">
 
         <div class="panel-body">
-            
+
             <div class="form-group">
                 <button type="button" class="btn btn-primary btn-registrar">Registrar Cliente</button>
             </div>
-            
+
             <div class="panel panel-primary head_table">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-sm-6">
                             <h4>Mantenedor de Clientes</h4>
                         </div>
-                                
+
                         <div class="col-sm-2">
                             <h5 class="text-right">Por Pag.</h5>
                         </div>
@@ -58,9 +58,9 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                 </div>
             </div>
-            
+
             <div id="contenidoTablas" class="table-primary table-responsive">
-                
+
             </div>
 
             <p id="loading" class="text-center" style="display:none;">
@@ -87,7 +87,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     <input type="hidden" name="xTipoPer" id="xTipoPer" value="j">
                     <div class="form-group">
                         <label>RUT</label>
-                        <input name="nRutPer" id="nRutPer" class="form-control alphanum" type="text" required>
+                        <input name="nRutPer" id="nRutPer" class="form-control" type="text" required>
                     </div>
                     <div class="form-group">
                         <label>Razón Social</label>
@@ -98,7 +98,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         <label>Actividad Económica</label>
                         <input name="xActEco" id="xActEco" class="form-control alpha" type="text" maxlength="10" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Pais</label>
                         <select class="form-control select2" name="cPais" id="cPais" required="">
@@ -156,9 +156,9 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                 <label>N° Dir.</label>
                                                 <input type="text" name="xNumDir" id="xNumDir" class="form-control num" maxlength="15" required="">
                                             </div>
-                                                
+
                                         </div>
-                                        
+
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-md-4">
@@ -168,7 +168,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                     <?php echo Persona::listaSelectCtr('COMUNAS'); ?>
                                                 </select>
                                             </div>
-                                                
+
                                         </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-margin-hr">
@@ -177,16 +177,16 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                     <?php echo Persona::listaSelectCtr('PAIS'); ?>
                                                 </select>
                                             </div>
-                                                
+
                                         </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-margin-hr">
                                                 <label>Email</label>
                                                 <input type="email" name="xEmail" id="xEmail" maxlength="40" class="form-control">
                                             </div>
-                                                
+
                                         </div>
-                                        
+
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-md-4">
@@ -194,14 +194,14 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                 <label>Telefono 1</label>
                                                 <input type="text" name="xTelEnt1" id="xTelEnt1" maxlength="9" class="form-control num">
                                             </div>
-                                                
+
                                         </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-margin-hr">
                                                 <label>Telefono 2</label>
                                                 <input type="text" name="xTelEnt2" id="xTelEnt2" maxlength="9" class="form-control num">
                                             </div>
-                                                
+
                                         </div>
                                         <div class="col-xs-12 col-md-4">
                                             <div class="form-group no-margin-hr">
@@ -227,7 +227,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                     <div class="col-sm-4">
                                         <h4>Registro de Direcciones</h4>
                                     </div>
-                                            
+
                                     <div class="col-sm-2">
                                         <h5 class="text-right">Por Pag.</h5>
                                     </div>
@@ -247,9 +247,9 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="contenidoDirecciones" class="table-primary table-responsive">
-                            
+
                         </div>
 
                         <p id="" class="text-center loading" style="display:none;">
@@ -257,10 +257,10 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         </p>
 
                     </div> <!-- / .tab-pane -->
-                </div> 
+                </div>
 
             </div>
-            
+
         </div> <!-- / .modal-content -->
     </div> <!-- / .modal-dialog -->
 </div>
@@ -278,7 +278,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     <li class="active">
                         <a href="#contactos" data-toggle="tab">Contactos </a>
                     </li>
-                    
+
                 </ul>
 
                 <div class="tab-content tab-content-bordered">
@@ -298,7 +298,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                     <?php echo Persona::listaSelectContactosCtr(); ?>
                                                 </select>
                                             </div>
-                                                
+
                                         </div>
                                         <div class="col-xs-12 col-md-6">
                                             <div class="form-group no-margin-hr">
@@ -309,10 +309,10 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                                 </select>
                                             </div>
                                         </div>
-                                        
-                                        
+
+
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <div class="text-center">
                                             <button type="button" class="btn btn-default close-open" data-open="modalTablaDetalle" data-dismiss="modal">Cerrar</button>
@@ -330,7 +330,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                     <div class="col-sm-4">
                                         <h4>Registro de Contactos</h4>
                                     </div>
-                                            
+
                                     <div class="col-sm-2">
                                         <h5 class="text-right">Por Pag.</h5>
                                     </div>
@@ -350,9 +350,9 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div id="contenidoContactos" class="table-primary table-responsive">
-                            
+
                         </div>
 
                         <p id="" class="text-center loading" style="display:none;">
@@ -360,11 +360,11 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         </p>
 
                     </div>
-                    
-                </div> 
+
+                </div>
 
             </div>
-            
+
         </div> <!-- / .modal-content -->
     </div> <!-- / .modal-dialog -->
 </div>

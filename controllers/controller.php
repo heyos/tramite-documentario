@@ -516,7 +516,7 @@ class Controller {
               $respuestaOk = true;
               $contenidoOk = $datos;
           }else{
-              $mensajeError = "Parametros incorrectos - NULL.";
+              $mensajeError = "Parametros incorrectos.";
           }
 
 

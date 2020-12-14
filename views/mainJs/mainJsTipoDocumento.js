@@ -4,7 +4,7 @@ var modalLista = '#modalLista';
 
 init.push(function () {
 
-  var table = $('.tablaTipoDocumento').DataTable( {
+    var table = $('.tablaTipoDocumento').DataTable( {
       "ajax": {
           url:"ajax/datatable-tipoDocumento.ajax.php",
           data: function(d){
@@ -30,14 +30,14 @@ init.push(function () {
       "language": {
 
           "sProcessing":     "Procesando...",
-          "sLengthMenu":     "Mostrar _MENU_ registros",
+          "sLengthMenu":     "Por Pagina _MENU_",
           "sZeroRecords":    "No se encontraron resultados",
           "sEmptyTable":     "Ningún dato disponible en esta tabla",
           "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
           "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0",
           "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
           "sInfoPostFix":    "",
-          "sSearch":         "Buscar:",
+          "sSearch":         "",
           "sUrl":            "",
           "sInfoThousands":  ",",
           "sLoadingRecords": "Cargando...",
@@ -55,6 +55,9 @@ init.push(function () {
       }
 
     });
+
+    $('#DataTables_Table_0_wrapper .table-caption').text('Tipo Documento');
+  	$('#DataTables_Table_0_wrapper .dataTables_filter input').attr('placeholder', 'Buscar...');
 
     $('.btn-registrar').click(function(){
       $(modalReg+' #myModalLabel').text('Registrar Tipo Documento');
@@ -165,7 +168,7 @@ init.push(function () {
 
     });
 
-    $('.disponibles').on('click', 'button', function(){
+    $('.disponibles').on('click', 'a', function(){
 
       var  $this = $(this);
 
@@ -203,8 +206,8 @@ init.push(function () {
 
     });
 
-    $('.ocupados').on('click', 'button', function(){
-       
+    $('.ocupados').on('click', 'a', function(){
+
        var $this = $(this);
 
        var id = $this.attr('id');

@@ -10,7 +10,7 @@ $enlaces = new Enlaces();
 
 
 <div id="content-wrapper">
-
+	<input type="hidden" class="mantenimiento" value="<?php echo $mantenimiento; ?>">
     <div class="page-header">
         <h1 class="text-center text-left-sm">
             <i class="fa fa-sitemap page-header-icon"></i> <?php $enlaces -> titlePageController(); ?>

@@ -4,7 +4,7 @@ class File{
 
     public static function listarFilesController(){
 
-        if(isset($_GET["action"]) && !empty($_GET["action"])){
+        if(isset($_GET["action"]) && !empty($_GET["action"]) && isset($_SESSION['validar']) ){
 
             $type = "";
 
@@ -42,14 +42,17 @@ class File{
             if(count($respuesta) > 0){ //si cumple porque manda un array con los datos
 
                 foreach ($respuesta as $row => $item) {
-                    
+
                     echo '<script src="views/mainJs/'.$item[2].'"></script>';
                 }
 
             }else if($enlaces == 'ingreso'){
                 echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
-            }else{
+            }else if($enlaces == 'inicio'){
                 echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
+                //luego poner script dashboard
+            }else{
+              echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
             }
 
         }else{

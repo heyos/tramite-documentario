@@ -1,6 +1,8 @@
 <?php
 
-class Persona{
+require_once 'controller.php';
+
+class Persona extends Controller{
 
     public static function mostrarListaPersona($datos){
 
@@ -10,7 +12,7 @@ class Persona{
         $rowsPerPage = $datos['por_pag'];
         $buscar = $datos['buscar'];
         $pageNum = ($datos["numPaginador"] == '')? 1 : $datos["numPaginador"];
-        
+
 
         //Ultimo registro mostrado por el numero de pagina anterior
         $offset = ($pageNum - 1) * $rowsPerPage;
@@ -24,11 +26,11 @@ class Persona{
 
                 $where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',t.xvalor1,' ',p.xActEco) LIKE  '%".$buscar."%' AND ";
             }
-            
+
         }
 
         $where .= sprintf(" p.xTipoPer = '%s' ",$datos['tipo']);
-        
+
         //cantidad de registros
         $cantidad = PersonaModel::mostrarPersonaGeneralModel($where,$datos['tabla']);
         $totalReg = count($cantidad);
@@ -51,7 +53,7 @@ class Persona{
                 $i++;
                 $tipo = $datos['tipo'];
                 $title = "";
-                
+
                 switch ($tipo) {
                     case 'n':
                         $title = "Direcciones";
@@ -70,7 +72,7 @@ class Persona{
                                 <td>'.$fechaNac.'</td>
                                 <td class="text-center">
                         ';
-                        
+
                         break;
 
                     case 'j':
@@ -132,7 +134,7 @@ class Persona{
                         <th>Fecha Nacimiento</th>
                         <th></th>
                 ';
-                
+
                 break;
 
             case 'j':
@@ -172,7 +174,7 @@ class Persona{
         $rowsPerPage = $datos['por_pag'];
         $buscar = $datos['buscar'];
         $pageNum = ($datos["numPaginador"] == '')? 1 : $datos["numPaginador"];
-        
+
         //Ultimo registro mostrado por el numero de pagina anterior
         $offset = ($pageNum - 1) * $rowsPerPage;
 
@@ -180,7 +182,7 @@ class Persona{
 
         $id = $datos['id'];
         $persona_id = $id;
-        
+
         if($datos['tipo']=='direccion'){
             $table = 'direccion';
             $term =  'd.nIdPersona';
@@ -220,7 +222,7 @@ class Persona{
                 $i++;
                 $tipo = $datos['tipo'];
                 $extra = "";
-                
+
                 switch ($tipo) {
                     case 'direccion':
                         $datosPersona = Model::detalleDatosMdl('persona','id',$persona_id);
@@ -244,11 +246,11 @@ class Persona{
                         if($tipopersona =='j'){
                             $extra = '<a href="'.$id.'" data-accion="contacto" data-faena="'.$valor['xNomFaena'].'" title="Contacto" class="btn btn-warning btn-xs btn-rounded"><i class="fa fa-book"></i></a>';
                         }
-                        
+
                         break;
 
                     case 'contacto':
-                        
+
                         $contenido .= '
                             <tr>
                                 <td>'.$i.'</td>
@@ -307,7 +309,7 @@ class Persona{
                 ';
 
                 $identificador = "listadoOk2";
-                
+
                 break;
 
             case 'contacto':
@@ -368,4 +370,6 @@ class Persona{
 
         return $contenido;
     }
+
+    
 }

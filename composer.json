@@ -1,0 +1,11 @@
+{
+    "require": {
+        "setasign/setapdf-signer_eval_ioncube_php7.1": "2.35.0.1507"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://www.setasign.com/downloads/"
+        }
+    ]
+}

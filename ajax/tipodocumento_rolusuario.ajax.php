@@ -30,7 +30,7 @@ class TipoDocumentoRolUsuarioAjax {
     $respuesta = TipoDocumentoRolUsuarioController::deleteItem($params);
 
     echo json_encode($respuesta);
-    
+
   }
 
   public function lista(){
@@ -44,9 +44,9 @@ class TipoDocumentoRolUsuarioAjax {
     if(count($respuesta['disponibles']) > 0){
       foreach ($respuesta['disponibles'] as $id => $disponible) {
         $disponibles .= '
-          <button type="button" tipoDocumento_id = "'.$idTipoDoc.'" id_rol = "'.$id.'" class="list-group-item">
+          <a href="#" tipoDocumento_id = "'.$idTipoDoc.'" id_rol = "'.$id.'" class="list-group-item">
             <strong>'.$disponible.'</strong>
-          </button>
+          </a>
         ';
       }
     }
@@ -56,9 +56,9 @@ class TipoDocumentoRolUsuarioAjax {
     if(count($respuesta['ocupados']) > 0){
       foreach ($respuesta['ocupados'] as $id => $ocupado) {
         $ocupados .= '
-          <button type="button" tipoDocumento_id = "'.$idTipoDoc.'" id_rol= "'.$ocupado['rolUsuario_id'].'" id = "'.$id.'" class="list-group-item">
+          <a href="#" type="button" tipoDocumento_id = "'.$idTipoDoc.'" id_rol= "'.$ocupado['rolUsuario_id'].'" id = "'.$id.'" class="list-group-item">
             <strong>'.$ocupado['descripcion'].'</strong>
-          </button>
+          </a>
         ';
       }
     }

@@ -1,6 +1,8 @@
 <?php
 
-class PersonaModel{
+require_once "model.php";
+
+class PersonaModel extends Model{
 
     public static function mostrarPersonaFilterModel($datos,$tabla){
 
@@ -24,11 +26,11 @@ class PersonaModel{
                         $select,$tabla,$join,$where,$limit);
 
         $query = Conexion::conectar()->prepare($sql);
-        
+
         $query -> execute();
 
         return $query -> fetchAll(PDO::FETCH_ASSOC);
-        
+
         $query -> close();
     }
 
@@ -37,11 +39,11 @@ class PersonaModel{
         $query = Conexion::conectar()->prepare("SELECT *
                                                     FROM $tabla
                                                     WHERE $datos ");
-        
+
         $query -> execute();
 
         return $query -> fetchAll();
-        
+
         $query -> close();
     }
 

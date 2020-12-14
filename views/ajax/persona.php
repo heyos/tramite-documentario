@@ -2,10 +2,8 @@
 
 require_once "../../controllers/globales.php";
 require_once "../../controllers/persona.php";
-require_once "../../controllers/controller.php";
 
 require_once "../../models/persona.php";
-require_once "../../models/model.php";
 require_once "../../models/direccion_contacto.php";
 
 class Ajax{
@@ -91,6 +89,6 @@ if(isset($_POST)){
     $a -> input = $_POST;
 
     $a -> accionPersonaAjax();
-    
+
 
 }

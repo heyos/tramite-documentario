@@ -32,18 +32,18 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
               <button type="button" class="btn btn-primary btn-registrar">Registrar Tipo Documento</button>
           </div>
 
-
-          <table class="table primary-table table-default table-condensed dt-responsive table-bordered table-striped tablaTipoDocumento" style="width:100%">
-            <thead>
-              <tr>
-                <th style="width:5% !important">#</th>
-                <th style="width:70% !important">Descripcion</th>
-                <th style="width:25% !important"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-
+          <div class="table-primary">
+            <table class="table table-default table-condensed table-bordered table-striped tablaTipoDocumento" width="100%">
+              <thead>
+                <tr>
+                  <th style="width:5% !important">#</th>
+                  <th style="width:70% !important">Descripcion</th>
+                  <th style="width:25% !important"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
 
         </div>
 
