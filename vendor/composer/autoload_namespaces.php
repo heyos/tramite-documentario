@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'SetaPDF_' => array($vendorDir . '/setasign/setapdf-signer_eval_ioncube_php7.1/library'),
+    'Google_Service_' => array($vendorDir . '/google/apiclient-services/src'),
 );

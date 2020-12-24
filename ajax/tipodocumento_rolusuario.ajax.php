@@ -56,7 +56,7 @@ class TipoDocumentoRolUsuarioAjax {
     if(count($respuesta['ocupados']) > 0){
       foreach ($respuesta['ocupados'] as $id => $ocupado) {
         $ocupados .= '
-          <a href="#" type="button" tipoDocumento_id = "'.$idTipoDoc.'" id_rol= "'.$ocupado['rolUsuario_id'].'" id = "'.$id.'" class="list-group-item">
+          <a href="#" tipoDocumento_id = "'.$idTipoDoc.'" id_rol= "'.$ocupado['rolUsuario_id'].'" id = "'.$id.'" class="list-group-item">
             <strong>'.$ocupado['descripcion'].'</strong>
           </a>
         ';
@@ -70,6 +70,39 @@ class TipoDocumentoRolUsuarioAjax {
 
     echo json_encode($salidaJson);
 
+  }
+
+  public function listaRolPorTipoDocumento(){
+
+    $respuestaOk = false;
+    $rolesPermitidos = '';
+
+    $tipoDocumento_id = $this->params['tipoDocumento_id'];
+    $respuesta = TipoDocumentoRolUsuarioController::listaRolesPermitidosFirma($tipoDocumento_id);
+
+    if(count($respuesta) > 0){
+      $respuestaOk = true;
+      $orden = 0;
+      foreach ($respuesta as $rol) {
+
+        $rolesPermitidos .='
+          <a href="#" tipoDocumento_id = "'.$tipoDocumento_id.'" id_rol= "'.$rol['rolUsuario_id'].'" orden="'.$orden.'" rol_name = "'.$rol['descripcion'].'"
+          class="list-group-item">
+            <strong>'.$rol['descripcion'].'</strong>
+          </a>
+        ';
+
+        $orden++;
+      }
+    }
+
+    $salidaJson = array(
+      'respuesta'=>$respuestaOk,
+      'roles' => $rolesPermitidos,
+
+    );
+
+    echo json_encode($salidaJson);
   }
 
 }
@@ -89,6 +122,9 @@ if(isset($_POST['accion'])){
 
     case 'list':
       $item -> lista();
+      break;
+    case 'list_rol':
+      $item -> listaRolPorTipoDocumento();
       break;
     default:
 

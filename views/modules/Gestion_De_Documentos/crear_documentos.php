@@ -123,15 +123,71 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
       						</div>
 
                   <br><br>
-                  <button type="button" class="btn btn-primary wizard-next-step-btn">Sig.</button>
+                  <button type="button" data-div="datos" class="btn btn-primary wizard-next-step-btn">Sig.</button>
                 </div>
 
                 <div class="wizard-pane" id="firmantes" style="display: none;">
-                  This is step 2
+                  <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-4">
+                      <div class="form-group no-margin-hr">
+      									<label class="control-label">Tipo de documento</label>
+      									<select class="form-control valid" name="tipoDocumento_id" id="tipoDocumento_id" required>
+                          <option value="">-Seleccionar-</option>
+                          <?php
+                            $tipos = TipoDocumentoController::allData();
+                            if($tipos['respuesta']){
+                              foreach ($tipos['contenido'] as $row) {
+                                echo sprintf('<option value="%d">%s</option>',$row['id'],$row['descripcion']) ;
+                              }
+                            }
+                          ?>
+                        <select>
+      								</div>
+                    </div>
+                    <div class="col-sm-4"></div>
+                  </div>
 
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Roles permitidos para firmar</strong></div>
+                        <div class="panel-body slimScroll" style="height:200px">
+                          <div class="list-group disponibles">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Usuarios disponibles para firmar</strong></div>
+                        <div class="panel-body slimScroll" style="height:200px">
+                          <div class="list-group users-disponibles">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Usuarios aptos para firmar</strong></div>
+                        <div class="panel-body slimScroll" style="height:200px">
+                          <div class="list-group users-aptos">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <input type="" id="lista_aptos" name="lista_aptos">
+                  <input type="" id="rol_activo">
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
-                  <button type="button" class="btn btn-primary wizard-next-step-btn">Next</button>
+                  <button type="button" data-div="firmantes" class="btn btn-primary wizard-next-step-btn">Next</button>
                 </div>
 
                 <div class="wizard-pane" id="subirPdf" style="display: none;">

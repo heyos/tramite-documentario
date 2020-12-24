@@ -15,11 +15,11 @@ class UsuarioModel{
         $query = Conexion::conectar()->prepare("SELECT u.id_usuario,u.dni,u.nombres,u.apellidos,u.num_tel,u.id_rol,r.descripcion,u.username
                                                     FROM $tabla
                                                     WHERE $where u.borrado = '0' AND u.id_rol = r.id_rol $limit");
-        
+
         $query -> execute();
 
         return $query -> fetchAll();
-        
+
         $query -> close();
     }
 
@@ -28,11 +28,11 @@ class UsuarioModel{
         $query = Conexion::conectar()->prepare("SELECT u.id_usuario,u.dni,u.nombres,u.apellidos,u.num_tel,u.id_rol,r.descripcion,u.username
                                                     FROM $tabla
                                                     WHERE $datos u.borrado = '0' AND u.id_rol = r.id_rol");
-        
+
         $query -> execute();
 
         return $query -> fetchAll();
-        
+
         $query -> close();
     }
 
@@ -60,7 +60,7 @@ class UsuarioModel{
 
     public static function actualizarUsuarioModel($datos,$tabla){
 
-        $query = Conexion::conectar()->prepare("UPDATE $tabla 
+        $query = Conexion::conectar()->prepare("UPDATE $tabla
                                                 SET nombres =:nombres,apellidos =:apellidos,
                                                 dni =:dni,num_tel =:num_tel,
                                                 id_rol =:id_rol,username =:username,password =:password
@@ -92,7 +92,7 @@ class UsuarioModel{
         $query -> execute();
 
         return $query -> fetch();
-        
+
         $query -> close();
     }
 
@@ -104,13 +104,12 @@ class UsuarioModel{
         $query -> execute();
 
         return $query -> fetch();
-        
-        $query -> close();
+
     }
 
     public static function eliminarUsuarioModel($datos,$tabla){
 
-        $query = Conexion::conectar()->prepare("UPDATE $tabla 
+        $query = Conexion::conectar()->prepare("UPDATE $tabla
                                                 SET borrado = '1'
                                                 WHERE id_usuario = :id_usuario ");
         $query -> bindParam(":id_usuario",$datos,PDO::PARAM_INT);
@@ -121,7 +120,23 @@ class UsuarioModel{
             return "error";
         }
 
-        $query -> close();
     }
-    
+
+    public static function listUserPerRolModel($params,$table){
+      $all = [];
+
+      $conexion = Conexion::conectar();
+      $query = $conexion->prepare("SELECT * FROM $table WHERE borrado = '0' AND id_rol = :id_rol");
+      $query -> bindParam(":id_rol",$params,PDO::PARAM_INT);
+      $query -> execute();
+
+      $all = $query -> fetchAll();
+      
+      $conexion = null;
+      $query = null;
+
+      return $all;
+
+    }
+
 }

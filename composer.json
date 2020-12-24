@@ -1,6 +1,7 @@
 {
     "require": {
-        "setasign/setapdf-signer_eval_ioncube_php7.1": "2.35.0.1507"
+        "setasign/setapdf-signer_eval_ioncube_php7.1": "2.35.0.1507",
+        "google/apiclient": "^2.7"
     },
     "repositories": [
         {

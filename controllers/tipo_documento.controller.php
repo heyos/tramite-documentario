@@ -75,5 +75,29 @@ class TipoDocumentoController extends Controller {
     return $salida;
   }
 
+  public static function allData(){
+    $contenidoOk = [];
+    $respuestaOk = false;
+
+    $table = "tipo_documento";
+    $params = array(
+      'table'=> $table
+    );
+
+    $data = TipoDocumentoModel::all($params);
+
+    if(count($data) > 0){
+      $contenidoOk = $data;
+      $respuestaOk = true;
+    }
+
+    $salida = array(
+      'contenido'=>$contenidoOk,
+      'respuesta'=>$respuestaOk
+    );
+
+    return $salida;
+  }
+
 
 }

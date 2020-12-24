@@ -3,12 +3,64 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 });
 
 var form = "#formDocumento";
+var listaAptos = [];
 
 var wizard = ".ui-wizard-documento";
 
 init.push(function () {
 
-  $('.rut_paciente').Rut({
+  $(wizard).pixelWizard({
+    onChange: function () {
+      console.log('Current step: ' + this.currentStep());
+    },
+    onFinish: function () {
+      // Disable changing step. To enable changing step just call this.unfreeze()
+      this.freeze();
+      console.log('Wizard is freezed');
+      console.log('Finished!');
+    }
+  });
+
+  $('.wizard-next-step-btn').text('Siguiente');
+  $('.wizard-prev-step-btn').text('Atras');
+  $('.wizard-next-step-btn.finish').text('Guardar documento');
+
+  $('.wizard-next-step-btn').click(function () {
+		var div = $(this).attr('data-div');
+    var error = 0;
+    var vacio = 0;
+
+    $('.form-group').each(function(){
+      if($(this).hasClass('has-error')){
+        error++;
+      }
+    });
+
+    $('#'+div+' .valid').each(function(){
+      if($(this).val() == ''){
+        vacio++;
+      }
+    });
+
+    if(vacio > 0 || error > 0){
+      notification('Advertencia ..!','Se detectaron campos sin completar y/o erroneos.','error');
+      //return;
+    }
+
+    $(this).parents(wizard).pixelWizard('nextStep');
+
+  });
+
+  $('.wizard-prev-step-btn').click(function () {
+    $(this).parents(wizard).pixelWizard('prevStep');
+  });
+
+  $('.wizard-go-to-step-btn').click(function () {
+    $(this).parents(wizard).pixelWizard('setCurrentStep', 2);
+  });
+
+	//*****************************************************
+	$('.rut_paciente').Rut({
       on_error: function () {
 
           $('.rut_paciente').parent().parent().addClass('has-error');
@@ -90,55 +142,165 @@ init.push(function () {
 
 	});
 
-  $(wizard).pixelWizard({
-    onChange: function () {
-      console.log('Current step: ' + this.currentStep());
-    },
-    onFinish: function () {
-      // Disable changing step. To enable changing step just call this.unfreeze()
-      this.freeze();
-      console.log('Wizard is freezed');
-      console.log('Finished!');
-    }
-  });
+	$('#tipoDocumento_id').change(function(){
+		var tipo = $(this).val();
+		cargarRolesPorTipoDocumento(tipo);
+	});
 
-  $('.wizard-next-step-btn').text('Siguiente');
-  $('.wizard-prev-step-btn').text('Atras');
-  $('.wizard-next-step-btn.finish').text('Guardar documento');
+	$('.disponibles').on('click','a',function(e){
 
-  $('.wizard-next-step-btn').click(function () {
+		$('.disponibles a').removeClass('active');
+		e.preventDefault();
 
-    var error = 0;
-    var vacio = 0;
+		var $this = $(this);
+		var orden = $(this).attr('orden');
+		var idRol = $(this).attr('id_rol');
+		var rolName = $(this).attr('rol_name');
 
-    $('.form-group').each(function(){
-      if($(this).hasClass('has-error')){
-        error++;
-      }
-    });
+		$this.addClass('active');
+		$('#rol_activo').val(idRol);
 
-    $('.valid').each(function(){
-      if($(this).val() == ''){
-        vacio++;
-      }
-    });
+		var str = 'accion=listPerRol&idRol='+idRol+'&rolName='+rolName+'&orden='+orden+'&aptos='+$('#lista_aptos').val();
 
-    if(vacio > 0 || error > 0){
-      notification('Advertencia ..!','Se detectaron campos sin completar y/o erroneos.','error');
-      return;
-    }
+		$.ajax({
+			 beforeSend: function(){
+				 blockPage();
+			 },
+			 cache:false,
+			 type:'POST',
+			 dataType: 'json',
+			 url: 'ajax/usuario.ajax.php',
+			 data: str,
+			 success: function(response){
 
-    $(this).parents(wizard).pixelWizard('nextStep');
+				 unBlockPage();
 
-  });
+				 $('.users-disponibles').html(response.usuarios);
 
-  $('.wizard-prev-step-btn').click(function () {
-    $(this).parents(wizard).pixelWizard('prevStep');
-  });
+			 },
+			 error: function(e){
+				 unBlockPage();
+				 console.log(e.responseText);
 
-  $('.wizard-go-to-step-btn').click(function () {
-    $(this).parents(wizard).pixelWizard('setCurrentStep', 2);
-  });
+			 }
+		});
 
+	});
+
+	$('.users-disponibles').on('click','a',function(e){
+		e.preventDefault();
+
+		var element = [];
+		$(this).remove();
+
+		var orden = $(this).attr('orden_por_rol');
+		var idRol = $(this).attr('id_rol');
+		var rolName = $(this).attr('rol_name');
+		var idUsuario = $(this).attr('usuario_id');
+		var fullname = $(this).attr('fullname');
+
+		console.log(orden);
+
+		element.push({'rol_id':idRol,
+									'usuario_id':idUsuario,
+									'fullname':fullname,
+									'rol_name':rolName,
+									'orden':orden});
+
+		var str = 'accion=lista_aptos&user='+JSON.stringify(element[0])+'&aptos='+$('#lista_aptos').val()+'&orden='+orden;
+
+		$.ajax({
+			beforeSend: function(){
+				blockPage();
+			},
+			cache:false,
+			type: 'POST',
+			dataType: 'json',
+			url: 'ajax/documentos.ajax.php',
+			data:str,
+			success:function(response){
+
+				$('.users-aptos').html(response.contenido);
+				$('#lista_aptos').val(JSON.stringify(response.lista));
+				console.log(response.lista);
+				unBlockPage();
+			},
+			error:function(e) {
+				console.log(e);
+				unBlockPage();
+			}
+		});
+
+	});
+
+	$('.users-aptos').on('click','a',function(e){
+
+		e.preventDefault();
+
+		var $this = $(this);
+		var active = $('#rol_activo').val();
+		var activeRol = $(this).attr('id_rol');
+		var orden = $(this).attr('orden_por_rol');
+		var idUsuario = $(this).attr('usuario_id');
+		var listaAptos = JSON.parse($('#lista_aptos').val());
+		var listaNueva = [];
+
+		if(activeRol == active){
+			$this.appendTo('.users-disponibles');
+		}else{
+			$this.fadeOut();
+		}
+
+		listaNueva = listaAptos[orden].filter(user => user.usuario_id != idUsuario);
+
+		listaAptos[orden] = listaNueva;
+		$('#lista_aptos').val(JSON.stringify(listaAptos));
+		console.log(listaAptos);
+
+	});
 
 });
+
+function cargarRolesPorTipoDocumento(tipo){
+
+	$('.disponibles').html('');
+	$('.users-disponibles').html('');
+	$('.users-aptos').html('');
+	$('#lista_aptos').val('');
+
+	if(tipo !=''){
+		var str = 'accion=list_rol&tipoDocumento_id='+tipo;
+		$.ajax({
+			beforeSend: function(){
+				blockPage();
+			},
+			cache:false,
+			type: 'POST',
+			dataType: 'json',
+			url: 'ajax/tipodocumento_rolusuario.ajax.php',
+			data:str,
+			success:function(response){
+
+				if(response.respuesta == false){
+					notification('Advertencia..!',response.mensaje,'error');
+				}else{
+					$('.disponibles').html(response.roles);
+				}
+				//console.log(response);
+				unBlockPage();
+			},
+			error:function(e) {
+				console.log(e);
+				unBlockPage();
+			}
+		});
+	}
+}
+
+function listarJsonAptos(){
+
+	$('.users-aptos a').each(function(){
+
+	});
+
+}

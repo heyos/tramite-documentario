@@ -10,7 +10,7 @@ class Usuario{
         $rowsPerPage = $datos['por_pag'];
         $buscar = $datos['buscar'];
         $pageNum = ($datos["numPaginador"] == '')? 1 : $datos["numPaginador"];
-        
+
 
         //Ultimo registro mostrado por el numero de pagina anterior
         $offset = ($pageNum - 1) * $rowsPerPage;
@@ -40,7 +40,7 @@ class Usuario{
 
                 $id = $valor[0];
                 $i++;
-                
+
                 $contenido .= '
                     <tr>
                         <td>'.$i.'</td>
@@ -104,7 +104,7 @@ class Usuario{
         '.$paginacion;
 
         return $salida;
-        
+
     }
 
     public static function guardarUsuarioController($datos){
@@ -146,7 +146,7 @@ class Usuario{
 
                 break;
             }
-            
+
         }
 
         if($error == 0){
@@ -160,7 +160,7 @@ class Usuario{
                 $where = sprintf(" u.dni = '%s' AND ",$datos["dni"]);
                 $q =  UsuarioModel::datosUsuarioModel($where,"usuario AS u, rol_usuario AS r");
 
-                
+
             }
         }
 
@@ -177,7 +177,7 @@ class Usuario{
         $mensajeError = "No se puede ejecutar la aplicacion.";
         $respuestaOk = false;
         $contenidoOk = "";
-        
+
         $verificar = array("fullname"=>$datos["nombres"].' '.$datos["apellidos"],
                             "dni"=>$datos["dni"],
                             "num_tel"=>$datos["num_tel"],
@@ -221,9 +221,9 @@ class Usuario{
                     }
 
                 }
-                
+
             }
-        
+
         }
 
         if($error == 0){
@@ -247,7 +247,7 @@ class Usuario{
                     $id = $q[0];
 
                     $contenidoOk = '
-                        
+
                             <td id="tddni'.$id.'">'.$q[1].'</td>
                             <td id="tdnom'.$id.'">'.$q[2].'</td>
                             <td id="tdape'.$id.'">'.$q[3].'</td>
@@ -259,7 +259,7 @@ class Usuario{
                                 <a href="#" onclick="event.preventDefault();cargarDataFormularioUsuario('.$id.')" class="btn btn-primary btn-xs btn-rounded"><i class="far fa-edit"></i></a>
                                 <a href="#" onclick="event.preventDefault();eliminarUsuario('.$id.')" class="btn btn-danger btn-xs btn-rounded"><i class="far fa-trash-alt"></i></a>
                             </td>
-                        
+
                     ';
                 }
             }
@@ -328,6 +328,24 @@ class Usuario{
                             "mensaje"=>$mensajeError);
 
         echo json_encode($salidaJson);
+    }
+
+    public static function listUserPerRol($idRol){
+      $data = [];
+      $respuestaOk = false;
+
+      $table = 'usuario';
+      $respuesta = UsuarioModel::listUserPerRolModel($idRol,$table);
+
+      if(count($respuesta) > 0){
+        $data = $respuesta;
+        $respuestaOk = true;
+      }
+
+      $salidaJson = array("respuesta"=>$respuestaOk,
+                          "data"=>$data);
+
+      return $salidaJson;
     }
 
 }
