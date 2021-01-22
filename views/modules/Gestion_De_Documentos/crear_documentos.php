@@ -61,6 +61,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
               </ul>
             </div>
             <form id="formDocumento" class="form-horizontal">
+              <input type="" name="id" id="idDocumento" value="3">
               <div class="wizard-content panel">
                 <div class="wizard-pane" id="datos">
                   <div class="row">
@@ -183,7 +184,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
 
                   </div>
-                  <input type="" id="lista_aptos" name="lista_aptos">
+                  <input type="" id="lista_aptos" name="lista_usuarios_firma" class="valid">
                   <input type="" id="rol_activo">
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
@@ -191,7 +192,38 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                 </div>
 
                 <div class="wizard-pane" id="subirPdf" style="display: none;">
-                  This is step 3
+                  <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-sm-12 col-md-4">
+
+                      <input type="file" id="file" style="display: none;">
+                      <input type="hidden" id="name_documento" name="name_documento" class="name_documento">
+
+                      <div class="btn-group btn-group-justified">
+                        <div class="btn-group" role="group">
+                          <button class="btn btn-success" id="adjuntar">Adjuntar Documento</button>
+                        </div>
+                        <div class="btn-group" role="group" style="display: none;">
+                          <button class="btn btn-primary" id="ver">Ver Documento</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-sm-12 col-md-4">
+                      <div class="alert alert-warning" id="error">
+                        <p class="text-center">Documento aun no esta cargado</p>
+                      </div>
+
+                      <div class="alert alert-success" id="success" style="display: none;">
+                        <p class="text-center">Documento almacenado correctamente</p>
+                      </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                  </div>
 
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
@@ -202,10 +234,11 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                   Verifique los datos antes de guardar el documento<br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
                   <!-- <button class="btn btn-success wizard-go-to-step-btn">Go to Step 2</button> -->
-                  <button type="button" class="btn btn-primary wizard-next-step-btn finish">Guardar Documento</button>
+                  <button type="button" id="guardarDocumento" class="btn btn-primary wizard-next-step-btn finish">Guardar Documento</button>
                 </div>
 
               </div>
+              <input type="" name="usuario" value="<?php echo $_SESSION['user'] ?>">
             </form>
           </div>
 

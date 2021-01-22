@@ -179,7 +179,7 @@ function notification(title,message,type){
 
 }
 
-function cargarDataModal(url,type,str,modal,form){
+function cargarDataModal(url,type,str,modal,form,callback=null){
 
     if(type == ''){
         type = 'POST';
@@ -219,20 +219,29 @@ function cargarDataModal(url,type,str,modal,form){
                     }
                 });
 
-								console.log(response)
+				console.log(response)
 
-                $(modal).modal('show');
+                if(modal != ''){
+                    $(modal).modal('show');
+                }
+                
 
             }else{
                 notification('Error..!', response.message,'error');
+            }
+
+            if(callback){
+                callback(true,data);
             }
 
         },
         error: function(e){
             unBlockPage();
             // msgErrorsForm(e);
-						console.log(e);
-
+			console.log(e);
+            if(callback){
+                callback(false,e.status);
+            }
         }
 
     });

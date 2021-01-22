@@ -40,8 +40,12 @@ init.push(function () {
                     $("#btn-ingresar").text("Sign In");
 
                 },
-                error: function(){
+                error: function(e){
                     alert("Error General del sistema");
+                    console.log(e);
+
+                    $("#btn-ingresar").removeClass("btn-success").addClass("btn-primary");
+                    $("#btn-ingresar").text("Sign In");
                 }
 
             });

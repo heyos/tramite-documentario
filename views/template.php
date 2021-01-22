@@ -59,6 +59,7 @@ $enlaces = new Enlaces();
 	<script src="views/js/sweetalert.min.js"></script>
 	<script src="views/js/jquery_Rut_min.js"></script>
 	<script src="views/js/jquery.blockUI.js"></script>
+	<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
 	<!--[if lt IE 9]>
 		<script src="views/assets/javascripts/ie.min.js"></script>

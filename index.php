@@ -34,9 +34,12 @@ require_once "controllers/datosTabla.php";
 require_once "controllers/tablaLogica.php";
 require_once "controllers/persona.php";
 require_once "controllers/tipo_documento.controller.php";
+require_once "controllers/documentos.controller.php";
+
 require_once 'vendor/autoload.php';
 
-//$template -> templateController();
+$template = new Template();
+$template -> templateController();
 
 
 /*
@@ -245,52 +248,15 @@ $signer->setAppearance($visibleAppearance);
 $signer->sign($module);
 */
 
+
+/*
 require __DIR__ . '/vendor/autoload.php';
 
-// if (php_sapi_name() != 'cli') {
-//     throw new Exception('This application must be run on the command line.');
-// }
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxApp;
+use Kunnu\Dropbox\DropboxFile;
 
-/**
- * Returns an authorized API client.
- * @return Google_Client the authorized client object
- */
-function getClient()
-{
-    $client = new Google_Client();
-    $client->setApplicationName('Google Drive API PHP Quickstart');
-    $client->setAuthConfig('credentials.json');
-    $client->setRedirectUri('http://tramite.devel');
-    $client->addScope(Google_Service_Drive::DRIVE);
-    
-    // $client->setAccessType('offline');
-    // $client->setPrompt('select_account consent');
+//enlace para utilizar
+//https://stackoverflow.com/questions/56445545/upload-files-to-dropbox-with-php-dropbox-sdk-php
 
-
-    if (isset($_GET['code'])) {
-        $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-    }
-
-    return $client;
-}
-
-
-// Get the API client and construct the service object.
-$client = getClient(); exit();
-$service = new Google_Service_Drive($client);
-
-// Print the names and IDs for up to 10 files.
-$optParams = array(
-  'pageSize' => 10,
-  'fields' => 'nextPageToken, files(id, name)'
-);
-$results = $service->files->listFiles($optParams);
-
-if (count($results->getFiles()) == 0) {
-    print "No files found.\n";
-} else {
-    print "Files:\n";
-    foreach ($results->getFiles() as $file) {
-        printf("%s (%s)\n", $file->getName(), $file->getId());
-    }
-}
+*/

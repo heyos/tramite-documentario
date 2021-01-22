@@ -24,6 +24,7 @@ class Ingreso{
             $rol = $respuesta["id_rol"];
             $username = $datos["username"];
             //$sucursal = $respuesta["id_sucursal"];
+            $usuario_id = $respuesta['id_usuario'];
 
             $where = sprintf(" id_rol = '%d' AND ",$rol);
             $datosRol = RolUsuarioModel::datosRolModel($where,'rol_usuario');
@@ -31,7 +32,6 @@ class Ingreso{
             
             if($intentos < $maxIntentos){
                 
-
                 if(crypt($datos["password"],$passwordDB) == $passwordDB){
                                        
                     session_start();
@@ -39,6 +39,8 @@ class Ingreso{
                     $_SESSION["fullname"] = $nombres." ".$apellidos;
                     $_SESSION["nombres"] = $nombres;
                     $_SESSION["rol"] = $rol;
+                    $_SESSION['user'] = $username;
+                    $_SESSION['usuario_id'] = $usuario_id;
                     
                     $intentos = 0;
 

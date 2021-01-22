@@ -134,16 +134,12 @@ class Model {
                             break;
                     }
 
-                    $join .= sprintf(" %s ",$str);
+                    $join .= sprintf(" JOIN %s ",$str);
 
                 }
 
             }elseif (!empty($params['join'])) {
-                $join = $params['join'];
-            }
-
-            if(!empty($join)){
-                $join = ' JOIN '.$join;
+                $join = sprintf(" JOIN %s ",$params['join']) ;
             }
 
         }
@@ -393,7 +389,7 @@ class Model {
                     $item = 'null';
                     $values .= sprintf(" %s, ",$item);
                 }else{
-                    $item = Globales::sanearData($item);
+                    $item = $item;
                     $values .= sprintf(" '%s', ",$item);
                 }
 
