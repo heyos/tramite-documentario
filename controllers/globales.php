@@ -18,6 +18,18 @@ class Globales{
         return crypt($password, $salt);
     }
 
+    public static function encriptar($text){
+        $text = self::unEspacio($text);
+
+        return password_hash($text, PASSWORD_BCRYPT, ['cost' => 12,]);
+    }
+
+    public static function verificar($text,$hash){
+
+        return password_verify($text, $hash);
+
+    }
+
     //limpiar informacion de los formularios en el servidor
     public static function sanearData($string){
 

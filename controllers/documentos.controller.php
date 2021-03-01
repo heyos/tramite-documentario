@@ -27,13 +27,27 @@ class DocumentoController extends Controller {
 
 				$idDocumento = $respuesta;
 				$arr = [];
+				
+				$orden_firma = 1;
+				$totalItems = 0;
+				$i = 0;
+
+				$error = 0;
 
 				//guardamos usuarios aptos para firma
 				foreach ($usuariosFirma as $lista) {
+
+					$totalItems = count($lista);
+					$i = 0;
+
 					foreach ($lista as $usuario) {
+
+						$i++;
+
 						$arr['documento_id'] = $idDocumento;
 						$arr['usuario_id'] = $usuario['usuario_id'];
 						$arr['orden'] = $usuario['orden'];
+						$arr['orden_firma'] = $orden_firma;
 						$arr['usuario_crea'] = $params['usuario_crea'];
 						$arr['fecha_crea'] = $params['fecha_crea'];
 
@@ -41,8 +55,15 @@ class DocumentoController extends Controller {
 
 						if($res == 0){
 							$message .= $usuario['fullname'].'<br>';
+						}else{
+							//guardado exitosamente
+							if($i != $totalItems){
+								$orden_firma ++;
+							}
 						}
 					}
+					$orden_firma++;
+
 				}
 
 				$respuestaOk = true;
@@ -54,6 +75,7 @@ class DocumentoController extends Controller {
 				}
 
 				$data = $usuariosFirma;
+
 
 			}else{
 				$message = "Error al guardar el documento.";
@@ -71,6 +93,118 @@ class DocumentoController extends Controller {
 	}
 
 	static public function editarDocumento($params){
+
+		$respuestaOk = false;
+		$message = "";
+		$data = "";
+
+		$estadoFirma = array_key_exists('name_documento', $params) ? 
+						$params['name_documento'] != '' ? '1' : '0'
+						: '0' ; //1:en proceso de firma - 0:pendiente
+		$params['estado_firma'] = $estadoFirma;
+
+		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
+		
+
+		if(count($usuariosFirma) > 0){
+
+			$respuesta = DocumentoModel::update('documento',$params);
+
+			if($respuesta != 0){
+
+				$idDocumento = $respuesta;
+				$arr = [];
+
+				//eliminado logico de los usuarios firmantes
+				$where = array(
+				 	'deleted'=>'1',
+				 	'usuario_modifica' => $params['usuario_modifica'],
+				 	'fecha_modifica' => $params['fecha_modifica'],
+				 	'where' => array(
+				 		['documento_id',$idDocumento],
+				 		['deleted','0']
+				 	)
+				);
+				$delete = DocumentoUsuarioModel::update('documento_usuario',$where);
+
+				$orden_firma = 1;
+				$totalItems = 0;
+				$i = 0;
+
+				//guardamos usuarios aptos para firma
+				foreach ($usuariosFirma as $lista) {
+
+					$totalItems = count($lista);
+					$i = 0;
+
+					foreach ($lista as $usuario) {
+
+						$i++;
+
+						$arr['documento_id'] = $idDocumento;
+						$arr['usuario_id'] = $usuario['usuario_id'];
+						$arr['orden'] = $usuario['orden'];
+						$arr['orden_firma'] = $orden_firma;
+						$arr['deleted'] = '0';
+
+						$arr['useDeleted'] = '0';
+						$arr['where'] = array(
+							['documento_id',$idDocumento],
+							['usuario_id',$usuario['usuario_id']]
+						);
+
+						$existeUsuario = DocumentoUsuarioModel::firstOrAll('documento_usuario',$arr,'first');
+
+						if(!empty($existeUsuario)){
+							$arr['usuario_modifica'] = $params['usuario_modifica'];
+							$arr['fecha_modifica'] = $params['fecha_modifica'];
+							
+						}else{
+							$arr['usuario_crea'] = $params['usuario_modifica'];
+							$arr['fecha_crea'] = $params['fecha_modifica'];
+							$arr['usuario_modifica'] = '';
+							$arr['fecha_modifica'] = '';
+							
+						}
+
+						$res = DocumentoUsuarioModel::createOrUpdate('documento_usuario',$arr);
+
+						if($res == 0){
+							$message .= $usuario['fullname'].'<br>';
+						}else{
+							//actualizado o guardado exitosamente
+							if($i != $totalItems){
+								$orden_firma ++;
+							}
+							
+						}
+
+					}
+
+					$orden_firma ++;
+				}
+
+				$respuestaOk = true;
+
+				if($message !=''){
+					$message = "Se actualizo exitosamente el documento.<br><b>Pero hubo error al guardar estos usuarios:<b><br>".$message;
+				}else{
+					$message = "Se actualizo exitosamente el documento.";
+				}
+
+			}else{
+				$message = "Error al guardar el documento.";
+			}
+
+		}else{
+			$message = 'Debe seleccionar almenos un usuario para firmar.';
+		}
+
+		return array(
+			'respuesta'=>$respuestaOk,
+			'mensaje'=>$message,
+			'data'=>$data
+		);
 
 	}
 
@@ -126,7 +260,8 @@ class DocumentoController extends Controller {
 	    		'rut_cliente' => $documento[7],
 	    		'xRazSoc' => $documento[8],
 	    		'rut_paciente' => $documento[9],
-	    		'xNombrePaciente' => $documento[10]
+	    		'xNombrePaciente' => $documento[10],
+	    		'name_tipo_doc' => $documento[11]
 	    	);
 
 	    	$lista = json_decode($documento[6],true);
@@ -160,6 +295,32 @@ class DocumentoController extends Controller {
 			'message'=>$message,
 			'data'=>$data
 		);
+	}
+
+	static public function updateEstadoDocumento($params){
+
+		$respuestaOk = false;
+		$message = "";
+		$data = "";
+
+		$params['fecha_modifica'] = date('Y-m-d H:i:s');
+
+		$respuesta = DocumentoModel::update('documento',$params);
+
+		if($respuesta !=0){
+			$respuestaOk = true;
+		}
+		
+		return array(
+			'respuesta'=>$respuestaOk,
+			'mensaje'=>$message,
+			'data'=>$respuesta
+		);
+
+	}
+
+	static public function firmarDocumento($params){
+		
 	}
 
 }

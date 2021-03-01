@@ -76,6 +76,7 @@ class TipoDocumentoRolUsuarioAjax {
 
     $respuestaOk = false;
     $rolesPermitidos = '';
+    $dataRoles = [];
 
     $tipoDocumento_id = $this->params['tipoDocumento_id'];
     $respuesta = TipoDocumentoRolUsuarioController::listaRolesPermitidosFirma($tipoDocumento_id);
@@ -84,6 +85,12 @@ class TipoDocumentoRolUsuarioAjax {
       $respuestaOk = true;
       $orden = 0;
       foreach ($respuesta as $rol) {
+
+        $dataRoles[] = array(
+          'id' => $rol['rolUsuario_id'],
+          'orden' => $orden,
+          'name' => $rol['descripcion']
+        );
 
         $rolesPermitidos .='
           <a href="#" tipoDocumento_id = "'.$tipoDocumento_id.'" id_rol= "'.$rol['rolUsuario_id'].'" orden="'.$orden.'" rol_name = "'.$rol['descripcion'].'"
@@ -99,7 +106,7 @@ class TipoDocumentoRolUsuarioAjax {
     $salidaJson = array(
       'respuesta'=>$respuestaOk,
       'roles' => $rolesPermitidos,
-
+      'dataRoles' => $dataRoles
     );
 
     echo json_encode($salidaJson);

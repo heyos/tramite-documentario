@@ -224,14 +224,18 @@ function cargarDataModal(url,type,str,modal,form,callback=null){
                 if(modal != ''){
                     $(modal).modal('show');
                 }
+
+                if(callback){
+                    callback(true,data);
+                }
                 
 
             }else{
                 notification('Error..!', response.message,'error');
-            }
 
-            if(callback){
-                callback(true,data);
+                if(callback){
+                    callback(false,{});
+                }
             }
 
         },

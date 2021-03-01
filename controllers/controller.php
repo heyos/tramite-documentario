@@ -12,6 +12,13 @@ class Controller {
         $mensajeError = "No se puede ejecutar la aplicacion";
         $contenidoOk = '';
 
+        $outType = '';
+        if(array_key_exists('outType',$datos)){
+            $outType = $datos['outType'];
+            unset($datos['outType']);
+        }
+
+
         unset($datos['accion']);
         unset($datos['id']);
 
@@ -142,7 +149,17 @@ class Controller {
                             'mensaje'=>$mensajeError,
                             'contenido'=>$contenidoOk);
 
-        echo json_encode($salidaJson);
+        switch ($outType) {
+            case 'return':
+                return $salidaJson;
+                break;
+            
+            default:
+                echo json_encode($salidaJson);
+                break;
+        }
+
+        
 
     }
 
@@ -422,8 +439,8 @@ class Controller {
 
       $params['start'] = $start;
       $params['length'] = $length;
-      $params['order'] = $orderColumn;
-      $params['dir'] = $orderDir;
+      $params['order'] = !isset($params['order']) ? $orderColumn : $params['order'];
+      $params['dir'] = !isset($params['dir']) ? $orderDir : $params['dir'];
 
       $qRecords = Model::all($params);
 
@@ -491,9 +508,9 @@ class Controller {
         }
 
         $return = array('respuesta'=>$respuestaOk,
-                            'message'=>$mensajeError,
-                            'contenido'=>$contenidoOk,
-                            'id'=>$id);
+                        'message'=>$mensajeError,
+                        'contenido'=>$contenidoOk,
+                        'id'=>$id);
 
         return $return;
 

@@ -3,6 +3,7 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 });
 
 var form = "#formDocumento";
+var formPersona = "#formPersona";
 var listaAptos = [];
 
 var wizard = ".ui-wizard-documento";
@@ -15,7 +16,7 @@ init.push(function () {
     },
     onFinish: function () {
       // Disable changing step. To enable changing step just call this.unfreeze()
-      this.freeze();
+      //this.freeze();
       console.log('Wizard is freezed');
       console.log('Finished!');
     }
@@ -25,31 +26,61 @@ init.push(function () {
   $('.wizard-prev-step-btn').text('Atras');
   $('.wizard-next-step-btn.finish').text('Guardar documento');
 
-  $('.wizard-next-step-btn').click(function () {
+  	$('.wizard-next-step-btn').click(function () {
 		var div = $(this).attr('data-div');
-    var error = 0;
-    var vacio = 0;
+	    var error = 0;
+	    var vacio = 0;
 
-    $('.form-group').each(function(){
-      if($(this).hasClass('has-error')){
-        error++;
-      }
-    });
+	    $(form+' .form-group').each(function(){
+	      if($(this).hasClass('has-error')){
+	        error++;
+	      }
+	    });
 
-    $('#'+div+' .valid').each(function(){
-      if($(this).val() == ''){
-        vacio++;
-      }
-    });
+	    $('#'+div+' .valid').each(function(){
+	      if($(this).val() == ''){
+	        vacio++;
+	      }
+	    });
 
-    if(vacio > 0 || error > 0){
-      notification('Advertencia ..!','Se detectaron campos sin completar y/o erroneos.','error');
-      return;
-    }
+	    if(vacio > 0 || error > 0){
+	      notification('Advertencia ..!','Se detectaron campos sin completar y/o erroneos.','error');
+	      return;
+	    }
 
-    $(this).parents(wizard).pixelWizard('nextStep');
+	    if($('#'+div+' #lista_roles_aptos').length > 0){
 
-  });
+	    	var inputUsuariosAptos = $('#'+div+' #lista_aptos').val();
+	    	var usuariosAptos = inputUsuariosAptos != '' ? JSON.parse(inputUsuariosAptos) : [];
+	    	var totalGrupos = usuariosAptos.length;
+
+	    	var inputRoles = $('#'+div+' #lista_roles_aptos').val();
+	    	var roles = inputRoles != '' ? JSON.parse(inputRoles) : [];
+	    	var totalUsuariosFirmar = roles.length;
+
+	    	if(totalUsuariosFirmar != totalGrupos){
+	    		notification('Advertencia ..!','Seleccione un usuario de cada grupo para continuar.','error');
+	      		return;
+	    	}
+
+	    	var totalAptos = 0;
+	    	usuariosAptos.forEach(grupo => {
+
+	    		if(grupo.length > 0){
+	    			totalAptos ++;
+	    		}
+
+	    	});
+
+	    	if(totalUsuariosFirmar != totalAptos){
+	    		notification('Advertencia ..!','Seleccione un usuario de cada grupo para continuar.','error');
+	      		return;
+	    	}
+	    }
+
+	    $(this).parents(wizard).pixelWizard('nextStep');
+
+  	});
 
   	$('.wizard-prev-step-btn').click(function () {
    		$(this).parents(wizard).pixelWizard('prevStep');
@@ -82,6 +113,16 @@ init.push(function () {
           	$('.rut_cliente').parent().parent().removeClass('has-error');
           	$('.search-cliente').removeAttr('disabled');
       	},
+      	format_on: 'keyup'
+  	});
+
+  	$('.rut_persona').Rut({
+      	on_error: function () {
+          	$('.rut_persona').parent().parent().addClass('has-error');
+        },
+      	on_success: function () {
+          	$('.rut_persona').parent().parent().removeClass('has-error');
+        },
       	format_on: 'keyup'
   	});
 
@@ -142,9 +183,102 @@ init.push(function () {
 
 	});
 
+	//REGISTRAR PERSONA
+	$('.add-persona').click(function(){
+		var inputRut = $(this).attr('data-input');
+		var rut = $('#'+inputRut).val();
+		var type = $(this).attr('data-type');
+		var title = type == 'cliente' ? 'Registrar Cliente' : 'Registrar Paciente';
+		var tipoPersona = type == 'cliente' ? 'j' : 'n'; //cliente:j - paciente:n
+
+		resetFormulario('formPersona');
+
+		$('#myModalLabel').html(title);
+		$('#formPersona #nRutPer').val(rut);
+		$('#formPersona #xTipoPer').val(tipoPersona);
+		if(type == 'cliente'){
+			$('.natural').hide();
+			$('.juridica').show();
+			$('.juridica input').addClass('valid');
+			$('.natural input').removeClass('valid');
+		}else{
+			$('.natural').show();
+			$('.juridica').hide();
+			$('.juridica input').removeClass('valid');
+			$('.natural input').addClass('valid');
+		}
+
+		$('#modalReg').modal('show');
+	});
+
+	$('#guardarPersona').click(function(){
+
+		var error = 0;
+		var vacio = 0;
+
+		$(formPersona+' .form-group').each(function(){
+	      if($(this).hasClass('has-error')){
+	        error++;
+	      }
+	    });
+
+	    $(formPersona+' .valid').each(function(){
+	      if($(this).val() == ''){
+	        vacio++;
+	      }
+	    });
+
+	    if(vacio > 0 || error > 0){
+	      notification('Advertencia ..!','Se detectaron campos sin completar y/o erroneos.','error');
+	      return;
+	    }
+
+	    var tipo = $('#formPersona #xTipoPer').val();
+	    var inputName = tipo == 'j' ? $(form+' #xNombreCliente') : $(form+' #xRazSoc');
+	    var inputId = tipo == 'j' ? $(form+' #cliente_id') : $(form+' #paciente_id');
+	    var ocultar = tipo == 'j' ? '.add-cliente' : '.add-paciente';
+
+	    var str = $(formPersona).serialize()+'&accion=add';
+
+	    $.ajax({
+			beforeSend: function(){
+				inputName.val('');
+				inputId.val('');
+				blockPage();
+			},
+			cache:false,
+			type: 'POST',
+			dataType: 'json',
+			url: 'ajax/persona.ajax.php',
+			data:str,
+			success:function(response){
+
+				if(response.respuesta == false){
+					notification('Advertencia..!',response.mensaje,'error');
+				}else{
+
+					inputName.val(response.data.fullname);
+					inputId.val(response.data.id);
+
+					$(form+' '+ocultar).hide();
+					$('#modalReg').modal('hide');
+				}
+				//console.log(response);
+				unBlockPage();
+			},
+			error:function(e) {
+				console.log(e);
+				unBlockPage();
+			}
+		});
+
+	});
+
 
 	$('#tipoDocumento_id').change(function(){
 		var tipo = $(this).val();
+		var name_tipo_doc = $(form+' #tipoDocumento_id option:selected').text();
+		$(form+' #name_tipo_doc').val(name_tipo_doc);
 		cargarRolesPorTipoDocumento(tipo);
 	});
 
@@ -160,31 +294,15 @@ init.push(function () {
 
 		$this.addClass('active');
 		$('#rol_activo').val(idRol);
+		var detalleRolActivo = {
+			orden: orden,
+			id: idRol,
+			name: rolName
+		};
 
-		var str = 'accion=listPerRol&idRol='+idRol+'&rolName='+rolName+'&orden='+orden+'&aptos='+$('#lista_aptos').val();
+		$('#detalle_rol_activo').val(JSON.stringify(detalleRolActivo));
 
-		$.ajax({
-			 beforeSend: function(){
-				 blockPage();
-			 },
-			 cache:false,
-			 type:'POST',
-			 dataType: 'json',
-			 url: 'ajax/usuario.ajax.php',
-			 data: str,
-			 success: function(response){
-
-				 unBlockPage();
-
-				 $('.users-disponibles').html(response.usuarios);
-
-			 },
-			 error: function(e){
-				 unBlockPage();
-				 console.log(e.responseText);
-
-			 }
-		});
+		listUsersPerRol(detalleRolActivo);
 
 	});
 
@@ -221,8 +339,13 @@ init.push(function () {
 
 				$('.users-aptos').html(response.contenido);
 				$('#lista_aptos').val(JSON.stringify(response.lista));
-				console.log(response.lista);
+				console.log('response :>>',response);
+				console.log('lista :>>',response.lista);
 				unBlockPage();
+
+				var detalleRolActivo = JSON.parse($('#detalle_rol_activo').val());
+				listUsersPerRol(detalleRolActivo);
+
 			},
 			error:function(e) {
 				console.log(e);
@@ -253,8 +376,10 @@ init.push(function () {
 		listaNueva = listaAptos[orden].filter(user => user.usuario_id != idUsuario);
 
 		listaAptos[orden] = listaNueva;
+
 		$('#lista_aptos').val(JSON.stringify(listaAptos));
 		console.log(listaAptos);
+		console.log('listaNueva :>>',listaNueva);
 
 	});
 
@@ -266,6 +391,11 @@ init.push(function () {
 	$('#file').on('change',function(){
 
 		var file = this.files[0];
+		var oldFile = $('.name_documento').val();
+		var rut_cliente = $('#rut_cliente').val();
+		var nombre_paciente = $('#xNombrePaciente').val();
+		var tipo_doc = $('#name_tipo_doc').val();
+
 		$('.name_documento').val('');
 
 		if(file.type != 'application/pdf'){
@@ -278,12 +408,16 @@ init.push(function () {
 
         datos.append("file",file);
         datos.append("accion",'upload_file');
+        datos.append('oldFile',oldFile);
+        datos.append('rut_cliente',rut_cliente);
+        datos.append('nombre_paciente',nombre_paciente);
+        datos.append('tipo_doc',tipo_doc);
 
         $.ajax({
         	beforeSend: function(){
         		blockPage();
-        		$('#error').fadeIn();
-            	$('#success').hide();
+        		$(form +' .tieneDocumento').hide();
+				$(form+' .noTieneDocumento').fadeIn();
         	},
             url:"ajax/documentos.ajax.php",
             method: "POST",
@@ -294,15 +428,14 @@ init.push(function () {
             processData: false,
             success: function(response){
 
-                console.log(response);
                 unBlockPage();
 
                 if(response.respuesta == false){
                 	notification('Advertencia..!',response.mensaje,'error');
                 }else{
                 	$('.name_documento').val(response.data);
-                	$('#error').hide();
-                	$('#success').fadeIn();
+                	$(form +' .tieneDocumento').fadeIn();
+					$(form+' .noTieneDocumento').hide();
                 }
 
             },
@@ -314,6 +447,43 @@ init.push(function () {
         });
 
 	});
+
+	$('#ver').click(async function(){
+
+		var name = $(form+' #name_documento').val();
+
+		if(name == ''){
+			notification('Error..!','Documento no encontrado','error');
+			return;
+		}
+
+		name = name.replace('.pdf','');
+		var datos = 'accion=readfile&name='+name;
+
+		var formData = new FormData();
+    	formData.append('accion','readfile');
+    	formData.append('name',name);
+
+    	blockPage();
+
+    	var url = 'ajax/documentos.ajax.php';
+    	const response = await fetch(url,{
+				            method: 'post',
+				            body: formData,
+	          			});
+    	var blob = await response.blob();
+    	var blobUrl = URL.createObjectURL(blob);
+
+    	if(blob.type == 'application/pdf'){
+    		window.open(blobUrl, "Visualizar", "width=900,height=1000");
+    	}else{
+    		notification('Error..!','Documento no encontrado','error');
+    	}
+
+    	unBlockPage();
+
+    });
+	
 
 	$('#guardarDocumento').click(function(){
 
@@ -332,9 +502,17 @@ init.push(function () {
 			data:str,
 			success:function(response){
 
-				
 				console.log(response);
 				unBlockPage();
+
+				if(response.respuesta == false){
+					notification('Error..!',response.mensaje,'error');
+				}else{
+					notification('Exito..!',response.mensaje,'success');
+
+					window.location.href = 'index.php?action=lista_de_documentos';
+				}
+				
 			},
 			error:function(e) {
 				console.log(e);
@@ -357,10 +535,18 @@ init.push(function () {
 				cargarRolesPorTipoDocumento(data.tipoDocumento_id);
 				$(form +' .users-aptos').html(data.users_aptos);
 				$(form+' #lista_aptos').val(data.lista_aptos);
+
+				if(data.name_documento != null){
+					$(form +' .tieneDocumento').show();
+					$(form+' .noTieneDocumento').hide();
+
+				}else{
+					$(form +' .tieneDocumento').hide();
+					$(form+' .noTieneDocumento').show();
+				}
 			}
 		});
 
-		
 	}
 
 	//LISTA-DE-DOCUMENTOS
@@ -431,8 +617,32 @@ init.push(function () {
 	  		e.preventDefault();
 
 	  		var id = $(this).attr('id');
+	  		var str = 'accion=redirigir&id='+id;
 
-	  		console.log(id);
+	  		$.ajax({
+				beforeSend: function(){
+					blockPage();
+				},
+				cache:false,
+				type: 'POST',
+				dataType: 'json',
+				url: 'ajax/documentos.ajax.php',
+				data:str,
+				success:function(response){
+
+					if(response.respuesta == false){
+						notification('Advertencia..!',response.mensaje,'error');
+					}else{
+						window.location.href = 'index.php?action=crear_documentos';
+					}
+					
+					unBlockPage();
+				},
+				error:function(e) {
+					console.log(e);
+					unBlockPage();
+				}
+			});
 	  	});
 
 	}
@@ -446,8 +656,7 @@ function cargarRolesPorTipoDocumento(tipo){
 	$('.users-disponibles').html('');
 	$('.users-aptos').html('');
 	$('#lista_aptos').val('');
-
-	console.log(tipo)
+	$('#lista_roles_aptos').val('');
 
 	if(tipo !=''){
 		var str = 'accion=list_rol&tipoDocumento_id='+tipo;
@@ -466,6 +675,7 @@ function cargarRolesPorTipoDocumento(tipo){
 					notification('Advertencia..!',response.mensaje,'error');
 				}else{
 					$('.disponibles').html(response.roles);
+					$('#lista_roles_aptos').val(JSON.stringify(response.dataRoles))
 				}
 				console.log('cargarRolesPorTipoDocumento',response);
 				unBlockPage();
@@ -482,6 +692,35 @@ function listarJsonAptos(){
 
 	$('.users-aptos a').each(function(){
 
+	});
+
+}
+
+function listUsersPerRol(rol){
+
+	var str = 'accion=listPerRol&idRol='+rol.id+'&rolName='+rol.name+'&orden='+rol.orden+'&aptos='+$('#lista_aptos').val();
+
+	$.ajax({
+		beforeSend: function(){
+			blockPage();
+		},
+		cache:false,
+		type:'POST',
+		dataType: 'json',
+		url: 'ajax/usuario.ajax.php',
+		data: str,
+		success: function(response){
+
+			unBlockPage();
+
+			$('.users-disponibles').html(response.usuarios);
+
+		},
+		error: function(e){
+			unBlockPage();
+			console.log(e.responseText);
+
+		}
 	});
 
 }

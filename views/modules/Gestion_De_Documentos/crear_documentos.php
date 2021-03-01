@@ -8,6 +8,13 @@ if(!$_SESSION["validar"]){
 
 }
 
+$id = isset($_SESSION['idDocumento']) ? $_SESSION['idDocumento'] : 0;
+//$id = 2;
+
+if(isset($_SESSION['idDocumento'])){
+  unset($_SESSION['idDocumento']);
+}
+
 include 'views/modules/start-main-wrapper.php';
 include 'views/modules/main-menu.php';
 
@@ -61,7 +68,9 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
               </ul>
             </div>
             <form id="formDocumento" class="form-horizontal">
-              <input type="" name="id" id="idDocumento" value="3">
+
+              <input type="hidden" name="id" id="idDocumento" value="<?php echo $id; ?>">
+
               <div class="wizard-content panel">
                 <div class="wizard-pane" id="datos">
                   <div class="row">
@@ -78,12 +87,12 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                               <i class="fas fa-search"></i>
                             </button>
                             <button type="button" data-show="search-paciente" data-display="xNombrePaciente" data-displayId = "paciente_id"
-                              style="display:none;" class="btn btn-success add add-paciente">
+                              data-input="rut_paciente" data-type="paciente" style="display:none;" class="btn btn-success add-persona add add-paciente">
                               <i class="fas fa-user-plus"></i>
                             </button>
                           </span>
                         </div>
-                        <input type="" name="paciente_id" id="paciente_id" value="0" required>
+                        <input type="hidden" name="paciente_id" id="paciente_id" value="0" required>
                       </div>
       							</div>
 
@@ -104,13 +113,13 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                               data-displayId = "cliente_id" class="btn btn-primary search search-cliente">
                               <i class="fas fa-search"></i>
                             </button>
-                            <button type="button" data-show="search-cliente" data-display="xRazSoc"
-                              style="display:none;" class="btn btn-success add add-cliente">
+                            <button type="button" data-show="search-cliente" data-display="xRazSoc" data-input="rut_cliente" data-type="cliente"
+                              style="display:none;" class="btn btn-success add-persona add add-cliente">
                               <i class="fas fa-user-plus"></i>
                             </button>
                           </span>
                         </div>
-                        <input type="" name="cliente_id" id="cliente_id" value="0" required>
+                        <input type="hidden" name="cliente_id" id="cliente_id" value="0" required>
       								</div>
       							</div>
 
@@ -144,6 +153,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             }
                           ?>
                         <select>
+                        <input type="" id="name_tipo_doc">
       								</div>
                     </div>
                     <div class="col-sm-4"></div>
@@ -186,6 +196,8 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                   </div>
                   <input type="" id="lista_aptos" name="lista_usuarios_firma" class="valid">
                   <input type="" id="rol_activo">
+                  <input type="" id="detalle_rol_activo">
+                  <input type="" id="lista_roles_aptos">
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
                   <button type="button" data-div="firmantes" class="btn btn-primary wizard-next-step-btn">Next</button>
@@ -201,10 +213,10 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
                       <div class="btn-group btn-group-justified">
                         <div class="btn-group" role="group">
-                          <button class="btn btn-success" id="adjuntar">Adjuntar Documento</button>
+                          <button type="button" class="btn btn-success" id="adjuntar">Adjuntar Documento</button>
                         </div>
-                        <div class="btn-group" role="group" style="display: none;">
-                          <button class="btn btn-primary" id="ver">Ver Documento</button>
+                        <div class="btn-group tieneDocumento" role="group" style="display: none;">
+                          <button type="button" class="btn btn-primary" id="ver">Ver Documento</button>
                         </div>
                       </div>
                     </div>
@@ -214,11 +226,11 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                   <div class="row">
                     <div class="col-md-4"></div>
                     <div class="col-sm-12 col-md-4">
-                      <div class="alert alert-warning" id="error">
+                      <div class="alert alert-warning noTieneDocumento" id="error">
                         <p class="text-center">Documento aun no esta cargado</p>
                       </div>
 
-                      <div class="alert alert-success" id="success" style="display: none;">
+                      <div class="alert alert-success tieneDocumento" id="success" style="display: none;">
                         <p class="text-center">Documento almacenado correctamente</p>
                       </div>
                     </div>
@@ -238,7 +250,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                 </div>
 
               </div>
-              <input type="" name="usuario" value="<?php echo $_SESSION['user'] ?>">
+              <input type="hidden" name="usuario" value="<?php echo $_SESSION['user'] ?>">
             </form>
           </div>
 
@@ -247,6 +259,62 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
     </div>
 
 </div> <!-- / #content-wrapper -->
+
+<!-- CREAR PACIENTE - CLIENTE -->
+<div id="modalReg" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+              <form id="formPersona" class="form-horizontal">
+                <input type="hidden" name="xTipoPer" id="xTipoPer" class="form-control" required>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">RUT</label>
+                  <div class="col-sm-6">
+                      <input name="nRutPer" id="nRutPer" class="form-control rut_persona" type="text" required>
+                  </div>
+                </div>
+
+                <!-- JURIDICA -->
+                <div class="form-group juridica" style="display:none;">
+                  <label class="col-sm-4 control-label">Razon Social</label>
+                  <div class="col-sm-6">
+                      <input name="xRazSoc" id="xRazSoc" class="form-control alphanum limpiar" type="text">
+                  </div>
+                </div>
+
+                <!-- NATURAL -->
+                <div class="form-group natural" style="display:none;">
+                  <label class="col-sm-4 control-label">Nombres</label>
+                  <div class="col-sm-6">
+                      <input name="xNombre" id="xNombre" class="form-control alpha limpiar" type="text">
+                  </div>
+                </div>
+                <div class="form-group natural" style="display:none;">
+                  <label class="col-sm-4 control-label">Apellido Paterno</label>
+                  <div class="col-sm-6">
+                      <input name="xApePat" id="xApePat" class="form-control alpha limpiar" type="text">
+                  </div>
+                </div>
+                <div class="form-group natural" style="display:none;">
+                  <label class="col-sm-4 control-label">Apellido Materno</label>
+                  <div class="col-sm-6">
+                      <input name="xApeMat" id="xApeMat" class="form-control alpha limpiar" type="text">
+                  </div>
+                </div>
+                
+              </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="guardarPersona" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

@@ -29,7 +29,6 @@ class DatatableTipoDocumento  {
       'c.xRazSoc',
       'c.nRutPer',
       'p.nRutPer',
-      'tp.descripcion'
     ]; //columnas donde generar la busqueda
 
     $orderColumns = [
@@ -50,7 +49,9 @@ class DatatableTipoDocumento  {
         ['persona c','c.id','d.cliente_id'],
         ['persona p','p.id','d.paciente_id'],
         ['tipo_documento tp','tp.id','d.tipoDocumento_id']
-      )
+      ),
+      'order' => 'd.fecha_crea',
+      'dir' => 'DESC'
     );
 
     $options = DocumentoController::dataTable($this->request,$params,'options');

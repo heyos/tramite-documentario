@@ -34,6 +34,53 @@ class PersonaAjax {
 
     echo json_encode($respuesta);
   }
+
+  public function crearPersonaAjax(){
+    
+    $params = $this->request;
+    $params['outType'] = 'return';
+    $params['tabla'] = 'persona';
+    $respuesta = Persona::nuevoRegistroCtr($params);
+
+    $persona = [];
+
+    if($respuesta['respuesta']){
+
+      $where = array(
+        'table' => 'persona',
+        'where' => array(
+          ['nRutPer',$this->request['nRutPer']],['xTipoPer',$this->request['xTipoPer']]
+        )
+      );
+
+      $persona = Persona::itemDetail($where);
+
+      if($persona['respuesta']){
+
+        $full = '';
+        $data = $persona['data'];
+        switch ($this->request['xTipoPer']) {
+          case 'n':
+            $full = $data['xNombre'].' '.$data['xApePat'].' '.$data['xApeMat'];
+            break;
+          case 'j':
+            $full = $data['xRazSoc'];
+            break;
+        }
+
+        $persona['data']['fullname'] = $full;
+
+      }
+    }
+
+    echo json_encode(array(
+        'respuesta' => $respuesta['respuesta'],
+        'mensaje' => $respuesta['mensaje'],
+        'data' => $persona['data']
+      )
+    );
+
+  }
 }
 
 if(isset($_POST['accion'])){
@@ -45,7 +92,9 @@ if(isset($_POST['accion'])){
     case 'search':
       $a -> getDataPersonaAjax();
       break;
-
+    case 'add':
+      $a -> crearPersonaAjax();
+      break;
     default:
       # code...
       break;

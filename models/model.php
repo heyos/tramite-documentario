@@ -257,6 +257,12 @@ class Model {
     static public function firstOrAll($table, $params, $data){
 
         $where = "";
+        $useDeleted = '1';
+
+        if(array_key_exists('useDeleted',$params)){
+            $useDeleted = $params['useDeleted'] !='' ? $params['useDeleted'] : '1';
+            unset($params['useDeleted']);
+        }
 
         if(array_key_exists("where",$params)){
 
@@ -296,18 +302,21 @@ class Model {
 
                 }
 
-                if(!empty($where)){
-                    $where = ' AND '.$where;
-                }
-
-            }elseif($data=='first'){
-
-                $where = " LIMIT 1";
             }
 
         }
 
-        $sql = sprintf("SELECT * FROM %s WHERE deleted = '0' %s",$table,$where);
+        if($useDeleted == '1'){
+
+            if($where != ''){
+                $where .= " AND deleted = '0' ";
+            }else{
+                $where = " deleted = '0' ";
+            }
+           
+        }
+
+        $sql = sprintf("SELECT * FROM %s WHERE %s",$table,$where);
 
         if(array_key_exists('order',$params) && array_key_exists('dir',$params)){
             $sql .= sprintf(" ORDER BY %s %s ",$params['order'],$params['dir']);
@@ -344,6 +353,10 @@ class Model {
 
             unset($params['where']);
 
+            if(array_key_exists('useDeleted',$params)){
+                unset($params['useDeleted']);
+            }
+            
             if(!empty($response)){
                 $id = $response['id'];
                 $params['id'] = $id;
@@ -353,7 +366,7 @@ class Model {
             }elseif(array_key_exists('id',$params)){
 
                 unset($params['id']);
-
+                
                 return self::create($table,$params);
 
             }else{
@@ -361,6 +374,10 @@ class Model {
             }
 
         }elseif(array_key_exists('id',$params)){
+
+            if(array_key_exists('useDeleted',$params)){
+                unset($params['useDeleted']);
+            }
 
             if($params['id'] == 0){
                 unset($params['id']);
@@ -370,6 +387,11 @@ class Model {
             }
 
         }else{
+
+            if(array_key_exists('useDeleted',$params)){
+                unset($params['useDeleted']);
+            }
+            
             return self::create($table,$params);
         }
 
@@ -413,13 +435,13 @@ class Model {
                 echo $query -> errorInfo()[2];
             }
 
+            $con = null;
+            $query = null;
+
         }else{
             echo "DB :>> Parametros invalidos";
         }
 
-
-        $con = null;
-        $query = null;
 
         return $id;
 
@@ -429,60 +451,109 @@ class Model {
 
         $columns = '';
         $values = '';
-
+        $where = '';
+       
         $id = 0;
 
         $response = 0;
 
         if(array_key_exists('id',$params)){
-
+            
             $id = $params['id'];
 
             unset($params['id']);
 
             if($id != 0){
 
-                if(count($params) > 0){
-                    foreach ($params as $key => $item) {
-
-                        if($item == ''){
-                            $item = 'null';
-                            $values .= sprintf(" %s=%s, ",$key,$item);
-                        }else{
-                            $item = Globales::sanearData($item);
-                            $values .= sprintf(" %s='%s', ",$key,$item);
-                        }
-
-                    }
-
-                    $values = substr($values, 0,-2);
-
-                    $con = Conexion::conectar();
-
-                    $sql = sprintf("UPDATE %s SET %s WHERE id = '%d' ",$table,$values,$id);
-                    $query = $con -> prepare($sql);
-
-                    if($query->execute()) {
-
-                        $response = $id;
-
-                    }else {
-                        echo $query -> errorInfo()[2];
-                    }
-                }
+                $where = sprintf(" id = '%d' ",$id);
 
             }else{
                 echo "DB >> ID no puede ser 0";
+                $params  = array();
             }
-
-        }else{
-            echo "DB >> no existe un ID";
+        
         }
 
+        if(array_key_exists('where',$params)){
 
-        $con = null;
-        $query = null;
+            if(is_array($params['where'])){
 
+                if(count($params['where']) > 0){
+                    
+                    foreach ($params['where'] as $val) {
+
+                        $str = "";
+                        $column = "";
+                        $signo = "";
+                        $value = "";
+
+                        switch (count($val)) {
+                            case 3:
+                                $column = $val[0];
+                                $signo = $val[1];
+                                $value = $val[2];
+                                
+                                $str = sprintf(" %s %s '%s'",$column,$signo,$value);
+                                
+                                break;
+                                
+                            case 2:
+                                $column = $val[0];
+                                $value = $val[1];
+                                
+                                $str = sprintf(" %s = '%s'",$column,$value);
+                                break;
+
+                            case 1:
+                                $str = $val;
+                                break;
+                        }
+                        
+                        $where .= sprintf(" %s AND",$str);
+                    }
+
+                    $where = substr($where, 0,-3);
+
+                    unset($params['where']);
+                                      
+                }else{
+                    echo "DB >> WHERE no puede estar vacio";
+                    $params = array();
+                }
+            }
+        }
+
+        if(count($params) > 0){
+            foreach ($params as $key => $item) {
+
+                if($item == ''){
+                    $item = 'null';
+                    $values .= sprintf(" %s=%s, ",$key,$item);
+                }else{
+                    $values .= sprintf(" %s='%s', ",$key,$item);
+                }
+
+            }
+
+            $values = substr($values, 0,-2);
+
+            $con = Conexion::conectar();
+
+            $sql = sprintf("UPDATE %s SET %s WHERE %s ",$table,$values,$where);
+            $query = $con -> prepare($sql);
+
+            if($query->execute()) {
+
+                $response = $id;
+
+            }else {
+                echo $query -> errorInfo()[2];
+            }
+
+            $con = null;
+            $query = null;
+        }
+        
         return $response;
     }
 

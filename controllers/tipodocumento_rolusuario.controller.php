@@ -71,9 +71,9 @@ class TipoDocumentoRolUsuarioController extends Controller {
     if(count($rolFirma) > 0){
       foreach ($rolFirma as $row) {
         $rolesFirma[$row[0]] = array(
-                                      'rolUsuario_id' => $row[1],
-                                      'descripcion' => $row[2]
-                                      );
+                                'rolUsuario_id' => $row[1],
+                                'descripcion' => $row[2]
+                                );
       }
     }
 

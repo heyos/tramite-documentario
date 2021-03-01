@@ -21,6 +21,7 @@ init.push(function () {
                     $("#btn-ingresar").removeClass("btn-primary").addClass("btn-success");
                     $("#btn-ingresar").attr("disabled","disabled");
                     $("#btn-ingresar").text("Cargando...");
+                    $(".remove").remove();
                 },
                 success: function(response){
 
@@ -28,9 +29,9 @@ init.push(function () {
 
                     if(response.respuesta ==  true){
                         window.location = "index.php?action="+response.contenido;
-                        $(".alerta").after('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button><strong>'+response.mensaje+'</div>')
+                        $(".alerta").after('<div class="alert alert-success remove"><button type="button" class="close" data-dismiss="alert">×</button><strong>'+response.mensaje+'</div>')
                     }else{
-                        $(".alerta").after('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><strong>'+response.mensaje+'</div>')
+                        $(".alerta").after('<div class="alert alert-danger remove"><button type="button" class="close" data-dismiss="alert">×</button><strong>'+response.mensaje+'</div>')
                     }
 
                 },
@@ -38,7 +39,8 @@ init.push(function () {
 
                     $("#btn-ingresar").removeClass("btn-success").addClass("btn-primary");
                     $("#btn-ingresar").text("Sign In");
-
+                    $("#btn-ingresar").removeAttr("disabled");
+                    
                 },
                 error: function(e){
                     alert("Error General del sistema");
@@ -46,6 +48,8 @@ init.push(function () {
 
                     $("#btn-ingresar").removeClass("btn-success").addClass("btn-primary");
                     $("#btn-ingresar").text("Sign In");
+                    $("#btn-ingresar").removeAttr("disabled");
+                    $(".remove").remove();
                 }
 
             });
