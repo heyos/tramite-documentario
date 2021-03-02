@@ -73,8 +73,6 @@ init.push(function () {
       var accion = $(form+' #id').val() == '0' ? 'add' : 'edit';
       var data = $(form).serialize()+'&accion='+accion;
 
-      console.log(accion);
-
       $.ajax({
         beforeSend: function(){
           blockPage();

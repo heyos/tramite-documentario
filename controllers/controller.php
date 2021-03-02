@@ -524,7 +524,7 @@ class Controller {
 
       if(array_key_exists('table',$params)){
 
-          $tabla = Globales::sanearData($params['table']);
+          $tabla = $params['table'];
 
           $datos = Model::firstOrAll($tabla,$params,'first');
 

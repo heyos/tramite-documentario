@@ -36,19 +36,17 @@ class FirmaElectronica {
 
 	}
 
-	public static function firmar($name,$clave,$documento,$orden){
+	public static function firmar($name,$clave,$documento,$orden,$pathOut){
 		
 		try {
 
 			$respuestaOk = false;
 			$mensajeError = '';
+			$data = array();
 
 			$pkcs12 = self::verificarCertificado($name,$clave);
 
 			if(count($pkcs12) > 0){
-
-				// $respuestaOk = true;
-				// $mensajeError = 'verificada';
 
 				// create e.g. a PAdES module instance
 				$module = new SetaPDF_Signer_Signature_Module_Pades();
@@ -150,13 +148,20 @@ class FirmaElectronica {
 				// copy($tempWriter->getPath(), $saveDocument);
 				// echo "se firmo exitosamente el documento ".$saveDocument;
 
+				$respuestaOk = true;
+				$message = "Se firmo digitalmente";
+				$data = array(
+					'out'=>'definir la nueva ruta del archivo firmado'
+				);
+
 			}else{
 				$mensajeError = 'No se pudo verificar el certificado';
 			}
 
 			$return = array(
 				'respuesta' => $respuestaOk,
-				'message' => $mensajeError
+				'message' => $mensajeError,
+				'data' => $data
 			);
 
 			return $return;

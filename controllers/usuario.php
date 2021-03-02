@@ -1,6 +1,8 @@
 <?php
 
-class Usuario{
+require_once "controller.php";
+
+class Usuario extends Controller {
 
     public static function mostrarUsuarioController($datos){
 

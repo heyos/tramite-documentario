@@ -195,6 +195,45 @@ init.push(function () {
 			
 		});
 
+		$('#firmar').on('click',function(){
+
+			var arrayDocs = [];
+			var id = $('#form-firma #id').val();
+
+			arrayDocs.push(id);
+
+			var str = $('#form-firma').serialize()+'&accion=firmar&docus='+JSON.stringify(arrayDocs);
+
+			$.ajax({
+		        beforeSend: function(){
+		          blockPage();
+		        },
+		        cache: false,
+		        url:"ajax/firmar_documentos.ajax.php",
+		        dataType: 'json',
+		        type:'POST',
+		        data:str,
+		        success:function(response){
+
+		          if(response.respuesta == false){
+		            unBlockPage();
+		            notification('Error..!',response.mensaje,'error');
+		          }else{
+		            notification('Exito..!',response.mensaje,'success');
+		            
+		          }
+		          console.log(response);
+		        },
+		        error: function(e){
+		          unBlockPage();
+		          console.log(e.responseText);
+		        }
+	      	});
+
+		    return false;
+
+		});
+
 	}
 
 

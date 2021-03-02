@@ -285,7 +285,7 @@ class DocumentoController extends Controller {
 	      	}
 
 	      	$data['users_aptos'] = $contenidoAptos;
-	    	//$data = $documento;
+	    	
 	    }else{
 	    	$message = "Documento no encontrado.";
 	    }
@@ -320,6 +320,59 @@ class DocumentoController extends Controller {
 	}
 
 	static public function firmarDocumento($params){
+
+		$respuestaOk = false;
+		$message = "";
+		$data = "";
+
+		$arrayDocs = array();
+
+		$where_usuario = array(
+			'table' => 'usuario',
+			'where' => array(
+				['id_usuario',$params['user_id']],
+			),
+			'useDeleted' => '0'
+		);
+		$usuarioFirma = Usuario::itemDetail($where_usuario);
+		$hashCertificado = $usuarioFirma['respuesta'] ? $usuarioFirma['data']['name_certificado'] : '';
+		$hashPassCertificado = $usuarioFirma['respuesta'] ? $usuarioFirma['data']['pass_certificado'] : '';
+		
+		$nameCertificadoTemp = $params['user'];
+		$passCertificadoTemp = $params['name'];
+
+		$verificarCerficado = Globales::verificar($nameCertificadoTemp,$hashCertificado);
+		
+		if($verificarCerficado){
+
+			$verificarPass = Globales::verificar($passCertificadoTemp,$hashPassCertificado);
+
+			if($verificarPass){
+
+				$arrayDocs = json_decode($params['docus'],true);
+
+				$where_documento = array(
+					'id' => $params['id']
+				);
+				$documento = self::detalleDocumento($where_documento);
+
+				$message = count($arrayDocs);
+				
+
+			}else{
+				$message = "No se puede verificar la autenticidad del certificado.";
+			}
+
+		}else{
+			$message = "Certificado invalido para este usuario y/o no cuenta con uno.";
+		}
+
+		
+		return array(
+			'respuesta'=>$respuestaOk,
+			'mensaje'=>$message,
+			'data'=>$data
+		);
 		
 	}
 

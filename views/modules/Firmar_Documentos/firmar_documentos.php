@@ -73,7 +73,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             <div class="input-group">
                                 <input name="name" id="name" class="form-control" type="text" required="">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-success">Firmar Digitalmente</button>
+                                    <button type="button" id="firmar" class="btn btn-success">Firmar Digitalmente</button>
                                 </div>
                             </div>
                             

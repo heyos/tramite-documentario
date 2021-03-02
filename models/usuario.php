@@ -1,8 +1,8 @@
 <?php
 
-require_once "conexion.php";
+require_once "model.php";
 
-class UsuarioModel{
+class UsuarioModel extends Model{
 
     public static function mostrarUsuarioFilterModel($datos,$tabla){
 
