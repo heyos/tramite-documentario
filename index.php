@@ -41,7 +41,7 @@ require_once 'controllers/firma_electronica.controller.php';
 //require_once 'library/SetaPDF/Autoload.php';
 
 $template = new Template();
-$template -> templateController();
+//$template -> templateController();
 
 // $clave = 'heyller3107';
 // $name = Globales::encriptar($clave);
@@ -56,9 +56,9 @@ $template -> templateController();
 
 // print_r($firma);
 
-exit();
+//exit();
 
-$file = 10 ;
+$file = 0 ;
 $orden = $file+1;
 $file = '../files-firma/test'.$file.'.pdf';
 
