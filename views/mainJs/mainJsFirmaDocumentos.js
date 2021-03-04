@@ -203,7 +203,7 @@ init.push(function () {
 			arrayDocs.push(id);
 
 			var str = $('#form-firma').serialize()+'&accion=firmar&docus='+JSON.stringify(arrayDocs);
-
+console.log(str);
 			$.ajax({
 		        beforeSend: function(){
 		          blockPage();

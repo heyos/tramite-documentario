@@ -41,7 +41,7 @@ require_once 'controllers/firma_electronica.controller.php';
 //require_once 'library/SetaPDF/Autoload.php';
 
 $template = new Template();
-//$template -> templateController();
+$template -> templateController();
 
 // $clave = 'heyller3107';
 // $name = Globales::encriptar($clave);
@@ -56,7 +56,7 @@ $template = new Template();
 
 // print_r($firma);
 
-//exit();
+exit();
 
 $file = 0 ;
 $orden = $file+1;
@@ -65,7 +65,7 @@ $file = '../files-firma/test'.$file.'.pdf';
 // read certificate and private key from the PFX file
 $pkcs12 = array();
 $pfxRead = openssl_pkcs12_read(
-    file_get_contents('../files-firma/10464148022.pfx'),
+    file_get_contents('../files-firma/hreyes.pfx'),
     $pkcs12,
     'heyller3107'
 );
