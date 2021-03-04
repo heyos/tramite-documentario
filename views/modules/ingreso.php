@@ -14,11 +14,11 @@
     <h1 class="form-header">Ingrese a su cuenta de usuario</h1>
     
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-hide">
             <img class="img-responsive pull-right" src="views/assets/demo/Logo Medinort.gif" alt=""
             style="height: 233.567px">
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-12">
 
             <form id="signin-form_id" class="panel" >
                 <div class="form-group">
@@ -37,7 +37,7 @@
                 <div class="alerta"></div>
             </form>
         </div>
-        <div class="col-sm-4"></div>
+        <div class="col-sm-4 col-xs-hide"></div>
     </div>
 
     <!-- <form id="signin-form_id" class="panel" >

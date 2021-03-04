@@ -359,10 +359,10 @@ class DocumentoController extends Controller {
 				$message = count($arrayDocs);
 				foreach ($arrayDocs as $idDocumento) {
 
-					// $where_documento = array(
-					// 	'id' => $idDocumento
-					// );
-					// $documento = self::detalleDocumento($where_documento);
+					$where_documento = array(
+						'id' => $idDocumento
+					);
+					$documento = self::detalleDocumento($where_documento);
 
 					# code...
 					//FirmaElectronica::firma();
