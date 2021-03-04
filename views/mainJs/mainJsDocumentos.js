@@ -234,7 +234,7 @@ init.push(function () {
 	    }
 
 	    var tipo = $('#formPersona #xTipoPer').val();
-	    var inputName = tipo == 'j' ? $(form+' #xNombreCliente') : $(form+' #xRazSoc');
+	    var inputName = tipo == 'j' ? $(form+' #xRazSoc') : $(form+' #xNombrePaciente');
 	    var inputId = tipo == 'j' ? $(form+' #cliente_id') : $(form+' #paciente_id');
 	    var ocultar = tipo == 'j' ? '.add-cliente' : '.add-paciente';
 
