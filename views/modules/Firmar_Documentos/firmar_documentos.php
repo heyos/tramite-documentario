@@ -37,12 +37,19 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         <tr>
                             <th width="3%">#</th>
                             <th width="10%">RUT Empresa</th>
-                            <th width="18%">Nombre Empresa</th>
+                            <th width="15%">Nombre Empresa</th>
                             <th width="10%">RUT Paciente</th>
                             <th width="17%">Nombre Paciente</th>
                             <th width="15%">Tipo de Documento</th>
                             <th width="12%">Estado</th>
-                            <th width="5%">Check</th>
+                            <th width="7%" class="align-middle">Check 
+                                
+                                    <label class="px-single" >
+                                        <input type="checkbox" name="" value="" class="px">
+                                        <span class="lbl"></span>
+                                    </label>
+                                
+                            </th>
                             <th width="10%"></th>
                         </tr>
                     </thead>
