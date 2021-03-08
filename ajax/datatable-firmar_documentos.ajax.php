@@ -52,6 +52,8 @@ class DatatableTipoDocumento  {
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
 
+    $idDocus = json_decode($this->request['idDocus'],true);
+
     $searchColumns = [
       'CONCAT(p.xNombre," ",p.xApePat," ",p.xApeMat)',
       'tp.descripcion',
@@ -187,7 +189,7 @@ class DatatableTipoDocumento  {
                   <i class='fas fa-file-signature'></i>
                 </button>
               ";
-
+//if idDocus
               $check = '
                 <input type="checkbox" id="'.$id.'" class="check_firma" value="'.$id.'">
               ';

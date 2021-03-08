@@ -45,7 +45,7 @@ class FirmaElectronica {
 			$data = array();
 
 			$pkcs12 = self::verificarCertificado($name,$clave);
-			
+
 			if(count($pkcs12) > 0){
 
 				// create e.g. a PAdES module instance
@@ -60,6 +60,8 @@ class FirmaElectronica {
 				    $module->setExtraCertificates($pkcs12['extracerts']);
 				}
 
+				//ruta carpeta documentos
+				$documento = '../../files-firma/documentos/'.$documento;
 				// create a temporary file writer
 				$tempWriter = new SetaPDF_Core_Writer_TempFile();
 				$document = SetaPDF_Core_Document::loadByFilename(
@@ -143,10 +145,17 @@ class FirmaElectronica {
 
 				// sign the document and send the final document to the initial writer
 				$signer->sign($module);
+								
+				$pathFile = '../../files-firma/documentos/'.$pathOut['path'];
+				$nameFile = $pathOut['pdf'];
 
-				// $saveDocument = '../files-firma/test'.$orden.'.pdf';
-				// copy($tempWriter->getPath(), $saveDocument);
-				// echo "se firmo exitosamente el documento ".$saveDocument;
+				if(!is_dir($pathFile)){
+		          	mkdir($pathFile,0777,true);
+		        }
+
+				$saveDocument = $pathFile.'/'.$nameFile;
+				copy($tempWriter->getPath(), $saveDocument);
+
 
 				$respuestaOk = true;
 				$message = "Se firmo digitalmente";
@@ -160,7 +169,7 @@ class FirmaElectronica {
 
 			$return = array(
 				'respuesta' => $respuestaOk,
-				'message' => $mensajeError,
+				'message' => $message,
 				'data' => $data
 			);
 

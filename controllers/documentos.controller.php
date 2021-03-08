@@ -1,6 +1,8 @@
 <?php
 
 require_once "controller.php";
+require_once "documento_usuario.controller.php";
+
 
 class DocumentoController extends Controller {
 
@@ -228,7 +230,8 @@ class DocumentoController extends Controller {
                 c.xRazSoc,
                 p.nRutPer,
                 CONCAT(p.xNombre,' ',p.xApePat,' ',p.xApeMat) as paciente,
-                tp.descripcion
+                tp.descripcion,
+                d.orden_firmante
                 "; //columnas
 
         $params = array(
@@ -261,7 +264,8 @@ class DocumentoController extends Controller {
 	    		'xRazSoc' => $documento[8],
 	    		'rut_paciente' => $documento[9],
 	    		'xNombrePaciente' => $documento[10],
-	    		'name_tipo_doc' => $documento[11]
+	    		'name_tipo_doc' => $documento[11],
+	    		'orden_firmante'=> $documento[12]
 	    	);
 
 	    	$lista = json_decode($documento[6],true);
@@ -360,9 +364,78 @@ class DocumentoController extends Controller {
 
 					$documento = self::detalleDocumento($where_documento);
 					$documentoPdf = $documento['data']['name_documento'];
+					$orden = $documento['data']['orden_firmante'];
+
+					$dir = explode('/',$documentoPdf);
+					$dir[0] = date('Y-m-d');
+					$newDir = $dir[0].'/'.$dir[1];
+					$pathOut = ['path' => $newDir,
+								'pdf' => $dir[2]
+							   ];
 					# code...
-					FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
-					//actualizar orden
+					$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
+					$respuestaOk = $firmado['respuesta'];
+					$message = $firmado['message'];
+					
+					$message = $respuestaOk;
+					if ($respuestaOk == true) {
+
+						//Cantidad de firmantes
+						$where_documentoUsuario = array(
+							'table' => 'documento_usuario',							
+							'where' => array(
+								['documento_id',$idDocumento],
+								['deleted','0']
+							)
+						);
+						
+						$documentoUsuario = DocumentoUsuarioController::itemDetail($where_documentoUsuario);
+						$cantDocUsuario = count($documentoUsuario);
+
+						//Actualizar tabla DOCUMENTO_USUARIO (firmado,fecha_firma,usuario_modifica,fecha_modifica)
+						$where_updateDocUsuario = array(
+						 	'firmado'=>'1',						 	
+						 	'fecha_firma' => date('Y-m-d H:i:s'),
+						 	'where' => array(
+						 		['documento_id',$idDocumento],
+						 		['deleted','0']
+						 	)
+						);
+						$updateDocUsuario = DocumentoUsuarioModel::update('documento_usuario',$where_updateDocUsuario);
+$message = $updateDocUsuario;						
+						if ($updateDocUsuario != 0) {
+							if ($orden == $cantDocUsuario) {						
+								//actualizar tabla DOCUMENTO (usuario_modifica,fecha_modifica,estado_firma,orden_firmante)
+								//esatdo_firma 	0:pendiente | 1:en proceso de firma | 2: firmado por todos | 3:cancelado
+								$where_updateDocumento = array(
+								 	'estado_firma'=>'2',						 	
+								 	'orden_firmante' => $orden,
+								 	'where' => array(
+								 		['documento_id',$idDocumento],
+								 		['deleted','0']
+								 	)
+								);
+							}else{
+								$where_updateDocumento = array(								 						
+								 	'orden_firmante' => $orden,
+								 	'where' => array(
+								 		['documento_id',$idDocumento],
+								 		['deleted','0']
+								 	)
+								);
+							}
+
+							$updateDocumento = DocumentoModel::update('documento',$where_updateDocumento);
+							if ($updateDocumento != 0) {
+								$message = $updateDocumento.'jo';
+							}
+
+						}
+						
+					}else{
+						$message = ' sss';
+					}
+					//actualizar documentos(orden, usuariomod,fecha_mod,estado_firma(2)-cuanto cant reg = cant (1)...,name_-documento), documento_usuario (fecha, mod, fecha_firma) 
 
 				}
 				

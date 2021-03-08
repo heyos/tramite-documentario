@@ -2,6 +2,7 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 	hidePreloader();
 });
 
+//local store
 
 init.push(function () {
 
@@ -20,6 +21,7 @@ init.push(function () {
 	          url:"ajax/datatable-firmar_documentos.ajax.php",
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
+	              d.idDocus = JSON.stringify([1,2,3]);
 	          },
 	          complete: function(res){
 	              //console.log(res);
@@ -182,6 +184,9 @@ init.push(function () {
 			$('#id').val(id);
 			$('#txt_response').hide();
 
+			$('#form-firma').show();
+		    $('#div_msj').remove();
+
 			$('#modalFirma').modal({
 	            backdrop: 'static',
 	            keyboard: false
@@ -207,6 +212,7 @@ console.log(str);
 			$.ajax({
 		        beforeSend: function(){
 		          blockPage();
+		          //$().show();
 		        },
 		        cache: false,
 		        url:"ajax/firmar_documentos.ajax.php",
@@ -214,13 +220,25 @@ console.log(str);
 		        type:'POST',
 		        data:str,
 		        success:function(response){
-
+		        	//div msj exito
 		          if(response.respuesta == false){
 		            unBlockPage();
 		            notification('Error..!',response.mensaje,'error');
+		            $('#form-firma').show();
+		            $('#div_msj').remove();
 		          }else{
+		          	unBlockPage();
 		            notification('Exito..!',response.mensaje,'success');
-		            
+		            $('#div_msj').remove();
+		            $('#form-firma').hide();		            
+		            $('#form-firma').after(	'<div class="row" id="div_msj">'+
+		            							'<div class="col-sm-12">'+
+		            								'<div class="note note-success">'+
+		            									'<i class="fa fa-check-circle" style="color:green"></i> Se firmo correctamente.'+
+		            								'</div>'+
+		            								'<img src="views/images/empresa/contratodigital.jpg">'+
+		            							'</div>'+
+		            						'</div>');
 		          }
 		          console.log(response);
 		        },

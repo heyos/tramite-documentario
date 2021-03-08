@@ -132,7 +132,7 @@ $font = new SetaPDF_Core_Font_TrueType_Subset(
 $visibleAppearance->setFont($font);
 
 // choose a document with a handwritten signature
-$signatureDocument = SetaPDF_Core_Document::loadByFilename('../files-firma/images/logo3.pdf');
+$signatureDocument = SetaPDF_Core_Document::loadByFilename('../files-firma/certificados/logo_default.pdf');
 $signatureXObject = $signatureDocument->getCatalog()->getPages()->getPage(1)->toXObject($document);
 // set the signature xObject as graphic
 $visibleAppearance->setGraphic($signatureXObject);
