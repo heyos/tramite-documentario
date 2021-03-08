@@ -72,6 +72,11 @@ class DatatableTipoDocumento  {
       6 => 'd.estado_firma'
     ]; //columnas para ordenar
 
+    $inicio = !empty($params['inicio']) ? date('Y-m-d',$params['inicio']) : date('Y-m-d');
+    $fin = !empty($params['fin']) ? date('Y-m-d',$params['fin']) : $inicio;
+
+    $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
+
     $params = array(
       "table"=>"documento_usuario du",
       "columns"=>$columns,
@@ -84,7 +89,8 @@ class DatatableTipoDocumento  {
         ['tipo_documento tp','tp.id','d.tipoDocumento_id']
       ),
       'where' => array(
-        ['du.usuario_id',$usuario_id]
+        ['du.usuario_id',$usuario_id],
+        [$filtro_fecha]
       ),
       'order' => 'd.fecha_crea',
       'dir' => 'DESC'
@@ -189,7 +195,7 @@ class DatatableTipoDocumento  {
                   <i class='fas fa-file-signature'></i>
                 </button>
               ";
-//if idDocus
+              //if idDocus
               $check = '
                 <input type="checkbox" id="'.$id.'" class="check_firma" value="'.$id.'">
               ';

@@ -22,9 +22,11 @@ init.push(function () {
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
 	              d.idDocus = JSON.stringify([1,2,3]);
+	              d.inicio = '';
+	              d.fin = '';
 	          },
 	          complete: function(res){
-	              //console.log(res);
+	              console.log(res);
 	              hidePreloader();
 	              unBlockPage();
 	      	}
