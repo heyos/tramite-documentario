@@ -9,7 +9,7 @@ init.push(function () {
         submitHandler: function(){
 
             var str = $("#signin-form_id").serialize();
-
+console.log(str);
             $.ajax({
 
                 cache: false,

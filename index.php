@@ -65,7 +65,7 @@ $file = '../files-firma/test'.$file.'.pdf';
 // read certificate and private key from the PFX file
 $pkcs12 = array();
 $pfxRead = openssl_pkcs12_read(
-    file_get_contents('../files-firma/10464148022.pfx'),
+    file_get_contents('../files-firma/hreyes.pfx'),
     $pkcs12,
     'heyller3107'
 );

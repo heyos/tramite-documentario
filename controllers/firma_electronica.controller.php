@@ -45,7 +45,7 @@ class FirmaElectronica {
 			$data = array();
 
 			$pkcs12 = self::verificarCertificado($name,$clave);
-
+			
 			if(count($pkcs12) > 0){
 
 				// create e.g. a PAdES module instance

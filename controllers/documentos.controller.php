@@ -351,21 +351,19 @@ class DocumentoController extends Controller {
 
 				$arrayDocs = json_decode($params['docus'],true);
 
-				// $where_documento = array(
-				// 	'id' => $params['id']
-				// );
-				// $documento = self::detalleDocumento($where_documento);
-
 				$message = count($arrayDocs);
 				foreach ($arrayDocs as $idDocumento) {
 
 					$where_documento = array(
 						'id' => $idDocumento
 					);
-					$documento = self::detalleDocumento($where_documento);
 
+					$documento = self::detalleDocumento($where_documento);
+					$documentoPdf = $documento['data']['name_documento'];
 					# code...
-					//FirmaElectronica::firma();
+					FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
+					//actualizar orden
+
 				}
 				
 
