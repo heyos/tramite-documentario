@@ -369,8 +369,12 @@ class DocumentoController extends Controller {
 					$dir = explode('/',$documentoPdf);
 					$dir[0] = date('Y-m-d');
 					$newDir = $dir[0].'/'.$dir[1];
+
+					$file = explode(".",$dir[2]);					
+					$newName = $file[0]."-".$orden.".".$file[1];;
+
 					$pathOut = ['path' => $newDir,
-								'pdf' => $dir[2]
+								'pdf' => $newName
 							   ];
 					# code...
 					$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
@@ -395,6 +399,8 @@ class DocumentoController extends Controller {
 						 	'firmado'=>'1',						 	
 						 	'fecha_firma' => date('Y-m-d H:i:s'),
 						 	'ruta_firma' => $documentoPdf,
+						 	'usuario_modifica' => $params['user'],
+							'fecha_modifica' => date('Y-m-d H:i:s'),
 						 	'where' => array(
 						 		['documento_id',$idDocumento],
 						 		['usuario_id',$params['user_id']],
@@ -408,6 +414,7 @@ class DocumentoController extends Controller {
 								//actualizar tabla DOCUMENTO (usuario_modifica,fecha_modifica,estado_firma,orden_firmante)
 								//esatdo_firma 	0:pendiente | 1:en proceso de firma | 2: firmado por todos | 3:cancelado
 								$where_updateDocumento = array(
+									'name_documento' => $newDir."/".$newName,
 									'usuario_modifica' => $params['user'],
 									'fecha_modifica' => date('Y-m-d H:i:s'),
 								 	'estado_firma'=>'2',												 	
@@ -416,6 +423,7 @@ class DocumentoController extends Controller {
 							}else{
 								$orden++;
 								$where_updateDocumento = array(
+									'name_documento' => $newDir."/".$newName,
 									'usuario_modifica' => $params['user'],
 									'fecha_modifica' => date('Y-m-d H:i:s'),
 								 	'orden_firmante' => $orden,
