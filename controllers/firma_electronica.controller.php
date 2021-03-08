@@ -12,6 +12,14 @@ class FirmaElectronica {
 		return $rutaCerfificado;
 	}
 
+	private static function rutaDocumento(){
+
+		$rootFolder = Config::rutas();
+		$rutaDocumento = $rootFolder['documento'].'/';
+
+		return $rutaDocumento;
+	}
+
 	private static function verificarCertificado($name,$clave){
 
 		try {
@@ -45,6 +53,7 @@ class FirmaElectronica {
 			$data = array();
 
 			$pkcs12 = self::verificarCertificado($name,$clave);
+			$rutaDocumento = self::rutaDocumento();
 
 			if(count($pkcs12) > 0){
 
@@ -61,7 +70,7 @@ class FirmaElectronica {
 				}
 
 				//ruta carpeta documentos
-				$documento = '../../files-firma/documentos/'.$documento;
+				$documento = $rutaDocumento.$documento;
 				// create a temporary file writer
 				$tempWriter = new SetaPDF_Core_Writer_TempFile();
 				$document = SetaPDF_Core_Document::loadByFilename(
@@ -146,7 +155,7 @@ class FirmaElectronica {
 				// sign the document and send the final document to the initial writer
 				$signer->sign($module);
 								
-				$pathFile = '../../files-firma/documentos/'.$pathOut['path'];
+				$pathFile = $rutaDocumento.$pathOut['path'];
 				$nameFile = $pathOut['pdf'];
 
 				if(!is_dir($pathFile)){

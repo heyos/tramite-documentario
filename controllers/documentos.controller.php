@@ -376,10 +376,8 @@ class DocumentoController extends Controller {
 					$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
 					$respuestaOk = $firmado['respuesta'];
 					$message = $firmado['message'];
-					
-					$message = $respuestaOk;
+										
 					if ($respuestaOk == true) {
-
 						//Cantidad de firmantes
 						$where_documentoUsuario = array(
 							'table' => 'documento_usuario',							
@@ -396,44 +394,42 @@ class DocumentoController extends Controller {
 						$where_updateDocUsuario = array(
 						 	'firmado'=>'1',						 	
 						 	'fecha_firma' => date('Y-m-d H:i:s'),
+						 	'ruta_firma' => $documentoPdf,
 						 	'where' => array(
 						 		['documento_id',$idDocumento],
+						 		['usuario_id',$params['user_id']],
 						 		['deleted','0']
 						 	)
 						);
 						$updateDocUsuario = DocumentoUsuarioModel::update('documento_usuario',$where_updateDocUsuario);
-$message = $updateDocUsuario;						
-						if ($updateDocUsuario != 0) {
+						
+						if ($updateDocUsuario > 0) {
 							if ($orden == $cantDocUsuario) {						
 								//actualizar tabla DOCUMENTO (usuario_modifica,fecha_modifica,estado_firma,orden_firmante)
 								//esatdo_firma 	0:pendiente | 1:en proceso de firma | 2: firmado por todos | 3:cancelado
 								$where_updateDocumento = array(
-								 	'estado_firma'=>'2',						 	
-								 	'orden_firmante' => $orden,
-								 	'where' => array(
-								 		['documento_id',$idDocumento],
-								 		['deleted','0']
-								 	)
+									'usuario_modifica' => $params['user'],
+									'fecha_modifica' => date('Y-m-d H:i:s'),
+								 	'estado_firma'=>'2',												 	
+								 	'id' => $idDocumento
 								);
 							}else{
-								$where_updateDocumento = array(								 						
+								$orden++;
+								$where_updateDocumento = array(
+									'usuario_modifica' => $params['user'],
+									'fecha_modifica' => date('Y-m-d H:i:s'),
 								 	'orden_firmante' => $orden,
-								 	'where' => array(
-								 		['documento_id',$idDocumento],
-								 		['deleted','0']
-								 	)
+								 	'id' => $idDocumento
 								);
 							}
 
 							$updateDocumento = DocumentoModel::update('documento',$where_updateDocumento);
-							if ($updateDocumento != 0) {
-								$message = $updateDocumento.'jo';
+							if ($updateDocumento > 0) {
+								
 							}
 
 						}
 						
-					}else{
-						$message = ' sss';
 					}
 					//actualizar documentos(orden, usuariomod,fecha_mod,estado_firma(2)-cuanto cant reg = cant (1)...,name_-documento), documento_usuario (fecha, mod, fecha_firma) 
 

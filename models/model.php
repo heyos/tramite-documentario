@@ -544,7 +544,7 @@ class Model {
 
             if($query->execute()) {
 
-                $response = $id;
+                $response = 1;//$id; Si no se envia ID no envia
 
             }else {
                 echo $query -> errorInfo()[2];
