@@ -21,9 +21,11 @@ init.push(function () {
 	          url:"ajax/datatable-firmar_documentos.ajax.php",
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
-	              d.idDocus = JSON.stringify([1,2,3]);
+	              d.idDocus = localStorage.getItem('arrId') ? localStorage.getItem('arrId') : JSON.stringify([]) ;
 	              d.inicio = '';
 	              d.fin = '';
+
+	              //
 	          },
 	          complete: function(res){
 	              console.log(res);
@@ -210,7 +212,7 @@ init.push(function () {
 			arrayDocs.push(id);
 
 			var str = $('#form-firma').serialize()+'&accion=firmar&docus='+JSON.stringify(arrayDocs);
-console.log(str);
+			console.log(str);
 			$.ajax({
 		        beforeSend: function(){
 		          blockPage();
@@ -251,6 +253,33 @@ console.log(str);
 	      	});
 
 		    return false;
+
+		});
+
+		//FIRMA_LOTE
+		$('#firma_lote').on('click',function(){
+			
+			var i = 0;
+			var arrId = [];
+
+			$('.check_firma').each(function(){
+
+				var $this = $(this);
+				
+				if($this.prop('checked')){
+					i++;
+					var id = $this.attr('id');
+					arrId.push(id);
+				}
+
+			});
+
+			if(arrId.length > 0){
+				localStorage.setItem('arrId',JSON.stringify(arrId));
+			}
+
+			//localStorage.removeItem('arrId');
+			console.log(arrId);
 
 		});
 

@@ -528,7 +528,7 @@ class Controller {
 
           $datos = Model::firstOrAll($tabla,$params,'first');
 
-          if(!empty($datos) > 0){
+          if(!empty($datos)){
 
               $respuestaOk = true;
               $contenidoOk = $datos;

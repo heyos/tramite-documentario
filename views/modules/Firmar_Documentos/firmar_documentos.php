@@ -28,7 +28,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
         <div class="panel-body">
             <div class="form-group">
-                <button type="button" class="btn btn-primary">Firmar documentos por lote</button>
+                <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos por lote</button>
             </div>
             <br>
             <div class="table-primary">

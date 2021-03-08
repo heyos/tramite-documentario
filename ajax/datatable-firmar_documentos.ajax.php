@@ -225,7 +225,7 @@ class DatatableTipoDocumento  {
 
         $button .="
           </div>
-        ";
+        ".$idDocus[0];
 
         $labelEstado = '<span class="label '.$css.' ">'.$txt.'</span>';
 
