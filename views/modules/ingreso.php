@@ -14,7 +14,7 @@
     <h1 class="form-header">Ingrese a su cuenta de usuario</h1>
     
     <div class="row">
-        <div class="col-sm-4 col-xs-hide">
+        <div class="col-sm-4 hidden-xs">
             <img class="img-responsive pull-right" src="views/assets/demo/Logo Medinort.gif" alt=""
             style="height: 233.567px">
         </div>
@@ -37,25 +37,8 @@
                 <div class="alerta"></div>
             </form>
         </div>
-        <div class="col-sm-4 col-xs-hide"></div>
+        <div class="col-sm-4 hidden-xs"></div>
     </div>
-
-    <!-- <form id="signin-form_id" class="panel" >
-        <div class="form-group">
-            <input type="text" name="username" id="username_id" minlength="3" class="form-control input-lg validar" value="admin" placeholder="Username" required="">
-        </div>
-
-        <div class="form-group signin-password">
-            <input type="password" name="password" id="password_id" minlength="6" class="form-control input-lg validar" value="admin123456" placeholder="Password" required="">
-
-        </div>
-
-        <div id="divButton" class="form-actions">
-            <button type="button" id="btn-ingresar" class="btn btn-primary btn-block btn-lg" >Sign In</button>
-        </div>
-        <br>
-        <div class="alerta"></div>
-    </form> -->
 
     <div class="signin-with">
 		<div class="signin-header">
