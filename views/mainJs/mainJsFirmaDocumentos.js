@@ -2,9 +2,17 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 	hidePreloader();
 });
 
-//local store
-
 init.push(function () {
+
+	$('.calendar').datepicker({
+		dateFormat: 'dd-mm-yy',
+		changeMonth: true
+	});
+	
+	$('body').on('click','#buscar_documento',function(e){
+		table.draw();
+		$("input[type=checkbox]").prop("checked", false);
+	});	
 
 	$('body').on('keyup', function(e) { // makes sure the whole site is loaded
 		var charCode = e.charCode || e.keyCode || e.which;
@@ -22,10 +30,9 @@ init.push(function () {
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
 	              d.idDocus = localStorage.getItem('arrId') ? localStorage.getItem('arrId') : JSON.stringify([]) ;
-	              d.inicio = '';
-	              d.fin = '';
-
-	              //
+	              d.inicio = $('#fecha_inicio').val();
+	              d.fin = $('#fecha_fin').val();
+	              console.log(d);
 	          },
 	          complete: function(res){
 	              console.log(res);
@@ -209,10 +216,16 @@ init.push(function () {
 			var arrayDocs = [];
 			var id = $('#form-firma #id').val();
 
-			arrayDocs.push(id);
+			if (id == '') {
+				var docus = localStorage.getItem('arrId');
+			}else{
+				arrayDocs.push(id);
+				docus = JSON.stringify(arrayDocs);
+			}
 
-			var str = $('#form-firma').serialize()+'&accion=firmar&docus='+JSON.stringify(arrayDocs);
-			console.log(str);
+			//console.log(docus);
+			var str = $('#form-firma').serialize()+'&accion=firmar&docus='+docus;
+			//console.log(str);
 			$.ajax({
 		        beforeSend: function(){
 		          blockPage();
@@ -231,6 +244,8 @@ init.push(function () {
 		            $('#form-firma').show();
 		            $('#div_msj').remove();
 		          }else{
+		          	localStorage.removeItem('arrId');
+		          	$("input[type=checkbox]").prop("checked", false);
 		          	unBlockPage();
 		            notification('Exito..!',response.mensaje,'success');
 		            $('#div_msj').remove();
@@ -256,9 +271,20 @@ init.push(function () {
 
 		});
 
+		$('.px').on('click',function(){
+
+			if($(this).prop('checked')){
+				$("input[type=checkbox]").prop("checked", true);
+			}else{
+				$("input[type=checkbox]").prop("checked", false);
+			}
+
+		});
+
 		//FIRMA_LOTE
 		$('#firma_lote').on('click',function(){
-			
+			$('#form-firma #id').val('');
+			localStorage.removeItem('arrId');
 			var i = 0;
 			var arrId = [];
 
@@ -276,9 +302,19 @@ init.push(function () {
 
 			if(arrId.length > 0){
 				localStorage.setItem('arrId',JSON.stringify(arrId));
+
+				$('#modalFirma').modal({
+		            backdrop: 'static',
+		            keyboard: false
+		        });
+
+			}else{				
+				notification('Advertencia..!','Debe seleccionar almenos un documento','error');
 			}
 
-			//localStorage.removeItem('arrId');
+			
+
+			//
 			console.log(arrId);
 
 		});

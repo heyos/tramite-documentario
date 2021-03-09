@@ -72,8 +72,8 @@ class DatatableTipoDocumento  {
       6 => 'd.estado_firma'
     ]; //columnas para ordenar
 
-    $inicio = !empty($params['inicio']) ? date('Y-m-d',$params['inicio']) : date('Y-m-d');
-    $fin = !empty($params['fin']) ? date('Y-m-d',$params['fin']) : $inicio;
+    $inicio = !empty($this->request['inicio']) ? date('Y-m-d',strtotime($this->request['inicio'])) : date('Y-m-d');
+    $fin = !empty($this->request['fin']) ? date('Y-m-d',strtotime($this->request['fin'])) : $inicio;
 
     $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
 
@@ -225,7 +225,7 @@ class DatatableTipoDocumento  {
 
         $button .="
           </div>
-        ".$idDocus[0];
+        ";
 
         $labelEstado = '<span class="label '.$css.' ">'.$txt.'</span>';
 
