@@ -27,9 +27,34 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
     <div class="panel panel-default">
 
         <div class="panel-body">
-            <div class="form-group">
-                <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos por lote</button>
-            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-calendar"></i>&nbsp;&nbsp; Rango de Fechas: 
+                        </label>
+                        <div class="input-daterange input-group" id="bs-datepicker-range">
+                            <input type="text" class="input-sm form-control calendar" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha inicio" value="<?php echo date('d-m-Y');?>" autocpmplete="off">
+                            <span class="input-group-addon">hasta</span>
+                            <input type="text" class="input-sm form-control calendar" id="fecha_fin" name="fecha_fin" placeholder="Fecha fin" autocpmplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label>&nbsp;&nbsp;</label>
+                    <div class="input-group">                    
+                        <button type="button" id="buscar_documento" class="btn btn-success"> <i class="fa fa-search"></i></button>
+                    </div>                                    
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label>&nbsp;&nbsp;</label>
+                    <div class="input-group">                       
+                        <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos lote</button>
+                    </div>                                    
+                </div>
+           </div>
             <br>
             <div class="table-primary">
                 <table class="table table-default table-condensed table-bordered table-striped tablaDocumento" width="100%">
