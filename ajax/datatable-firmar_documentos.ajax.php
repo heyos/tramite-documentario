@@ -2,6 +2,7 @@
 require_once "../controllers/documentos.controller.php";
 require_once "../models/documentos.model.php";
 
+
 class DatatableTipoDocumento  {
 
   public $request;

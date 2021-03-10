@@ -1,7 +1,6 @@
 <?php
 
 require_once "controller.php";
-require_once "documento_usuario.controller.php";
 
 
 class DocumentoController extends Controller {

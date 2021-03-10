@@ -206,7 +206,7 @@ init.push(function () {
 	    });
 
 	    $('.updateDatatable').click(function(){
-
+	    	
 	    	table.draw();
 			
 		});

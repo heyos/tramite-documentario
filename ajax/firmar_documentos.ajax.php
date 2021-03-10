@@ -6,6 +6,7 @@ require_once "../controllers/globales.php";
 
 
 require_once "../controllers/documentos.controller.php";
+require_once "../controllers/documento_usuario.controller.php";
 require_once "../controllers/usuario.php";
 
 require_once "../models/documento_usuario.model.php";

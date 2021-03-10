@@ -92,7 +92,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close updateDatatables" data-dismiss="modal" data-keyboard="false" aria-hidden="true">×</button>
+                <button type="button" class="close updateDatatable" data-dismiss="modal" data-keyboard="false" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myModalLabel">Firmar Documento Digitalmente</h4>
             </div>
             <div class="modal-body">
