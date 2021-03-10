@@ -113,6 +113,12 @@ class Model {
         $limit = "";
         $orderBy = "";
 
+        $useDeleted = '1';
+        if(array_key_exists('useDeleted',$params)){
+            $useDeleted = $params['useDeleted'] !='' ? $params['useDeleted'] : '1';
+            unset($params['useDeleted']);
+        }
+
         //JOIN
         if(array_key_exists('join',$params)){
 
@@ -227,15 +233,19 @@ class Model {
 
         $columns = array_key_exists('columns',$params) ? $params['columns']:'*';
 
-        $deletedParam = 'deleted';
+        $deletedParam = "deleted = '0'";
 
         if(!empty($join)){
             $arr = explode(" ", $params['table']);
-            $deletedParam = trim($arr[1]).'.deleted'; //REFENCIA AL "AS" DE LA TABLA
+            $deletedParam = trim($arr[1]).".deleted = '0'" ; //REFENCIA AL "AS" DE LA TABLA
         }
 
-        $sql = sprintf("SELECT %s FROM %s %s WHERE %s = '0' %s %s %s",
-                        $columns,$params['table'],$join,$deletedParam,$where,$orderBy,$limit);
+        if($useDeleted == '1'){
+            $where = $deletedParam.$where;
+        }
+
+        $sql = sprintf("SELECT %s FROM %s %s WHERE %s %s %s",
+                        $columns,$params['table'],$join,$where,$orderBy,$limit);
 
         $query = Conexion::conectar()->prepare($sql);
 

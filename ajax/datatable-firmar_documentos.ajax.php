@@ -72,8 +72,8 @@ class DatatableTipoDocumento  {
       6 => 'd.estado_firma'
     ]; //columnas para ordenar
 
-    $inicio = !empty($params['inicio']) ? date('Y-m-d',$params['inicio']) : date('Y-m-d');
-    $fin = !empty($params['fin']) ? date('Y-m-d',$params['fin']) : $inicio;
+    $inicio = '2020-11-01'; //!empty($params['inicio']) ? date('Y-m-d',$params['inicio']) : date('Y-m-d');
+    $fin = '2021-03-09'; //!empty($params['fin']) ? date('Y-m-d',$params['fin']) : $inicio;
 
     $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
 
