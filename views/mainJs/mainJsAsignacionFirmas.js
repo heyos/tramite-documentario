@@ -3,7 +3,7 @@ var modalReg = '#modalReg';
 var modalLista = '#modalLista';
 
 init.push(function () {
-
+  
    var table = $('.tablaAsignacionFirma').DataTable( {
       "ajax": {
           url:"ajax/datatable-asignacionFirma.ajax.php",
