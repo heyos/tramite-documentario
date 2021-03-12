@@ -54,7 +54,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos lote</button>
                     </div>                                    
                 </div>
-           </div>
+            </div>
             <br>
             <div class="table-primary">
                 <table class="table table-default table-condensed table-bordered table-striped tablaDocumento" width="100%">
