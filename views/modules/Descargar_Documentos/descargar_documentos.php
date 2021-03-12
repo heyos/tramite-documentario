@@ -52,7 +52,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                 <div class="form-group col-md-2">
                     <label>&nbsp;&nbsp;</label>
                     <div class="input-group">                       
-                        <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos lote</button>
+                        <button type="button" id="firma_lote" class="btn btn-primary">Descargar documentos</button>
                     </div>                                    
                 </div>
             </div>
