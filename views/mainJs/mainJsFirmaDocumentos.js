@@ -2,6 +2,8 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 	hidePreloader();
 });
 
+localStorage.removeItem('arrId');
+
 init.push(function () {
 
 	$('.calendar').datepicker({

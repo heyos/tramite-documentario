@@ -216,7 +216,10 @@ class DocumentoController extends Controller {
 		$message = "";
 		$contenidoAptos = '';
 
-		$id = $params['id'];
+		//$id = $params['id'];
+		
+		$where = array_key_exists('id', $params) ? array(['d.id',$params['id']]) : array(['d.codigo',$params['codigo']]);
+		
 
 		$columns = "d.id,
                 d.cliente_id,
@@ -241,9 +244,7 @@ class DocumentoController extends Controller {
 		        ['persona p','p.id','d.paciente_id'],
 		        ['tipo_documento tp','tp.id','d.tipoDocumento_id']
 	      	),
-	      	"where" => array(
-	      		['d.id',$id]
-	      	)
+	      	"where" => $where
 	    );
 
 	    $respuesta = DocumentoModel::all($params);
