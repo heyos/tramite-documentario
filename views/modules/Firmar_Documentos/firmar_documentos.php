@@ -41,7 +41,29 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                 </div>
 
-                <div class="form-group col-md-6">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-license-card"></i> Tipo Documento
+                        </label>
+                        <select name="tipoDoc" id="tipoDoc" class="form-control" required>
+                                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-license-card"></i> Estado Documento
+                        </label>
+                        <select name="estadoDoc" id="estadoDoc" class="form-control" required>
+                                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-2">
                     <label>&nbsp;&nbsp;</label>
                     <div class="input-group">                    
                         <button type="button" id="buscar_documento" class="btn btn-success"> <i class="fa fa-search"></i></button>

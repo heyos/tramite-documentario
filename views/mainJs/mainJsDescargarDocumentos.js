@@ -68,7 +68,7 @@ init.push(function () {
 
 	    });
 
-	    $('#DataTables_Table_0_wrapper .table-caption').text('Lista de Documentos por Firmar');
+	    $('#DataTables_Table_0_wrapper .table-caption').text('Lista de Documentos Firmados');
 	  	$('#DataTables_Table_0_wrapper .dataTables_filter input').attr('placeholder', 'Buscar...');
 	 }
 });

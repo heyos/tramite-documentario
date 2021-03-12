@@ -29,7 +29,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
         <div class="panel-body">
             
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label class="control-label">
                             <i class="fa fa-calendar"></i>&nbsp;&nbsp; Rango de Fecha: 
@@ -42,64 +42,35 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                 </div>
 
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">
-                            <i class="fa fa-credit-card-o"></i> Rut de Empresa
-                        </label>
-                        
-                        <input type="text" class="input-sm form-control" name="" value="" placeholder="">
-                        
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">
-                            <i class="fa fa-license-card"></i> Rut de Paciente
-                        </label>
-                        
-                        <input type="text" class="input-sm form-control" name="" value="" placeholder="">
-                        
-                    </div>
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
                             <i class="fa fa-license-card"></i> Tipo Documento
                         </label>
-                        <select name="usuario" id="usuario" class="form-control" required>
+                        <select name="tipoDoc" id="tipoDoc" class="form-control" required>
                                             
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3 hide">
                     <div class="form-group">
                         <label class="control-label">
-                            <i class="fa fa-license-card"></i> Estado del Documento
+                            <i class="fa fa-license-card"></i> Estado Documento
                         </label>
-                        <select name="usuario" id="usuario" class="form-control" required>
+                        <select name="estadoDoc" id="estadoDoc" class="form-control" required>
                                             
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group col-md-1">
+                <div class="form-group col-sm-offset-3 col-md-2 ">
                     <label>&nbsp;&nbsp;</label>
                     <div class="input-group">                       
-                        <button type="button" id="firma_lote" class="btn btn-primary"><i class="fa fa-download"></i></button>
+                        <button type="button" id="firma_lote" class="btn btn-primary"><i class="fa fa-download"></i> Descargar por Lote</button>
                     </div>                                    
                 </div>
-                <!--
-                <div class="form-group col-md-1">
-                    <label>&nbsp;&nbsp;</label>
-                    <div class="input-group">                    
-                        <button type="button" id="buscar_documento" class="btn btn-success"> <i class="fa fa-search"></i></button>
-                    </div>                                    
-                </div>
-                -->
+                
                 
             </div>
             <br>
