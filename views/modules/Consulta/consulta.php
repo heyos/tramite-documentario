@@ -43,7 +43,11 @@
                         <ul class="nav navbar-nav pull-right right-navbar-nav">
                             <li>
                                 <form class="navbar-form pull-left">
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <div class="form-group has-feedback">
+                                         <i class="fa fa-search" style="position: absolute;padding: 10px;padding-top: 17px;pointer-events: none;color: #DDDDDD"></i>
+                                        <input style="padding-left: 30px!important;width: 100%" type="text" class="form-control" placeholder="Documento">
+                                    </div>
+                                    
                                 </form>
                             </li>
                         </ul>
@@ -62,6 +66,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <!--
                     <div class="row">
                         <div class="col-md-4">
                             <h6 class="text-light-gray text-semibold text-xs">DOCUMENTO</h6>
@@ -73,6 +78,7 @@
                             </div>
                         </div>
                     </div>
+                    -->
                     <div class="row">
                         <div class="col-sm-12">
                             <h1 class="note note-info">TIPO DOCUMENTO</h1>

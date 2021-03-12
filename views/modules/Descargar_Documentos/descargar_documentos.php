@@ -29,10 +29,10 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
         <div class="panel-body">
             
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
-                            <i class="fa fa-calendar"></i>&nbsp;&nbsp; Rango de Fechas: 
+                            <i class="fa fa-calendar"></i>&nbsp;&nbsp; Rango de Fecha: 
                         </label>
                         <div class="input-daterange input-group" id="bs-datepicker-range">
                             <input type="text" class="input-sm form-control calendar" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha inicio" value="<?php echo date('d-m-Y');?>" autocpmplete="off">
@@ -42,33 +42,72 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                 </div>
 
-                <div class="form-group col-md-6">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-credit-card-o"></i> Rut de Empresa
+                        </label>
+                        
+                        <input type="text" class="input-sm form-control" name="" value="" placeholder="">
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-license-card"></i> Rut de Paciente
+                        </label>
+                        
+                        <input type="text" class="input-sm form-control" name="" value="" placeholder="">
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-license-card"></i> Tipo Documento
+                        </label>
+                        <select name="usuario" id="usuario" class="form-control" required>
+                                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">
+                            <i class="fa fa-license-card"></i> Estado del Documento
+                        </label>
+                        <select name="usuario" id="usuario" class="form-control" required>
+                                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-1">
+                    <label>&nbsp;&nbsp;</label>
+                    <div class="input-group">                       
+                        <button type="button" id="firma_lote" class="btn btn-primary"><i class="fa fa-download"></i></button>
+                    </div>                                    
+                </div>
+                <!--
+                <div class="form-group col-md-1">
                     <label>&nbsp;&nbsp;</label>
                     <div class="input-group">                    
                         <button type="button" id="buscar_documento" class="btn btn-success"> <i class="fa fa-search"></i></button>
                     </div>                                    
                 </div>
-
-                <div class="form-group col-md-2">
-                    <label>&nbsp;&nbsp;</label>
-                    <div class="input-group">                       
-                        <button type="button" id="firma_lote" class="btn btn-primary">Descargar documentos</button>
-                    </div>                                    
-                </div>
+                -->
+                
             </div>
             <br>
             <div class="table-primary">
                 <table class="table table-default table-condensed table-bordered table-striped tablaDocumento" width="100%">
                     <thead>
                         <tr>
-                            <th width="3%">#</th>
-                            <th width="10%">RUT Empresa</th>
-                            <th width="15%">Nombre Empresa</th>
-                            <th width="10%">RUT Paciente</th>
-                            <th width="17%">Nombre Paciente</th>
-                            <th width="15%">Tipo de Documento</th>
-                            <th width="12%">Estado</th>
-                            <th width="7%" class="align-middle">Check 
+                            <th width="5%"> 
                                 
                                     <label class="px-single" >
                                         <input type="checkbox" name="" value="" class="px">
@@ -76,6 +115,14 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                     </label>
                                 
                             </th>
+                            <th width="3%">#</th>
+                            <th width="10%">RUT Empresa</th>
+                            <th width="15%">Nombre Empresa</th>
+                            <th width="10%">RUT Paciente</th>
+                            <th width="17%">Nombre Paciente</th>
+                            <th width="15%">Tipo de Documento</th>
+                            <th width="12%">Estado</th>
+                            
                             <th width="10%"></th>
                         </tr>
                     </thead>
