@@ -94,7 +94,7 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-4">
                             <div class="timeline">
                                 <!-- Timeline header -->
                                 <div class="tl-header now bg-primary">FIRMANTES</div>
@@ -137,9 +137,23 @@
 
                             </div>
                         </div>
+
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" />
+                                    
+                                </div>
+                                <div class="col-sm-5 text-center">
+                                    <img src="../files-firma/qr.png" style="width: 60%">
+                                    <br><br>
+                                    <h4>Timbre A1800002042ABD4IN2</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-sm-7">
                             <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" />
                             
@@ -149,7 +163,7 @@
                             <br><br>
                             <h4>Timbre A1800002042ABD4IN2</h4>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             
