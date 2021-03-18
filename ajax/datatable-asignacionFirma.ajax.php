@@ -1,34 +1,52 @@
 <?php
-require_once "../controllers/tipo_documento.controller.php";
-require_once "../models/tipo_documento.model.php";
+require_once "../controllers/usuario.php";
+require_once "../models/usuario.php";
 
-class DatatableTipoDocumento  {
+class DatatableAsignacionFirma  {
 
   public $request;
 
-  public function dataTipoDocumento(){
+  public function dataListaUsuarios(){
 
-    $columns = "id,
-                descripcion
+    $columns = "u.id_usuario,
+                CONCAT(u.nombres,' ',u.apellidos) fullname,
+                u.username,
+                r.descripcion,
+                u.logo,
+                u.tiene_certificado
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
 
-    $searchColumns = ['descripcion']; //columnas donde generar la busqueda
+    $searchColumns = [
+    "CONCAT(u.nombres,' ',u.apellidos)",
+    "u.username",
+    "r.descripcion"
+    ]; //columnas donde generar la busqueda
+
     $orderColumns = [
-      0 => 'id',
-      1 => 'descripcion'
+      0 => 'u.id_usuario',
+      1 => 'fullname',
+      2 => 'u.username',
+      3 => 'r.descripcion'
     ]; //columnas para ordenar
 
     $params = array(
-            "table"=>"tipo_documento",
-            "columns"=>$columns,
-            "searchColumns"=>$searchColumns,
-            "orderColumns" => $orderColumns,
+      "table"=>"usuario u",
+      "columns"=>$columns,
+      "searchColumns"=>$searchColumns,
+      "orderColumns" => $orderColumns,
+      "join"=>array(
+        ['rol_usuario r','r.id_rol','u.id_rol']
+      ),
+      "where"=>array(
+        ['u.borrado','0'],
+      ),
+      "useDeleted"=>'0'
     );
 
-    $options = TipoDocumentoController::dataTable($this->request,$params,'options');
-    $records = TipoDocumentoController::dataTable($this->request,$params,'data');
+    $options = Usuario::dataTable($this->request,$params,'options');
+    $records = Usuario::dataTable($this->request,$params,'data');
     //$records = array();
     // $test = Controller::dataTable($this->request,$params,'');
     $data = [];
@@ -41,30 +59,48 @@ class DatatableTipoDocumento  {
 
       // procesando la data para mostrarla en el front
       $id = 0;
-      $descripcion = 0;
+      $fullname = '';
+      $username = '';
+      $rol = '';
+      $logo = '';
+      $tiene_certificado = '';
+      $text_certificado = '';
 
       foreach ($records as $row) {
 
         $i++;
-        $id = $row['id'];
-        $descripcion = $row['descripcion'];
+        $id = $row[0];
+        $fullname = $row[1];
+        $username = $row[2];
+        $rol = $row[3];
+        $logo = $row[4];
+        $tiene_certificado = $row[5];
+        $text_certificado = $tiene_certificado == '1' ? 
+          '<span class="label label-success"><i class="fas fa-check-circle"></i></span>':
+          '<span class="label label-warnig"><i class="fas fa-exclamation-triangle"></i></span>';
         $button = '';
 
         if($mantenimiento == '1'){
 
           $button =  "
-                <div class='btn-group'>
-                  <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$row["id"]."'><i class='fas fa-edit'></i></button>
-                  <button title='Agregar Roles' class='btn btn-info btnAddRol btn-sm' id='".$row["id"]."' descripcion='".$descripcion."' ><i class='fas fa-bars'></i></button>
-                  <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$row["id"]."'><i class='fa fa-times'></i></button>
-                </div>
+            <div class='btn-group'>
+              <button title='Editar' class='btn btn-success btnEditar btn-sm' 
+              fullname='".$fullname."' id='".$id."' username='".$username."' >
+                <i class='fas fa-file-signature'></i>
+              </button>
+              <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
+            </div>
           ";
 
         }
 
         $data[] = array(
           "DT_RowIndex" => $i,
-          "descripcion" => $descripcion,
+          "fullname" => $fullname,
+          "username" => $username,
+          "rol" => $rol,
+          "logo" => $logo,
+          "tiene_certificado" => $text_certificado,
           "action" => $button
         );
 
@@ -91,7 +127,7 @@ class DatatableTipoDocumento  {
 }
 
 if(isset($_GET)){
-  $data = new DatatableTipoDocumento();
+  $data = new DatatableAsignacionFirma();
   $data -> request = $_GET;
-  $data -> dataTipoDocumento();
+  $data -> dataListaUsuarios();
 }

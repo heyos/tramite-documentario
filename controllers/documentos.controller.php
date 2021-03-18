@@ -113,7 +113,7 @@ class DocumentoController extends Controller {
 
 			if($respuesta != 0){
 
-				$idDocumento = $respuesta;
+				$idDocumento = $params['id'];
 				$arr = [];
 
 				//eliminado logico de los usuarios firmantes

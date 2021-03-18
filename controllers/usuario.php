@@ -350,4 +350,24 @@ class Usuario extends Controller {
       return $salidaJson;
     }
 
+    public static function updateCredencialesUser($params){
+
+        $data = [];
+        $mensajeError = "";
+        $respuestaOk = false;
+
+        $certificado = $params['file']['certificado'];
+        $firma = $params['file']['firma'];
+        $rootFolder = Config::rutas();
+        $folder = $rootFolder['certificado'];
+
+        $data = $firma;
+
+        $salidaJson = array("respuesta"=>$respuestaOk,
+                          "data"=>$data);
+
+      return $salidaJson;
+
+    }
+
 }

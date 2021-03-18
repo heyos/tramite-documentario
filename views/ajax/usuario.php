@@ -1,6 +1,7 @@
 <?php
 
 require_once "../../controllers/globales.php";
+require_once "../../controllers/config.php";
 require_once "../../models/usuario.php";
 require_once "../../controllers/usuario.php";
 
@@ -14,6 +15,8 @@ class Ajax{
     public $id_rol;
     public $username;
     public $password;
+    public $file;
+    public $params;
 
     public function guardarUsuarioAjax(){
 
@@ -45,6 +48,19 @@ class Ajax{
         $respuesta = Usuario::eliminarUsuarioController($datos);
 
         echo $respuesta;
+    }
+
+    public function guardarCredencialesAjax(){
+
+        $params = $this->params;
+        $files = $this->file;
+
+        $params['file'] = array(
+            'certificado' => $files['ctr'],
+            'firma' => $files['digital']
+        );
+
+        echo json_encode($respuesta);
     }
 
 }
@@ -82,6 +98,11 @@ if(isset($_POST["accion"])){
 
             break;
 
+        case 'credencial':
+            $a -> file = isset($_FILES) ? $_FILES : [] ;
+            $a -> params = $_POST;
+            $a -> guardarCredencialesAjax();
+            break;
         default:
             # code...
             break;
