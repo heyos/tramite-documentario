@@ -9,7 +9,7 @@ class Config {
 		$rootFolder = array(
 			'DEV' => '../../files-firma/',
 			'TEST' => '../files-firma/',
-			'PROD' => ''
+			'PROD' => '../../../../files-firma/'
 		);
 
 		$rutas = array(

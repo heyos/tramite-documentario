@@ -210,9 +210,6 @@ class Model {
 
         }
 
-        if(!empty($where)){
-            $where = ' AND '.$where;
-        }
         //-------------------------------------------------------------------
         //FIN WHERE
         //-------------------------------------------------------------------
@@ -241,7 +238,7 @@ class Model {
         }
 
         if($useDeleted == '1'){
-            $where = $deletedParam.$where;
+            $where = !empty($where) ? $deletedParam.' AND '.$where : $deletedParam;
         }
 
         $sql = sprintf("SELECT %s FROM %s %s WHERE %s %s %s",

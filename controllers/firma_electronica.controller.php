@@ -34,7 +34,7 @@ class FirmaElectronica {
 				    $pkcs12,
 				    $clave
 				);
-			}				
+			}		
 
 			return $pkcs12;
 			
@@ -49,7 +49,7 @@ class FirmaElectronica {
 		try {
 
 			$respuestaOk = false;
-			$mensajeError = '';
+			$message = '';
 			$data = array();
 
 			$pkcs12 = self::verificarCertificado($name,$clave);
@@ -173,7 +173,7 @@ class FirmaElectronica {
 				);
 
 			}else{
-				$mensajeError = 'No se pudo verificar el certificado';
+				$message = 'No se pudo verificar el certificado';
 			}
 
 			$return = array(
