@@ -166,6 +166,8 @@ init.push(function () {
 				return;
 			}
 
+			blockPage();
+
 			name = name.replace('.pdf','');
 			var datos = 'accion=readfile&name='+name;
 
@@ -186,6 +188,8 @@ init.push(function () {
 	    	}else{
 	    		notification('Error..!','Documento no encontrado','error');
 	    	}
+
+	    	unBlockPage();
 
 	    });
 

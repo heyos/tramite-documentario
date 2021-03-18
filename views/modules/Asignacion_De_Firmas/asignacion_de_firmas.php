@@ -80,7 +80,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label">Clave</label>
-                                        <input type="text" name="clave" value="clave" class="form-control" placeholder="Ingrese la clave">
+                                        <input type="text" name="clave" id="clave" class="form-control" placeholder="Ingrese la clave">
                                     </div>
                                 </div>
                             </div>

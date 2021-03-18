@@ -60,6 +60,10 @@ class Ajax{
             'firma' => $files['digital']
         );
 
+        unset($params['accion']);
+
+        $respuesta = Usuario::updateCredencialesUser($params);
+
         echo json_encode($respuesta);
     }
 

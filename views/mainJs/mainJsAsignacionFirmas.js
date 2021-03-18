@@ -98,15 +98,23 @@ init.push(function () {
         }
 
         if(input_id == 'digital'){
-          if(file.type != 'image/png'){
-            notification('Advertencia..!','.PNG es el unico formato permitido','error');
-            $(this).val('');
-            $('button[limpiar="'+input_id+'"]').hide();
-            return;
-          }else{
-            var output = document.getElementById('contenedor-img');
-            output.src = URL.createObjectURL(file);
+          var output = document.getElementById('contenedor-img');
+          var src = 'views/images/firma-default.png';
+          
+          switch (file.type){
+            case 'image/png':
+            case 'image/jpeg':
+              output.src = URL.createObjectURL(file);
+              break;
+            default:
+              notification('Advertencia..!','.PNG y/o .JPEG es el unico formato permitido','error');
+              $(this).val('');
+              $('button[limpiar="'+input_id+'"]').hide();
+              output.src = src;
+              return;
+              break;
           }
+
         }
 
         $('button[limpiar="'+input_id+'"]').show();
@@ -115,37 +123,22 @@ init.push(function () {
 
     });
 
-    // $('#'+input_id).change(function(){
-    //   var file = this.files[0];
-    //   console.log('file => ',file);
-    //   if(input_id == 'ctr'){
-    //     if(file.type != 'application/x-pkcs12'){
-    //       notification('Advertencia..!','.PFX es el unico formato permitido','error');
-    //       $(this).val('');
-    //       $('button[limpiar="'+input_id+'"]').hide();
-    //       return;
-    //     }
-    //   }
-    // });
-
     $('#guardar').click(function(){
 
       var datos = new FormData();
       var digital = $('#digital').prop('files')[0];
       var ctr = $('#ctr').prop('files')[0];
-
-      console.log('digital => ',digital);
-      console.log('ctr => ',ctr);
-
-      return;
+      var clave = $('#clave').val();
+      var user = $('#username').val();
+      var id = $('#id_usuario').val();
 
       datos.append("ctr",ctr);
       datos.append("digital",digital);
-      datos.append('oldFile',oldFile);
-      datos.append('rut_cliente',rut_cliente);
-      datos.append('nombre_paciente',nombre_paciente);
-      datos.append('tipo_doc',tipo_doc);
-
+      datos.append('term',id);
+      datos.append('user',user);
+      datos.append('clave',clave);
+      datos.append('accion','credencial');
+      
       $.ajax({
         beforeSend: function(){
           blockPage();
@@ -164,10 +157,10 @@ init.push(function () {
           if(response.respuesta == false){
             notification('Advertencia..!',response.mensaje,'error');
           }else{
-            $('.name_documento').val(response.data);
-            $(form +' .tieneDocumento').fadeIn();
-            $(form+' .noTieneDocumento').hide();
+            
           }
+
+          console.log('response => ',response);
 
         },
         error: function(e){
