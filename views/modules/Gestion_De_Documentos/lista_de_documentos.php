@@ -37,11 +37,14 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Codigo</th>
                             <th>RUT Empresa</th>
                             <th>Nombre Empresa</th>
                             <th>RUT Paciente</th>
                             <th>Nombre Paciente</th>
                             <th>Tipo de Documento</th>
+                            <th>Estado</th>
+                            <th>Fecha Creacion</th>
                             <th></th>
                         </tr>
                     </thead>

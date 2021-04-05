@@ -548,141 +548,36 @@ class Controller {
 
     }
 
-    public static function updateItem($datos){
+    public static function updateItem($params){
 
         $respuestaOk = false;
         $mensajeError = "No se puede ejecutar la aplicacion";
         $contenidoOk = '';
 
-        unset($datos['accion']);
+        if($params['table'] !=''){
 
-        if(count($datos) > 0){
+            $table = $params['table'];
 
-            $columns = '';
-            $values = '';
-            $table = '';
+            unset($params['table']);
 
-            foreach ($datos as $key => $item) {
+            $respuesta = Model::update($table,$params);
 
-                if($key == 'tabla'){
-                    $table = $item;
-                }elseif ($key == 'id') {
-                    $id = $item;
-                }
-                elseif ($key == 'dFecNac') {
-
-                    if($item == ''){
-                        $fecha = 'null';
-
-                    }else{
-                        $fecha = date('Y-m-d',strtotime($datos['dFecNac']));
-                        $fecha = sprintf(" '%s' ",$fecha) ;
-                    }
-
-                    $columns .= sprintf(" %s =  %s, ",$key,$fecha);
-
-                }else{
-                    $columns .= sprintf(" %s = '%s', ",$key,$item);
-                }
-            }
-
-            $columns = substr($columns, 0,-2);
-
-            if($table != ''){
-
-                $error = 0;
-                $oldrut = '';
-                $columnId = 'id';
-
-                switch ($table) {
-                    case 'persona':
-
-                        if($_POST['nRutPer'] != ''){
-
-                            if(strlen($_POST['nRutPer']) > 1){
-                                $old = Model::detalleDatosMdl($table,'id',$id);
-                                if(count($old) > 0){
-
-                                    $validarRut = Globales::valida_rut($_POST['nRutPer']);
-
-                                    if($validarRut==false){
-                                        $mensajeError = "RUT invalido";
-                                        $error++;
-                                    }else{
-                                        $oldrut = $old[0]['nRutPer'];
-                                        if($oldrut != $_POST['nRutPer']){
-
-                                            // $verificar = Model::detalleDatosMdl($table,'nRutPer',$_POST['nRutPer']);
-                                            $where = array('nRutPer'=>$_POST['nRutPer'],'xTipoPer'=>$_POST['xTipoPer']);
-                                            $verificar = Model::detalleDatosCustomMdl($table,$where);
-                                            if(count($verificar) > 0){
-                                                $mensajeError = "RUT ya se encuentra registrado";
-                                                $error++;
-                                            }
-                                        }
-                                    }
-                                }else{
-                                    $error++;
-                                    $mensaje = 'Parametros invalidos';
-                                }
-                            }else{
-                                $error++;
-                                $mensajeError = "RUT invalido";
-                            }
-
-                        }else{
-                            $error++;
-                            $mensajeError = "Rut no puede estar vacio.";
-                        }
-
-                        $columnId = 'id';
-
-                        break;
-                    case 'direccion':
-
-                        if($_POST['xEmail'] != ''){
-                            $valid_email = Globales::is_valid_email($_POST['xEmail']);
-
-                            if($valid_email == false){
-                                $error++;
-                                if($mensajeError != ''){
-                                    $mensajeError.='<br>';
-                                }
-                                $mensajeError = "Email invalido";
-                            }
-                        }
-
-                        break;
-                    default:
-
-                        break;
-                }
-
-                if($error == 0){
-                    $respuesta = Model::actualizarDatosMdl($table,$columns,$columnId,$id);
-
-                    if($respuesta ==  true){
-                        $respuestaOk = true;
-                        $mensajeError = "Se actualizo exitosamente.";
-                    }else{
-                        $mensajeError = "No se actualizo el registro";
-                    }
-                }
-
+            if($respuesta !=  0){
+                $respuestaOk = true;
+                $mensajeError = "Se actualizo el registro exitosamente.";
             }else{
-                $mensajeError = "Parametros incorrectos";
+                $mensajeError = "No se ejecuto el proceso";
             }
-
 
         }else{
-            $mensajeError = "No contiene parametros validos";
+            $mensajeError = "Parametros inccorrectos";
         }
 
         $salidaJson = array('respuesta'=>$respuestaOk,
                             'mensaje'=>$mensajeError,
                             'contenido'=>$contenidoOk);
 
-        echo json_encode($salidaJson);
+        return $salidaJson;
 
     }
 

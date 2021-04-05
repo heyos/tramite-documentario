@@ -18,7 +18,10 @@ class DatatableTipoDocumento  {
                 c.xRazSoc,
                 p.nRutPer,
                 CONCAT(p.xNombre,' ',p.xApePat,' ',p.xApeMat) as paciente,
-                tp.descripcion
+                tp.descripcion,
+                DATE(d.fecha_crea),
+                d.codigo,
+                d.orden_firmante
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
@@ -29,6 +32,7 @@ class DatatableTipoDocumento  {
       'c.xRazSoc',
       'c.nRutPer',
       'p.nRutPer',
+      'd.codigo'
     ]; //columnas donde generar la busqueda
 
     $orderColumns = [
@@ -74,35 +78,81 @@ class DatatableTipoDocumento  {
       $nomPaciente = '' ;
       $tipoDocumento = '';
       $descripcion = "";
+      $estado = '';
+      $labelEstado = '';
+      $fechaCrea = '';
+      $codigo = '';
+      $ordenFirma = 0;
 
       foreach ($records as $row) {
 
         $i++;
         $id = $row[0];
+        $estado = $row[5];
         $rutCliente = $row[6] ;
         $nomCliente = $row[7] ;
         $rutPaciente = $row[8] ;
         $nomPaciente = $row[9] ;
         $tipoDocumento = $row[10];
+        $fechaCrea = date('d/m/Y',strtotime($row[11]));
+        $codigo = $row[12];
+        $ordenFirma = $row[13];
         $button = '';
+
+        switch ($estado) {
+          case '0':
+            $css = "label-warning";
+            $txt = 'Pendiente';
+
+            break;
+          case '1':
+            $css = "label-info";
+            $txt = 'En proceso de firma';
+
+            break;
+          case '2':
+            $css = "label-success";
+            $txt = 'Firmado por todos';
+            break;
+          case '3':
+            $css = "label-danger";
+            $txt = 'Cancelado';
+            break;
+          default:
+            
+            break;
+        }
+
+        $labelEstado = '<span class="label '.$css.' ">'.$txt.'</span>';
 
         if($mantenimiento == '1'){
 
           $button =  "
-                <div class='btn-group'>
-                  <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$id."'><i class='fas fa-edit'></i></button>
-                  <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
-                </div>
+            <div class='btn-group'>
+          ";
+
+          if($ordenFirma == 1){
+            $button .= "
+              <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$id."'><i class='fas fa-edit'></i></button>
+            ";
+          }
+
+          $button .= "
+              <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
+            </div>
           ";
         }
 
         $data[] = array(
           "DT_RowIndex" => $i,
+          "codigo" => $codigo,
           "rutCliente" => $rutCliente,
           "nomCliente" => $nomCliente,
           "rutPaciente" => $rutPaciente,
           "nomPaciente" => $nomPaciente,
           "tipoDocumento" => $tipoDocumento,
+          "estado" => $labelEstado,
+          "fechaCrea" => $fechaCrea,
           "action" => $button
         );
 

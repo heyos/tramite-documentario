@@ -47,7 +47,18 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             <i class="fa fa-license-card"></i> Tipo Documento
                         </label>
                         <select name="tipoDoc" id="tipoDoc" class="form-control" required>
-                                            
+                            <option value="0" >Todos</option>
+                            <?php
+                                $respuesta = TipoDocumentoController::allData();
+
+                                if($respuesta['respuesta']){
+                                    foreach ($respuesta['contenido'] as $key => $item) {
+                                        
+                                        echo '<option value="'.$item['id'].'" >'.$item['descripcion'].'</option>';
+                                    }
+                                    
+                                }
+                            ?>    
                         </select>
                     </div>
                 </div>
@@ -58,7 +69,18 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             <i class="fa fa-license-card"></i> Estado Documento
                         </label>
                         <select name="estadoDoc" id="estadoDoc" class="form-control" required>
-                                            
+                            <option value="4" >Todos</option>
+                            <?php
+                                $respuesta = EstadoDocumentoController::allData();
+
+                                if($respuesta['respuesta']){
+                                    foreach ($respuesta['contenido'] as $key => $item) {
+                                        
+                                        echo '<option value="'.$item['id'].'" >'.$item['descripcion'].'</option>';
+                                    }
+                                    
+                                }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -81,23 +103,43 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
             <div class="table-primary">
                 <table class="table table-default table-condensed table-bordered table-striped tablaDocumento" width="100%">
                     <thead>
-                        <tr>
+                        <!-- <tr>
                             <th width="3%">#</th>
-                            <th width="10%">RUT Empresa</th>
+                            <th width="9%">RUT Empresa</th>
                             <th width="15%">Nombre Empresa</th>
-                            <th width="10%">RUT Paciente</th>
-                            <th width="17%">Nombre Paciente</th>
-                            <th width="15%">Tipo de Documento</th>
-                            <th width="12%">Estado</th>
+                            <th width="9%">RUT Paciente</th>
+                            <th width="15%">Nombre Paciente</th>
+                            <th width="12%">Tipo de Documento</th>
+                            <th width="10%">Estado</th>
+                            <th width="9%">Fecha Creacion</th>
                             <th width="7%" class="align-middle">Check 
                                 
-                                    <label class="px-single" >
-                                        <input type="checkbox" name="" value="" class="px">
-                                        <span class="lbl"></span>
-                                    </label>
+                                <label class="px-single" >
+                                    <input type="checkbox" name="" value="" class="px">
+                                    <span class="lbl"></span>
+                                </label>
                                 
                             </th>
                             <th width="10%"></th>
+                        </tr> -->
+                        <tr>
+                            <th>#</th>
+                            <th>RUT Empresa</th>
+                            <th>Nombre Empresa</th>
+                            <th>RUT Paciente</th>
+                            <th>Nombre Paciente</th>
+                            <th>Tipo de Documento</th>
+                            <th>Estado</th>
+                            <th>Fecha Creacion</th>
+                            <th class="align-middle">Check 
+                                
+                                <label class="px-single" >
+                                    <input type="checkbox" name="" value="" class="px">
+                                    <span class="lbl"></span>
+                                </label>
+                                
+                            </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -120,7 +162,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
             <div class="modal-body">
                 
                 <form id="form-firma" class="form-horizontal">
-                    <input type="" id="id" name="id">
+                    <input type="hidden" id="id" name="id" required>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Clave</label>
                         <div class="col-sm-9">

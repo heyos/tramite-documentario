@@ -73,6 +73,7 @@ init.push(function () {
       $(modalReg+' #myModalLabel').html('Asignar Firma: <strong>'+fullname+'</strong>');
       resetFormularioNew(form);
 
+      $(form+' input[type=file]').val('');
       $(form+' input[name=id_usuario]').val(id);
       $(form+' input[name=username]').val(username);
       $(modalReg).modal('show');
@@ -87,7 +88,7 @@ init.push(function () {
 
       $('#'+input_id).change(function(){
         var file = this.files[0];
-        console.log('file => ',file);
+        //console.log('file => ',file);
         if(input_id == 'ctr'){
           if(file.type != 'application/x-pkcs12'){
             notification('Advertencia..!','.PFX es el unico formato permitido','error');
@@ -157,7 +158,11 @@ init.push(function () {
           if(response.respuesta == false){
             notification('Advertencia..!',response.mensaje,'error');
           }else{
-            
+            table.draw();
+            notification('Exito..!',response.mensaje,'success');
+
+            $(modalReg).modal('hide');
+            $('.quitar').hide();
           }
 
           console.log('response => ',response);
@@ -171,5 +176,63 @@ init.push(function () {
       });
 
     });
-    
+
+    $('body').on('click','.btnEliminar',function(e){
+
+      var term = $(this).attr('id');
+      var str = 'accion=quitar&term='+term;
+
+      bootbox.dialog({
+          message: "Esta seguro de quitar el certificado de este registro?",
+          title: "Eliminar Registro",
+          buttons: {
+              cancel: {
+                label: "Cancelar",
+                className: "btn-secondary"
+              },
+              confirm: {
+                label: "Ok",
+                className: "btn-success",
+                callback: function() {
+
+                  $.ajax({
+                    beforeSend:function(){
+                      blockPage();
+                    },
+                    url: 'views/ajax/usuario',
+                    method: "POST",
+                    cache: false,
+                    dataType: "json",
+                    data: str,
+                    success: function(response){
+
+                      if(response.respuesta==false){
+                          unBlockPage();
+                          notification('Advertencia..!', response.mensaje,'error');
+                      }else{
+
+                        table.draw();
+                        notification('Exito..!', response.mensaje,'success');
+
+                      }
+                      console.log(response);
+
+                    },
+                    error: function(e){
+                        unBlockPage();
+                        console.log(e);
+                    }
+
+                  });
+
+                }
+              }
+
+          },
+          className: "bootbox-sm modal-dialog-centered-custom"
+      });
+      
+    });
+
+      
 });

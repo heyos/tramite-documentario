@@ -4,6 +4,8 @@ require_once "../../controllers/globales.php";
 require_once "../../controllers/config.php";
 require_once "../../models/usuario.php";
 require_once "../../controllers/usuario.php";
+require_once "../../controllers/firma_electronica.controller.php";
+require_once "../../library/fpdf/fpdf.php";
 
 class Ajax{
 
@@ -56,8 +58,8 @@ class Ajax{
         $files = $this->file;
 
         $params['file'] = array(
-            'certificado' => $files['ctr'],
-            'firma' => $files['digital']
+            'certificado' => isset($files['ctr']) ? $files['ctr'] : [] ,
+            'firma' => isset($files['digital']) ? $files['digital'] : []
         );
 
         unset($params['accion']);
@@ -65,6 +67,32 @@ class Ajax{
         $respuesta = Usuario::updateCredencialesUser($params);
 
         echo json_encode($respuesta);
+    }
+
+    public function quitarCredencialesAjax(){
+
+        $params = $this->params;
+
+        unset($params['accion']);
+
+        $where = array(
+            'logo'=>'0',
+            'name_certificado' => '',
+            'pass_certificado' => '',
+            'tiene_certificado' => '0',
+            'where' => array(
+                ['id_usuario',$params['term']]
+            ),
+            'table'=>'usuario'
+        );
+
+        $update = Usuario::updateItem($where);
+
+        if($update['respuesta']){
+            $update['mensaje'] = "Se quitaron las credenciales exitosamente";
+        }
+
+        echo json_encode($update);
     }
 
 }
@@ -107,8 +135,17 @@ if(isset($_POST["accion"])){
             $a -> params = $_POST;
             $a -> guardarCredencialesAjax();
             break;
+        case 'quitar':
+            $a -> params = $_POST;
+            $a -> quitarCredencialesAjax();
+            break;
         default:
-            # code...
+            echo json_encode(array(
+                'respuesta' => false,
+                'message' => 'no se puede ejecutar la aplicacion',
+                'mensaje' => 'no se puede ejecutar la aplicacion'
+            ));
+
             break;
     }
 }

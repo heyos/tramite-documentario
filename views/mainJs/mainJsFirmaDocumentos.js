@@ -34,6 +34,8 @@ init.push(function () {
 	              d.idDocus = localStorage.getItem('arrId') ? localStorage.getItem('arrId') : JSON.stringify([]) ;
 	              d.inicio = $('#fecha_inicio').val();
 	              d.fin = $('#fecha_fin').val();
+	              d.tipoDoc = $('#tipoDoc').val();
+	              d.estadoDoc = $('#estadoDoc').val();
 	              console.log(d);
 	          },
 	          complete: function(res){
@@ -55,6 +57,7 @@ init.push(function () {
 	          {data: 'nomPaciente', name: 'nomPaciente',className:'text-center'},
 	          {data: 'tipoDocumento', name: 'tipoDocumento',className:'text-center'},
 	          {data: 'estado', name: 'estado',className:'text-center'},
+	          {data: 'fechaCrea', name: 'fechaCrea',className:'text-center'},
 	          {data: 'descargar', name: 'descargar',className:'text-center',orderable: false,searchable: false},
 	          {data: 'action', name: 'action', className:'text-center',orderable: false, searchable: false},
 

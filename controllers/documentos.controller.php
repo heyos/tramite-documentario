@@ -15,6 +15,7 @@ class DocumentoController extends Controller {
 						$params['name_documento'] != '' ? '1' : '0'
 						: '0' ; //1:en proceso de firma - 0:pendiente
 		$params['estado_firma'] = $estadoFirma;
+		$params$arr['codigo'] = uniqid();['codigo'] = uniqid();
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
 

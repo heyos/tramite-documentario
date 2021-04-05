@@ -48,7 +48,8 @@ class DatatableTipoDocumento  {
                 du.firmado,
                 d.usuario_modifica,
                 d.orden_firmante,
-                du.orden_firma
+                du.orden_firma,
+                DATE(d.fecha_crea)
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
@@ -78,6 +79,17 @@ class DatatableTipoDocumento  {
 
     $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
 
+    $where = array(
+      ['du.usuario_id',$usuario_id],
+      [$filtro_fecha]
+    );
+
+    $tipo = isset($this->request['tipoDoc']) ? $this->request['tipoDoc'] : '0';
+    $filtro_tipo = $tipo != '0' ? array_push($where, ['d.tipoDocumento_id',$tipo]) : '' ;
+
+    $estado = isset($this->request['estadoDoc']) ? $this->request['estadoDoc'] : '4';
+    $filtro_estado = $estado != '4' ? array_push($where, ['d.estado_firma',$estado]) : '' ;
+
     $params = array(
       "table"=>"documento_usuario du",
       "columns"=>$columns,
@@ -89,10 +101,7 @@ class DatatableTipoDocumento  {
         ['persona p','p.id','d.paciente_id'],
         ['tipo_documento tp','tp.id','d.tipoDocumento_id']
       ),
-      'where' => array(
-        ['du.usuario_id',$usuario_id],
-        [$filtro_fecha]
-      ),
+      'where' => $where,
       'order' => 'd.fecha_crea',
       'dir' => 'DESC'
     );
@@ -122,6 +131,7 @@ class DatatableTipoDocumento  {
       $orden_firmante = '';
       $orden_firma = '';
       $check = '';
+      $fechaCrea = '';
 
       foreach ($records as $row) {
 
@@ -138,6 +148,7 @@ class DatatableTipoDocumento  {
         $usuario_modifica = $row[12];
         $orden_firmante = $row[13];
         $orden_firma = $row[14];
+        $fechaCrea = date('d/m/Y',strtotime($row[15]));
 
         $txt = "";
         $css = "";
@@ -185,7 +196,7 @@ class DatatableTipoDocumento  {
               </button>
             ";
 
-            //if($orden_firmante == $orden_firma){
+            if($orden_firmante == $orden_firma){
               $button .= "
                 <button title='Firmar documento' class='btn btn-success btn-sm btnFirmar' 
                   id='".$id."'
@@ -201,7 +212,7 @@ class DatatableTipoDocumento  {
                 <input type="checkbox" id="'.$id.'" class="check_firma" value="'.$id.'">
               ';
 
-            //}
+            }
 
             break;
           case '2':
@@ -238,6 +249,7 @@ class DatatableTipoDocumento  {
           "nomPaciente" => $nomPaciente,
           "tipoDocumento" => $tipoDocumento_des,
           "estado" => $labelEstado,
+          "fechaCrea" => $fechaCrea,
           "descargar" => $check,
           "action" => $button
         );

@@ -355,18 +355,145 @@ class Usuario extends Controller {
         $data = [];
         $mensajeError = "";
         $respuestaOk = false;
+        $error = 0;
 
         $certificado = $params['file']['certificado'];
         $firma = $params['file']['firma'];
         $rootFolder = Config::rutas();
         $folder = $rootFolder['certificado'];
+        //576*364
 
-        $data = $firma;
+        $id = $params['term'];
+        $username = $params['user'];
+        $dir = '../'.$folder.'/'.$username;
 
-        $salidaJson = array("respuesta"=>$respuestaOk,
-                          "data"=>$data);
+        if(!is_dir($dir)){
+            mkdir($dir,0777,true);
+        }
 
-      return $salidaJson;
+        //FIRMA
+        $typeFileFirma = "";
+        $dirImgFirma = "";
+        $dirImgFirmaPdf = "";
+        $extIMG = array('png','jpeg','jpg');
+        $nameFileFirmaPdf = "";
+
+        
+        if(isset($firma['tmp_name'])){
+
+            $arrTypeFileFirma = explode('.', $firma['name']);
+            $typeFile = strtolower(end($arrTypeFileFirma));
+
+            if(in_array($typeFile,$extIMG)){
+                
+                $dirImgFirma = $dir.'/'.$username.'.'.$typeFile;
+
+                if(move_uploaded_file($firma['tmp_name'], $dirImgFirma)){
+
+                    $nameFileFirmaPdf = $username.'.pdf';
+                    $dirImgFirmaPdf = $dir.'/'.$nameFileFirmaPdf;
+
+                    if(is_dir($dir)){
+
+                        $pdf = new FPDF('L', 'mm', array(48.7,30.7));
+                        $pdf->AddPage();
+                        $pdf->image($dirImgFirma,0,0,48.7,30.7); //directorio,posX,posY,ancho,alto
+                        
+                        $pdf->Output('F',$dirImgFirmaPdf);
+
+                    }else{
+                        $mensajeError = "Fichero destino no existe.";
+                        $error++;
+                    }
+
+                    unlink($dirImgFirma);
+
+                }else{
+                    $error++;
+                    $mensajeError = "Error al subir la firma al servidor.";
+                }                
+                 
+            }else{
+                $mensajeError = "Formato no permitido para este tipo de archivo.";
+                $error++;
+            }
+            
+        }
+
+        //CERTIFICADO
+        $typeFileCert = "";
+        $dirCert = "";
+        $nameCert = "";
+
+        if(isset($certificado['tmp_name']) && $params['clave'] != ''){
+
+            $arrTypeFileCert = explode('.',$certificado['name']);
+            $typeFileCert = strtolower(end($arrTypeFileCert));
+            $nameCert = $username;
+            $dirCert = $dir.'/'.$nameCert.'.'.$typeFileCert;
+
+            if($typeFileCert == 'pfx'){
+
+                if(move_uploaded_file($certificado['tmp_name'],$dirCert)){
+
+                    $verify = FirmaElectronica::comprobarCertificado($dirCert,$params['clave']);
+
+                    if($verify){
+
+                        $update = array(
+                            'name_certificado' => Globales::encriptar($nameCert),
+                            'pass_certificado' => Globales::encriptar($params['clave']),
+                            'tiene_certificado' => '1',
+                            'where' => array(
+                                ['id_usuario', $params['term'] ]
+                            )
+                        );
+
+                        if($nameFileFirmaPdf != ''){
+                            $update['logo'] = '1';
+                        }
+
+                        $respuesta = UsuarioModel::update('usuario',$update);
+
+                        if($respuesta != 0){
+                            $respuestaOk = true;
+                            $mensajeError = "Se agrego el certificado digital exitosamente al USUARIO: ".$username;
+                        }else{
+                            $mensajeError = "Error al actualizar la informacion";
+                        }
+
+                    }else{
+                        $mensajeError = "No se pudo verificar la autenticidad del certificado.";
+                    }                        
+
+                }else{
+                    if($mensajeError != '' ){
+                        $mensajeError .= '<br>';
+                    }
+                    $mensajeError .= "Error al subir certificado digital.";
+                }
+
+            }else{
+                if($mensajeError != '' ){
+                    $mensajeError .= '<br>';
+                }
+                $mensajeError .= "*.pfx Unico formato permitido para el certificado.";
+            }
+
+        }else{
+            if($mensajeError != '' ){
+                $mensajeError .= '<br>';
+            }
+            $mensajeError .= "Certificado digital y/o Clave obligatorios";
+        }
+        
+        $salidaJson = array(
+            "respuesta"=>$respuestaOk,
+            "data"=>$data,
+            'mensaje' => $mensajeError
+        );
+
+        return $salidaJson;
 
     }
 

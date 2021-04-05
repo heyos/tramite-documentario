@@ -35,6 +35,7 @@ require_once "controllers/tablaLogica.php";
 require_once "controllers/persona.php";
 require_once "controllers/tipo_documento.controller.php";
 require_once "controllers/documentos.controller.php";
+require_once "controllers/estadodocumento.controller.php";
 
 require_once 'vendor/autoload.php';
 require_once 'controllers/firma_electronica.controller.php';

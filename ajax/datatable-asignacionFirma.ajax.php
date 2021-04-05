@@ -64,6 +64,7 @@ class DatatableAsignacionFirma  {
       $rol = '';
       $logo = '';
       $tiene_certificado = '';
+      $text_firma = '';
       $text_certificado = '';
 
       foreach ($records as $row) {
@@ -75,9 +76,12 @@ class DatatableAsignacionFirma  {
         $rol = $row[3];
         $logo = $row[4];
         $tiene_certificado = $row[5];
+        $text_firma = $logo == '0' ?
+          '<span class="label label-warning"><i class="fas fa-exclamation-triangle"></i></span>':
+          '<span class="label label-success"><i class="fas fa-check-circle"></i></span>';
         $text_certificado = $tiene_certificado == '1' ? 
           '<span class="label label-success"><i class="fas fa-check-circle"></i></span>':
-          '<span class="label label-warnig"><i class="fas fa-exclamation-triangle"></i></span>';
+          '<span class="label label-warning"><i class="fas fa-exclamation-triangle"></i></span>';
         $button = '';
 
         if($mantenimiento == '1'){
@@ -88,7 +92,17 @@ class DatatableAsignacionFirma  {
               fullname='".$fullname."' id='".$id."' username='".$username."' >
                 <i class='fas fa-file-signature'></i>
               </button>
+              
+            
+          ";
+
+          if($tiene_certificado == '1'){
+            $button .= "
               <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
+            ";
+          }
+
+          $button .= "
             </div>
           ";
 
@@ -99,7 +113,7 @@ class DatatableAsignacionFirma  {
           "fullname" => $fullname,
           "username" => $username,
           "rol" => $rol,
-          "logo" => $logo,
+          "logo" => $text_firma,
           "tiene_certificado" => $text_certificado,
           "action" => $button
         );

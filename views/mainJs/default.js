@@ -255,7 +255,7 @@ function cargarDataModal(url,type,str,modal,form,callback=null){
 function deleteRow(url,table,params,type){
 
     var str = params != '' ? params : 'params=';
-		var $type = type != '' ? type : 'DELETE';
+	var $type = type != '' ? type : 'DELETE';
 
     bootbox.dialog({
         message: "Esta seguro de eliminar este registro?",
@@ -290,7 +290,7 @@ function deleteRow(url,table,params,type){
                                 notification('Exito..!', 'Registro eliminado exitosamente','success');
 
                             }
-														console.log(response);
+							console.log(response);
 
                         },
                         error: function(e){

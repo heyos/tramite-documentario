@@ -23,7 +23,7 @@ class FirmarDocumentoAjax{
 		session_start();
 
 		$params = $this->params;
-		$params['user'] = 'hreyes'; //$_SESSION['user'];
+		$params['user'] = $_SESSION['user']; //$_SESSION['user'] - hreyes;
 		$params['user_id'] = $_SESSION['usuario_id'];
 
 		$respuesta = DocumentoController::firmarDocumento($params);

@@ -572,11 +572,14 @@ init.push(function () {
 	      columns: [
 
 	          {data: 'DT_RowIndex', name: 'DT_RowIndex',className:'text-center',searchable: false},
+	          {data: 'codigo', name: 'codigo',className:'text-center',orderable: false},
 	          {data: 'rutCliente', name: 'rutCliente',className:'text-center'},
 	          {data: 'nomCliente', name: 'nomCliente',className:'text-center'},
 	          {data: 'rutPaciente', name: 'rutPaciente',className:'text-center'},
 	          {data: 'nomPaciente', name: 'nomPaciente',className:'text-center'},
 	          {data: 'tipoDocumento', name: 'tipoDocumento',className:'text-center'},
+	          {data: 'estado', name: 'estado',className:'text-center',searchable: false},
+	          {data: 'fechaCrea', name: 'fechaCrea',className:'text-center',searchable: false},
 	          {data: 'action', name: 'action', className:'text-center',orderable: false, searchable: false},
 
 	      ],

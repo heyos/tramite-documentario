@@ -44,6 +44,33 @@ class FirmaElectronica {
 
 	}
 
+	public static function comprobarCertificado($ruta,$clave){
+
+		try {
+
+			$pkcs12 = array();
+			$respuesta = false;
+			
+			if(file_exists($ruta)){
+				$pfxRead = openssl_pkcs12_read(
+				    file_get_contents($ruta),
+				    $pkcs12,
+				    $clave
+				);
+
+				if(count($pkcs12) > 0){
+					$respuesta = true;
+				}
+			}		
+
+			return $respuesta;
+			
+		} catch (Exception $e) {
+			return false;
+		}
+
+	}
+
 	public static function firmar($name,$clave,$documento,$orden,$pathOut){
 		
 		try {
