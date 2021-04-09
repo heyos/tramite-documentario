@@ -205,15 +205,18 @@ class DocumentoAjax{
     $dir = Config::rutas();
     $dirName = $dir['documento'].'/';
     $ruta = $dirName.$file.'.pdf';
+    $arr = explode('/',$file);
+    $name = $arr[count($arr)-1].'.pdf';
+
     if(file_exists($ruta)){
 
       header("Content-type: application/pdf");
-      header("Content-Disposition: inline; filename=documento.pdf");
+      header("Content-Disposition: inline; filename=".$name);
 
       readfile($ruta);
 
     }else{
-      echo "ERROR:>> Documento no encontrado";
+      echo "ERROR:>> Documento no encontrado ".$ruta;
     }
   }
 

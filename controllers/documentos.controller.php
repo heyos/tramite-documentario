@@ -15,7 +15,7 @@ class DocumentoController extends Controller {
 						$params['name_documento'] != '' ? '1' : '0'
 						: '0' ; //1:en proceso de firma - 0:pendiente
 		$params['estado_firma'] = $estadoFirma;
-		$params$arr['codigo'] = uniqid();['codigo'] = uniqid();
+		$params['codigo'] = uniqid();
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
 
@@ -166,7 +166,6 @@ class DocumentoController extends Controller {
 							$arr['fecha_crea'] = $params['fecha_modifica'];
 							$arr['usuario_modifica'] = '';
 							$arr['fecha_modifica'] = '';
-							
 						}
 
 						$res = DocumentoUsuarioModel::createOrUpdate('documento_usuario',$arr);
@@ -392,7 +391,7 @@ class DocumentoController extends Controller {
 							)
 						);
 						
-						$documentoUsuario = DocumentoUsuarioController::itemDetail($where_documentoUsuario);
+						$documentoUsuario = DocumentoUsuarioModel::firstOrAll('documento_usuario',$where_documentoUsuario,'all');
 						$cantDocUsuario = count($documentoUsuario);
 
 						//Actualizar tabla DOCUMENTO_USUARIO (firmado,fecha_firma,usuario_modifica,fecha_modifica)

@@ -93,10 +93,13 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label>&nbsp;&nbsp;</label>
-                    <div class="input-group">                       
-                        <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos lote</button>
-                    </div>                                    
+                    
+                    <div class="form-group pull-right">
+                        <label>&nbsp;&nbsp;</label>
+                        <div class="input-group">                       
+                            <button type="button" id="firma_lote" class="btn btn-primary">Firmar documentos lote</button>
+                        </div>  
+                    </div>                               
                 </div>
             </div>
             <br>
@@ -139,7 +142,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                 </label>
                                 
                             </th>
-                            <th></th>
+                            <th width="10%"></th>
                         </tr>
                     </thead>
                     <tbody></tbody>

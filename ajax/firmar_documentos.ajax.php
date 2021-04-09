@@ -31,6 +31,10 @@ class FirmarDocumentoAjax{
 		echo json_encode($respuesta);
 		
 	}
+
+	public function descargarDocumentoAjax(){
+
+	}
 }
 
 if(isset($_POST['accion'])){
@@ -43,7 +47,7 @@ if(isset($_POST['accion'])){
 			$a -> generarFirmaAjax();
 			break;
 		
-		case 'lote':
+		case 'download':
 			
 			break;
 		default:

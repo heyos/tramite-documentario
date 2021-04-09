@@ -36,10 +36,10 @@ init.push(function () {
 	              d.fin = $('#fecha_fin').val();
 	              d.tipoDoc = $('#tipoDoc').val();
 	              d.estadoDoc = $('#estadoDoc').val();
-	              console.log(d);
+	              //console.log(d);
 	          },
 	          complete: function(res){
-	              console.log(res);
+	              //console.log(res);
 	              hidePreloader();
 	              unBlockPage();
 	      	}

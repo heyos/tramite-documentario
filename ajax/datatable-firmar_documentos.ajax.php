@@ -88,6 +88,10 @@ class DatatableTipoDocumento  {
     $filtro_tipo = $tipo != '0' ? array_push($where, ['d.tipoDocumento_id',$tipo]) : '' ;
 
     $estado = isset($this->request['estadoDoc']) ? $this->request['estadoDoc'] : '4';
+    $view = isset($this->request['view']) ? $this->request['view'] : 'firma';
+    $estado = isset($this->request['view']) ? 
+              $this->request['view'] == 'descargar' ? '2' : $estado : 
+              $estado;
     $filtro_estado = $estado != '4' ? array_push($where, ['d.estado_firma',$estado]) : '' ;
 
     $params = array(
@@ -218,6 +222,30 @@ class DatatableTipoDocumento  {
           case '2':
             $css = "label-success";
             $txt = 'Firmado por todos';
+
+            $button .=  "
+              <button title='Ver documento' name_docu = ".$name_docu." class='btn btn-primary btn-sm btnVer' id='".$id."'>
+                <i class='fas fa-eye'></i>
+              </button>
+            ";
+
+            if($view == 'descargar'){
+              //
+              $check = '
+                <input type="checkbox" id="'.$id.'" class="check_download" value="'.$id.'">
+              ';
+
+              $button .= "
+                <button title='Descargar documento' class='btn btn-success btn-sm btnDownload' 
+                  id='".$id."'
+                  name_docu = ".$name_docu."
+                >
+                  <i class='fa fa-download'></i>
+                </button>
+              ";
+
+            }
+
             break;
           case '3':
             $css = "label-danger";
@@ -229,7 +257,7 @@ class DatatableTipoDocumento  {
         }
 
         //verificamos si es el ultimo usuario en modificar para darle la accion de eliminar
-        if($user == $usuario_modifica){
+        if($user == $usuario_modifica && $view == 'firma'){
           $button .= "
             <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
           ";
