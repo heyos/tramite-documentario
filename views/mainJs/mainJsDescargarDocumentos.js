@@ -4,7 +4,10 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 
 init.push(function () {
 
-    if($('.tablaDocumento').length > 0){
+	const urlParams = new URLSearchParams(window.location.search);
+	const action = urlParams.get('action');
+
+	if($('.tablaDocumento').length > 0){
 
     	$('body').on('click','#buscar_documento',function(e){
 			table.draw();
@@ -22,6 +25,7 @@ init.push(function () {
 	              d.tipoDoc = $('#tipoDoc').val();
 	              //d.estadoDoc = $('#estadoDoc').val();
 	              d.view = 'descargar';
+	              d.general = action;
 	              //console.log(d);
 	          },
 	          complete: function(res){
@@ -91,7 +95,7 @@ init.push(function () {
 		});
 
 		//DESCARGA_LOTE
-		$('#descarga_lote').on('click',function(){
+		$('#descarga_lote').on('click',async function(){
 			
 			//localStorage.removeItem('arrId');
 			var i = 0;
@@ -108,23 +112,22 @@ init.push(function () {
 				}
 
 			});
-
+			
 			if(arrId.length > 0){
-				//localStorage.setItem('arrId',JSON.stringify(arrId));
-
+				
 				var formData = new FormData();
-				formData.append('accion','readfile');
-				formData.append('name',name);
+				formData.append('accion','download_lote');
+				formData.append('documentos',JSON.stringify(arrId));
 
-			var url = 'ajax/documentos.ajax.php';
+				var url = 'ajax/documentos.ajax.php';
 
-				descargarDocumento(arrId);
+				await descargarDocumento(formData,url,'documentos.zip');
+
+				$("input[type=checkbox]").prop("checked", false);
 
 			}else{				
 				notification('Advertencia..!','Debe seleccionar almenos un documento','error');
 			}
-
-			console.log(arrId);
 
 		});
 
@@ -146,7 +149,44 @@ init.push(function () {
 			await descargarDocumento(formData,url,nameFile);
 
 		});
+
+		$('body').on('click','.tablaDocumento .btnVer',async function(e){
+	  		e.preventDefault();
+			var name = $(this).attr('name_docu');
+
+			if(name == ''){
+				notification('Error..!','Documento no encontrado','error');
+				return;
+			}
+
+			blockPage();
+
+			name = name.replace('.pdf','');
+			var datos = 'accion=readfile&name='+name;
+
+			var formData = new FormData();
+	    	formData.append('accion','readfile');
+	    	formData.append('name',name);
+
+	    	var url = 'ajax/documentos.ajax.php';
+	    	const response = await fetch(url,{
+					            method: 'post',
+					            body: formData,
+		          			});
+	    	var blob = await response.blob();
+	    	var blobUrl = URL.createObjectURL(blob);
+
+	    	if(blob.type == 'application/pdf'){
+	    		window.open(blobUrl, "Visualizar", "width=900,height=1000");
+	    	}else{
+	    		notification('Error..!','Documento no encontrado','error');
+	    	}
+
+	    	unBlockPage();
+
+	    });
  	}
+
 
 });
 
@@ -161,17 +201,18 @@ async function descargarDocumento(formData,url,nameFile){
 	var blob = await response.blob();
 	var blobUrl = URL.createObjectURL(blob);
 
-	// if(blob.type == 'application/pdf' || ){
-	// 	window.open(blobUrl, "Visualizar", "width=900,height=1000");
-	// }else{
-	// 	notification('Error..!','Documento no encontrado','error');
-	// }
-	const a = document.createElement('a');
-  	a.href = blobUrl; //window.URL.createObjectURL(new Blob([json]));
-  	a.target = 'blank'
-  	a.download = nameFile;
-  	a.click();
+	if(blob.type == 'application/pdf' || blob.type == 'application/octet-stream' ){
 
+		const a = document.createElement('a');
+	  	a.href = blobUrl; //window.URL.createObjectURL(new Blob([json]));
+	  	a.target = 'blank'
+	  	a.download = nameFile;
+	  	a.click();
+		
+	}else{
+		notification('Error..!','Error en el proceso de descarga','error');
+	}
+	
 	unBlockPage();
 
 }

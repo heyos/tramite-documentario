@@ -2,11 +2,14 @@
 require_once "../controllers/config.php";
 require_once "../controllers/globales.php";
 require_once "../controllers/documentos.controller.php";
+require_once "../controllers/documento_usuario.controller.php";
+require_once "../controllers/resumen_documento_usuario.controller.php";
 require_once "../models/documentos.model.php";
 require_once "../models/documento_usuario.model.php";
+require_once "../models/resumen_documento_usuario.model.php";
 
 require_once "../vendor/autoload.php";
-require_once "../controllers/dropbox.controller.php";
+require_once "../library/phpqrcode/qrlib.php";
 
 class DocumentoAjax{
 
@@ -61,6 +64,7 @@ class DocumentoAjax{
     $path = '';
     $message = '';
     $respuesta_upload = false;
+    $resumen = [];
 
     $oldFile = array_key_exists('oldFile', $this->params) ? $this->params['oldFile'] : '';
     $id = array_key_exists('id', $this->params) ? $this->params['id'] : 0; //parametro desde mainJsFirmaDocumentos.js
@@ -116,6 +120,7 @@ class DocumentoAjax{
 
           //verificamos que es de un documento creado
           if($id != 0){
+
             $params = array(
               'id'=>$id,
               'estado_firma' => '1',
@@ -127,6 +132,18 @@ class DocumentoAjax{
             $documento = DocumentoController::updateEstadoDocumento($params);
 
             $respuesta_upload = $documento['respuesta'];
+
+            if($documento['respuesta']){
+
+              $old = array(
+                'estado_old' => '0',
+                'documento_id' => $id
+              );
+
+              $resumen = ResumenDocumentoUsuarioController::updateResumen($old);
+
+            }
+              
           }             
 
         }else{
@@ -150,7 +167,8 @@ class DocumentoAjax{
       'data'=>$path,
       'respuesta'=>$respuestaOk,
       'mensaje'=>$message,
-      'respuesta_upload' => $respuesta_upload
+      'respuesta_upload' => $respuesta_upload,
+      'resumen' => $resumen
     )); 
 
   }
@@ -201,14 +219,40 @@ class DocumentoAjax{
 
   public function readFileDocumentAjax(){
 
-    $file = $this->params['name'];
+    $ruta = '';
+    $name = '';
+    $file = '';
+    $arr = [];
+
     $dir = Config::rutas();
     $dirName = $dir['documento'].'/';
-    $ruta = $dirName.$file.'.pdf';
-    $arr = explode('/',$file);
-    $name = $arr[count($arr)-1].'.pdf';
 
+
+    if(isset($this->params['name'])){
+
+      $file = $this->params['name'];
+      
+    }elseif (isset($this->params['term'])) {
+      //buscar por codigo del documento
+      $data = array(
+        'codigo' => $this->params['term']
+      );
+      $documento = DocumentoController::detalleDocumento($data);
+
+      if($documento['respuesta']){
+
+        $file = $documento['data']['name_documento'];
+        $file = str_replace('.pdf','',$file);
+
+      }
+    }
+
+    $ruta = $dirName.$file.'.pdf';
+    
     if(file_exists($ruta)){
+
+      $arr = explode('/',$file);
+      $name = $arr[count($arr)-1].'.pdf';
 
       header("Content-type: application/pdf");
       header("Content-Disposition: inline; filename=".$name);
@@ -216,7 +260,7 @@ class DocumentoAjax{
       readfile($ruta);
 
     }else{
-      echo "ERROR:>> Documento no encontrado ".$ruta;
+      echo "<h1><b>ERROR:>> Documento no encontrado y/o aun no se adjunta uno</b></h1>";
     }
   }
 
@@ -240,6 +284,119 @@ class DocumentoAjax{
     }
 
     echo json_encode($documento);
+  }
+
+  public function historialUsuariosFirmaAjax(){
+
+    $params = $this->params;
+    $respuesta = DocumentoUsuarioController::historialUsuariosFirma($params);
+
+    $contenido = '';
+
+    if($respuesta['respuesta']){
+      $contenido = DocumentoUsuarioController::generarContenidoFirmantes($respuesta['data']);
+
+      $respuesta['contenido'] = $contenido;
+
+      unset($respuesta['data']);
+    }
+
+    echo json_encode($respuesta);
+    
+  }
+
+  public function anularDocumentoAjax(){
+    session_start();
+    $params = $this->params;
+    $user = $_SESSION['user'];
+    $usuario_id = $_SESSION['usuario_id'];
+
+    $data = array(
+      'table' => 'documento',
+      'usuario_modifica' => $user,
+      'fecha_modifica' => date('Y-m-d'),
+      'estado_firma' => '3',
+      'where' => array(
+        ['id',$params['documento_id']]
+      )
+    );
+
+    //obtener estado antes de actualizarlo
+    $documento = DocumentoController::itemDetail($data);
+    $estado = $documento['respuesta'] ? $documento['data']['estado_firma'] : 0;
+
+    $respuesta = DocumentoController::updateItem($data);
+    $mensaje = $respuesta['respuesta'] ? 'Se anulo el documento exitosamente.' : $respuesta['mensaje'];
+    $respuesta['message'] = $mensaje;
+
+    
+    if($respuesta['respuesta']){
+
+      $old = array(
+        'estado_old' => $estado,
+        'documento_id' => $params['documento_id']
+      );
+
+      $resumen = ResumenDocumentoUsuarioController::updateResumen($old);
+
+    }
+      
+    echo json_encode($respuesta);
+  }
+
+  public function descargarPorLoteAjax(){
+
+    $params = $this->params;
+
+    $config = Config::rutas();
+    $rutaAbsoluta = $config['documento'];
+
+    $arrRutas = DocumentoController::descargarPorLote($params);
+
+    $zip = new ZipArchive();
+    
+    $nombreArchivoZip = $rutaAbsoluta."/".date('d.m.Y.H.i.s').".zip";
+
+    if (!$zip->open($nombreArchivoZip, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+        exit("Error abriendo ZIP en $nombreArchivoZip");
+    }
+    
+    $file = '';
+    foreach ($arrRutas as $documento) {
+      $file = $rutaAbsoluta."/".$documento['ruta'];
+      $zip->addFile($file, $documento['name_doc']);
+      echo $file.'<br>';
+    }
+
+    $resultado = $zip->close();
+    
+    if ($resultado) {
+
+      header('Content-Type: application/octet-stream');
+      header("Content-Transfer-Encoding: Binary");
+      header("Content-disposition: attachment; filename=$nombreArchivoZip");
+      // Leer el contenido binario del zip y enviarlo
+      readfile($nombreArchivoZip);
+
+      unlink($nombreArchivoZip);
+      
+    } else {
+      echo "Error creando archivo";
+    }
+
+  }
+
+  public function consultaReporteDocumentoAjax(){
+
+    $params = $this->params;
+    $data = array(
+      'codigo' => $params['term']
+    );
+
+    $respuesta = DocumentoController::consultaReporteDocumento($data);
+
+    echo json_encode($respuesta);
+
   }
 
 }
@@ -279,6 +436,21 @@ if(isset($_POST)){
 
     case 'redirigir':
       $a -> generarSesionIdDocumentoAjax();
+      break;
+
+    case 'historial':
+      $a -> historialUsuariosFirmaAjax();
+      break;
+
+    case 'anular':
+      $a -> anularDocumentoAjax();
+      break;
+    case 'download_lote':
+      $a -> descargarPorLoteAjax();
+      break;
+
+    case 'consulta_reporte':
+      $a -> consultaReporteDocumentoAjax();
       break;
 
     default:

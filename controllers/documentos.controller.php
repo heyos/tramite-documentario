@@ -15,7 +15,10 @@ class DocumentoController extends Controller {
 						$params['name_documento'] != '' ? '1' : '0'
 						: '0' ; //1:en proceso de firma - 0:pendiente
 		$params['estado_firma'] = $estadoFirma;
-		$params['codigo'] = uniqid();
+		$codigo = uniqid();
+		$params['codigo'] = $codigo;
+
+		$textoQr ='http://'.$_SERVER['SERVER_NAME'].'/?action=ver&term='.$codigo;
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
 
@@ -62,6 +65,12 @@ class DocumentoController extends Controller {
 							if($i != $totalItems){
 								$orden_firma ++;
 							}
+							$data = array(
+								'usuario_id' => $usuario['usuario_id'],
+								'estado' => $estadoFirma,
+								'documento_id' => $idDocumento
+							);
+							ResumenDocumentoUsuarioController::crearResumen($data);
 						}
 					}
 					$orden_firma++;
@@ -78,6 +87,16 @@ class DocumentoController extends Controller {
 
 				$data = $usuariosFirma;
 
+				//GENERAR QR
+				$uploadDir = Config::rutas();
+    			$uploadQr = $uploadDir['qr'];
+
+    			if(!is_dir($uploadQr)){
+		          mkdir($uploadQr,0777,true);
+		        }
+
+		        $dirQr = $uploadQr.'/'.$codigo.'.png';
+				QRcode::png($textoQr, $dirQr, 'H', 5);
 
 			}else{
 				$message = "Error al guardar el documento.";
@@ -116,6 +135,27 @@ class DocumentoController extends Controller {
 
 				$idDocumento = $params['id'];
 				$arr = [];
+
+				//actualizamos resumen
+				$where_usuarios = array(
+					'where' => array(
+						['documento_id',$idDocumento]
+					)
+				);
+
+				$usuariosOld = DocumentoUsuarioModel::firstOrAll('documento_usuario',$where_usuarios,'all');
+
+				if(count($usuariosOld) > 0){
+					foreach ($usuariosOld as $user) {
+
+						$args = array(
+							'usuario_id' => $user['usuario_id'],
+							'estado' => $estadoFirma,
+							'documento_id' => $idDocumento
+						);
+						ResumenDocumentoUsuarioController::crearResumen($args,'quit');
+					}
+				}
 
 				//eliminado logico de los usuarios firmantes
 				$where = array(
@@ -177,6 +217,13 @@ class DocumentoController extends Controller {
 							if($i != $totalItems){
 								$orden_firma ++;
 							}
+
+							$args = array(
+								'usuario_id' => $usuario['usuario_id'],
+								'estado' => $estadoFirma,
+								'documento_id' => $idDocumento
+							);
+							ResumenDocumentoUsuarioController::crearResumen($args);
 							
 						}
 
@@ -221,7 +268,8 @@ class DocumentoController extends Controller {
 		$where = array_key_exists('id', $params) ? array(['d.id',$params['id']]) : array(['d.codigo',$params['codigo']]);
 		
 
-		$columns = "d.id,
+		$columns = "
+				d.id,
                 d.cliente_id,
                 d.paciente_id,
                 d.tipoDocumento_id,
@@ -233,7 +281,12 @@ class DocumentoController extends Controller {
                 p.nRutPer,
                 CONCAT(p.xNombre,' ',p.xApePat,' ',p.xApeMat) as paciente,
                 tp.descripcion,
-                d.orden_firmante
+                d.orden_firmante,
+                d.codigo,
+                d.usuario_crea,
+                d.fecha_crea,
+                CONCAT(u.nombres,' ',u.apellidos),
+                r.descripcion
                 "; //columnas
 
         $params = array(
@@ -242,7 +295,9 @@ class DocumentoController extends Controller {
 	      	"join" => array (
 		        ['persona c','c.id','d.cliente_id'],
 		        ['persona p','p.id','d.paciente_id'],
-		        ['tipo_documento tp','tp.id','d.tipoDocumento_id']
+		        ['tipo_documento tp','tp.id','d.tipoDocumento_id'],
+		        ['usuario u','u.username','d.usuario_crea'],
+		        ['rol_usuario r','r.id_rol','u.id_rol'],
 	      	),
 	      	"where" => $where
 	    );
@@ -265,7 +320,14 @@ class DocumentoController extends Controller {
 	    		'rut_paciente' => $documento[9],
 	    		'xNombrePaciente' => $documento[10],
 	    		'name_tipo_doc' => $documento[11],
-	    		'orden_firmante'=> $documento[12]
+	    		'orden_firmante'=> $documento[12],
+	    		'codigo' => $documento[13],
+	    		'user_crea' => $documento[14],
+	    		'fecha_crea' => $documento[15],
+	    		'cliente_full' => $documento[7].' '.$documento[8],
+	    		'paciente_full' => $documento[9].' '.$documento[10],
+	    		'usuario_crea_full' => $documento[16],
+	    		'rol_usuario_crea' => $documento[17]
 	    	);
 
 	    	$lista = json_decode($documento[6],true);
@@ -365,6 +427,7 @@ class DocumentoController extends Controller {
 					$documento = self::detalleDocumento($where_documento);
 					$documentoPdf = $documento['data']['name_documento'];
 					$orden = $documento['data']['orden_firmante'];
+					$codigo = $documento['data']['codigo'];
 
 					$dir = explode('/',$documentoPdf);
 					$dir[0] = date('Y-m-d');
@@ -374,7 +437,9 @@ class DocumentoController extends Controller {
 					$newName = $file[0]."-".$orden.".".$file[1];;
 
 					$pathOut = ['path' => $newDir,
-								'pdf' => $newName
+								'pdf' => $newName,
+								'codigo' => $codigo,
+								'dominio' => $_SERVER['SERVER_NAME']
 							   ];
 					# code...
 					$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
@@ -432,8 +497,15 @@ class DocumentoController extends Controller {
 							}
 
 							$updateDocumento = DocumentoModel::update('documento',$where_updateDocumento);
+							
 							if ($updateDocumento > 0) {
 								
+								$old = array(
+					                'estado_old' => '1',
+					                'documento_id' => $idDocumento
+				              	);
+
+				              	$resumen = ResumenDocumentoUsuarioController::updateResumen($old);
 							}
 
 						}
@@ -459,6 +531,116 @@ class DocumentoController extends Controller {
 			'data'=>$data
 		);
 		
+	}
+
+	static public function descargarPorLote($params){
+
+		$arrayRutas = [];
+		
+		$arr = json_decode($params['documentos'],true);
+		$salida = [];
+		$ruta = '';
+
+		foreach ($arr as $id) {
+			
+			$data = array(
+				'table' => 'documento',
+				'where' => array(
+					['id',$id]
+				)
+			);
+			$detalle = self::itemDetail($data);
+			$ruta = $detalle['data']['name_documento'];
+			$arrName = explode('/',$ruta);
+			$name = end($arrName);
+
+			$salida = array(
+				'ruta' => $ruta,
+				'name_doc' => $name
+			);
+
+			array_push($arrayRutas, $salida);
+		}
+
+		return $arrayRutas;
+	}
+
+	public static function consultaReporteDocumento($params){
+
+		$respuestaOk = false;
+		$message = 'No se puede ejecutar la aplicacion';
+		$data = [];
+
+		$detalle = self::detalleDocumento($params);
+
+		$documento = [];
+		$fecha_crea = '';
+		$dir = [];
+		$dirQr = '';
+		$dirImgQr = '';
+		$img = '';
+		
+		if($detalle['respuesta']){
+			$documento = $detalle['data'];
+			$params['type'] = 'codigo';
+			$firmantes = DocumentoUsuarioController::historialUsuariosFirma($params);
+
+			$contenido = '';
+			if($firmantes['respuesta']){
+				$contenido = DocumentoUsuarioController::generarContenidoFirmantesConsulta($firmantes['data']);
+			}
+
+			$documento['firmantes'] = $contenido;
+			$fecha_crea = date('d/m/Y',strtotime($documento['fecha_crea']));
+			$documento['crea'] = '
+				<div class="tl-entry temp">
+                    <div class="tl-time">
+                        '.$fecha_crea.'
+                    </div>
+                    <div class="tl-icon bg-info"><i class="fa fa-comment"></i></div>
+                    <div class="panel tl-body">
+                        <h4 class="text-info"><b>'.strtoupper($documento['rol_usuario_crea']).'</b></h4>
+                        '.strtoupper($documento['usuario_crea_full']).'
+                    </div>
+                </div>
+			';
+			$documento['name_tipo_doc'] = strtoupper($documento['name_tipo_doc']);
+			$documento['cliente_full'] =  strtoupper($documento['cliente_full']);
+			$documento['paciente_full'] =  strtoupper($documento['paciente_full']);
+
+			//qr
+			$dir = Config::rutas();
+    		$dirQr = $dir['qr'].'/';
+    		$dirImgQr = $dirQr.$documento['codigo'].'.png';
+    		$imageData = '';
+    		
+    		if(!file_exists($dirImgQr)){
+    			$dirImgQr = 'views/images/no_disponible.png';
+    		}else{
+    			$imageData = base64_encode(file_get_contents($dirImgQr));
+    			$dirImgQr = 'data: '.mime_content_type($dirImgQr).';base64,'.$imageData;
+    		}
+
+    		$img = '
+    		<img class="img-thumbnail" style="width: 60%" src="'.$dirImgQr.'" />
+    		<br><br>
+    		<h4>Timbre '.$documento['codigo'].'</h4>';
+
+    		$documento['qr'] = $img;
+
+			$data = $documento;
+			$respuestaOk = true;
+		}else{
+			$message = "Codigo de documento invalido";
+		}
+		
+
+		return array(
+			'respuesta'=>$respuestaOk,
+			'message'=>$message,
+			'data'=>$data
+		);
+
 	}
 
 }

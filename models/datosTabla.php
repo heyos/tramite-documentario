@@ -1,8 +1,8 @@
 <?php
 
-require_once "conexion.php";
+require_once "model.php";
 
-class DatosTablaModel{
+class DatosTablaModel extends Model{
 
     public static function mostrarDatosTablaModel($datos,$tabla){
 

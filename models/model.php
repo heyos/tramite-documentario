@@ -4,8 +4,8 @@ require_once 'conexion.php';
 
 class Model {
 
-    /******************************************
-    //OLD FUNCTIONS
+/******************************************
+//OLD FUNCTIONS
     ******************************************/
     public static function guardarDatosMdl($tabla,$columns,$values){
 
@@ -97,9 +97,9 @@ class Model {
         $query = null;
     }
 
-    /******************************************
-    //FIN OLD FUNCTIONS
-    ******************************************/
+/******************************************
+//FIN OLD FUNCTIONS
+******************************************/
 
     static public function all($params){
 
@@ -433,12 +433,13 @@ class Model {
 
             $sql = sprintf("INSERT INTO %s (%s) VALUES (%s) ",$table,$columns,$values);
             $query = $con -> prepare($sql);
-
+            
             if($query->execute()) {
 
                 $id = $con->lastInsertId();
 
             }else {
+                echo 'create function Error :>> ';
                 echo $query -> errorInfo()[2];
             }
 
@@ -554,6 +555,7 @@ class Model {
                 $response = 1;//$id; Si no se envia ID no envia
 
             }else {
+                echo 'update function Error :>> ';
                 echo $query -> errorInfo()[2];
             }
 

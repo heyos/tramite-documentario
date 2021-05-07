@@ -142,7 +142,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                                 </label>
                                 
                             </th>
-                            <th width="10%"></th>
+                            <th width="12%"></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -195,7 +195,40 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default updateDatatable" data-dismiss="modal">Cerrar</button>
-                <button type="button" id="guardarPersona" class="btn btn-primary">Guardar</button>
+                <!-- <button type="button" id="guardarPersona" class="btn btn-primary">Guardar</button> -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="modalUsuariosAsignados" class="modal fade" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close updateDatatable" data-dismiss="modal" data-keyboard="false" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Lista de usuarios firmantes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-5 text-center">
+                        <label>Usuario</label>
+                    </div>
+                    <div class="col-sm-2 text-center">
+                        <label>Firmado?</label>
+                    </div>
+                    <div class="col-sm-5 text-center">
+                        <label>Fecha Firma</label>
+                    </div>
+                </div>
+                <div id="contenido">
+                    
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default updateDatatable" data-dismiss="modal">Cerrar</button> -->
+                <!-- <button type="button" id="guardarPersona" class="btn btn-primary">Guardar</button> -->
             </div>
 
         </div>

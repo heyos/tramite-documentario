@@ -1,6 +1,7 @@
 <?php
 require_once "../controllers/documentos.controller.php";
 require_once "../models/documentos.model.php";
+require_once "../models/documento_usuario.model.php";
 
 class DatatableTipoDocumento  {
 
@@ -72,6 +73,7 @@ class DatatableTipoDocumento  {
 
       // procesando la data para mostrarla en el front
       $id = 0;
+      $name_docu = '';
       $rutCliente = '' ;
       $nomCliente = '' ;
       $rutPaciente = '' ;
@@ -88,6 +90,7 @@ class DatatableTipoDocumento  {
 
         $i++;
         $id = $row[0];
+        $name_docu = $row[4];
         $estado = $row[5];
         $rutCliente = $row[6] ;
         $nomCliente = $row[7] ;
@@ -131,16 +134,43 @@ class DatatableTipoDocumento  {
             <div class='btn-group'>
           ";
 
-          if($ordenFirma == 1){
+          if($estado != '3'){
+            $button .= "
+              <button title='Ver usuarios firmantes' class='btn btn-success btn-sm btnLista' id='".$id."'>
+                <i class='fas fa-list-alt'></i>
+              </button>
+            ";
+          }
+
+          if(!in_array($estado, ['0','3'])){
+            $button .=  "
+              <button title='Ver documento' name_docu = '".$name_docu."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
+                <i class='fas fa-eye'></i>
+              </button>
+            ";
+          }            
+
+          $where = array(
+            'where' => array(
+              ['documento_id', $id],
+              ['firmado', '1']
+            )
+          );
+          $firmado = DocumentoUsuarioModel::firstOrAll('documento_usuario',$where,'all');
+
+          if(count($firmado) == 0 && !in_array($estado, ['3'])){
             $button .= "
               <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$id."'><i class='fas fa-edit'></i></button>
             ";
           }
 
-          $button .= "
-              <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
-            </div>
-          ";
+          if($estado != '3'){
+            $button .= "
+                <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
+              </div>
+            ";
+          }
+            
         }
 
         $data[] = array(

@@ -42,10 +42,12 @@
                     <!-- <div class="right clearfix"> -->
                         <ul class="nav navbar-nav pull-right right-navbar-nav">
                             <li>
-                                <form class="navbar-form pull-left">
+                                <form id="form-consulta" class="navbar-form pull-left">
                                     <div class="form-group has-feedback">
-                                         <i class="fa fa-search" style="position: absolute;padding: 10px;padding-top: 17px;pointer-events: none;color: #DDDDDD"></i>
-                                        <input style="padding-left: 30px!important;width: 100%" type="text" class="form-control" placeholder="Documento">
+                                        <i class="fa fa-search" style="position: absolute;padding: 10px;padding-top: 17px;pointer-events: none;color: #DDDDDD"></i>
+                                        <input id="term" name="term"
+                                        style="padding-left: 30px!important;width: 100%" type="text" class="form-control" 
+                                        placeholder="Codigo + Enter">
                                     </div>
                                     
                                 </form>
@@ -66,30 +68,17 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <!--
-                    <div class="row">
-                        <div class="col-md-4">
-                            <h6 class="text-light-gray text-semibold text-xs">DOCUMENTO</h6>
-                            <div class="input-group">
-                                <input type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <h1 class="note note-info">TIPO DOCUMENTO</h1>
+                            <h1 class="note note-info" id="name_tipo_doc">TIPO DOCUMENTO</h1>
                         </div>
                     </div>
                     <div class="row" style="margin-left: 20px;">
                         <div class="col-sm-12">
                             <h4 class="text-primary"><i class="fa fa-user-md"></i> <u> CLIENTE</u> </h4>
-                            <em> <h4>76244460-7 ROBERTO SIERRA ROJAS</h4>  </em>
+                            <em> <h4 id="cliente_full">-</h4>  </em>
                             <h4 class="text-primary"><i class="fa fa-medkit"></i> <u> PACIENTE</u></h4>
-                            <em> <h4>76244460-7 ROBERTO SIERRA ROJAS</h4>  </em>
+                            <em> <h4 id="paciente_full">-</h4>  </em>
                         </div>
                     </div>
                     <br>
@@ -97,43 +86,21 @@
                         <div class="col-sm-4">
                             <div class="timeline">
                                 <!-- Timeline header -->
-                                <div class="tl-header now bg-primary">FIRMANTES</div>
+                                <div id="afterFirmantes" class="tl-header now bg-primary">FIRMANTES</div>
 
-                                <div class="tl-entry">
+                                <div class="tl-entry default">
                                     <div class="tl-time">
-                                        21/06/2021<br>11:45 am
+                                    
                                     </div>
-                                    <div class="tl-icon bg-success"><i class="fa fa-check"></i></div>
-                                    <div class="panel tl-body">
-                                        <h4 class="text-success"><b>DIRECTOR MEDICO</b></h4>
-                                        CABALLERO ORTEGA, FRANCISCO JAVIER
-                                    </div> <!-- / .tl-body -->
-                                </div> <!-- / .tl-entry -->
-
-                                <div class="tl-entry">
-                                    <div class="tl-time">
-                                        21/06/2021<br>11:45 pm
+                                    <div class="tl-icon bg-default">-</div>
+                                    <div class="tl-body">
+                                        <h4 class="text-success"><b></b></h4>
+                                        
                                     </div>
-                                    <div class="tl-icon bg-warning"><i class="fa fa-clock"></i></div>
-                                    <div class="panel tl-body">
-                                        <h4 class="text-warning"><b>DIRECTOR MEDICO</b></h4>
-                                        CABALLERO ORTEGA, FRANCISCO JAVIER
-                                    </div> <!-- / .tl-body -->
-                                </div> <!-- / .tl-entry -->
-
+                                </div>
+                                
                                 <!-- Timeline header -->
-                                <div class="tl-header">CREACION</div>
-
-                                <div class="tl-entry">
-                                    <div class="tl-time">
-                                        21/06/2021<br>11:45 pm
-                                    </div>
-                                    <div class="tl-icon bg-info"><i class="fa fa-comment"></i></div>
-                                    <div class="panel tl-body">
-                                        <h4 class="text-info"><b>DIRECTOR MEDICO</b></h4>
-                                        CABALLERO ORTEGA, FRANCISCO JAVIER
-                                    </div> <!-- / .tl-body -->
-                                </div> <!-- / .tl-entry -->                                
+                                <div id="afterCreacion" class="tl-header">CREACION</div>
 
                             </div>
                         </div>
@@ -141,30 +108,22 @@
                         <div class="col-sm-8">
                             <div class="row">
                                 <div class="col-sm-7">
-                                    <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" />
+                                    <!-- <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" /> -->
                                     
                                 </div>
-                                <div class="col-sm-5 text-center">
-                                    <img src="../files-firma/qr.png" style="width: 60%">
+                                <div class="col-sm-5 text-center default">
+                                    <img class="img-thumbnail" src="views/images/no_disponible.png" style="width: 60%">
                                     <br><br>
-                                    <h4>Timbre A1800002042ABD4IN2</h4>
+                                    <h4>Timbre ---</h4>
+                                </div>
+
+                                <div class="col-sm-5 text-center" style="display: none;" id="qr">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- <div class="row">
-                        <div class="col-sm-7">
-                            <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" />
-                            
-                        </div>
-                        <div class="col-sm-5 text-center">
-                            <img src="../files-firma/qr.png" style="width: 60%">
-                            <br><br>
-                            <h4>Timbre A1800002042ABD4IN2</h4>
-                        </div>
-                    </div> -->
-                </div>
+                11  </div>
             </div>
             
         </div>

@@ -12,28 +12,7 @@ class DatatableTipoDocumento  {
     session_start();
     $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0 ;
     $user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
-    //
-    /*
-      SELECT d.id,
-                d.cliente_id,
-                d.paciente_id,
-                d.tipoDocumento_id,
-                d.name_documento,
-                d.estado_firma,
-                c.nRutPer,
-                c.xRazSoc,
-                p.nRutPer,
-                CONCAT(p.xNombre,' ',p.xApePat,' ',p.xApeMat) as paciente,
-                tp.descripcion
-      FROM documento_usuario du
-      JOIN documento d ON d.id = du.documento_id
-      JOIN persona c ON c.id=d.cliente_id
-      JOIN persona p ON p.id=d.paciente_id
-      JOIN tipo_documento tp ON tp.id=d.tipoDocumento_id
-      WHERE du.usuario_id = 4
-
-    */
-
+        
     $columns = "d.id,
                 d.cliente_id,
                 d.paciente_id,
@@ -80,9 +59,13 @@ class DatatableTipoDocumento  {
     $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
 
     $where = array(
-      ['du.usuario_id',$usuario_id],
       [$filtro_fecha]
     );
+    
+    $general = isset($this->request['general']) ? $this->request['general'] : '';
+    if($general != 'consultar_documentos'){
+      array_push($where,['du.usuario_id',$usuario_id]);
+    }
 
     $tipo = isset($this->request['tipoDoc']) ? $this->request['tipoDoc'] : '0';
     $filtro_tipo = $tipo != '0' ? array_push($where, ['d.tipoDocumento_id',$tipo]) : '' ;
@@ -172,6 +155,14 @@ class DatatableTipoDocumento  {
           */
         }
 
+        if($view == 'firma' && $estado != '3'){
+          $button .=  "
+            <button title='Ver usuarios firmantes' class='btn btn-warning btn-sm btnLista' id='".$id."'>
+              <i class='fas fa-list-alt'></i>
+            </button>
+          ";
+        }          
+
         switch ($estado) {
           case '0':
             $css = "label-warning";
@@ -224,7 +215,7 @@ class DatatableTipoDocumento  {
             $txt = 'Firmado por todos';
 
             $button .=  "
-              <button title='Ver documento' name_docu = ".$name_docu." class='btn btn-primary btn-sm btnVer' id='".$id."'>
+              <button title='Ver documento' name_docu = '".$name_docu."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
                 <i class='fas fa-eye'></i>
               </button>
             ";
@@ -257,7 +248,7 @@ class DatatableTipoDocumento  {
         }
 
         //verificamos si es el ultimo usuario en modificar para darle la accion de eliminar
-        if($user == $usuario_modifica && $view == 'firma'){
+        if($user == $usuario_modifica && $view == 'firma' &&  $estado !='3'){
           $button .= "
             <button title='Eliminar' class='btn btn-danger btnEliminar btn-sm' id='".$id."'><i class='fa fa-times'></i></button>
           ";

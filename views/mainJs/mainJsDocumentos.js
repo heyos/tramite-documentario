@@ -648,6 +648,102 @@ init.push(function () {
 			});
 	  	});
 
+	  	$('body').on('click','.tablaDocumento .btnVer',async function(e){
+	  		e.preventDefault();
+			var name = $(this).attr('name_docu');
+
+			if(name == ''){
+				notification('Error..!','Documento no encontrado','error');
+				return;
+			}
+
+			blockPage();
+
+			name = name.replace('.pdf','');
+			var datos = 'accion=readfile&name='+name;
+
+			var formData = new FormData();
+	    	formData.append('accion','readfile');
+	    	formData.append('name',name);
+
+	    	var url = 'ajax/documentos.ajax.php';
+	    	const response = await fetch(url,{
+					            method: 'post',
+					            body: formData,
+		          			});
+	    	var blob = await response.blob();
+	    	var blobUrl = URL.createObjectURL(blob);
+
+	    	if(blob.type == 'application/pdf'){
+	    		window.open(blobUrl, "Visualizar", "width=900,height=1000");
+	    	}else{
+	    		notification('Error..!','Documento no encontrado','error');
+	    	}
+
+	    	unBlockPage();
+
+	    });
+
+	    $('body').on('click','.tablaDocumento .btnLista',function(e){
+	  		e.preventDefault();
+
+	  		var id = $(this).attr('id');
+
+	  		var datos = new FormData();
+
+	        datos.append("documento_id",id);
+	        datos.append("accion",'historial');
+	        
+	        $.ajax({
+	        	beforeSend: function(){
+	        		blockPage();
+	        	},
+	            url:"ajax/documentos.ajax.php",
+	            method: "POST",
+	            data: datos,
+	            dataType: "json",
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function(response){
+
+	                unBlockPage();
+
+	                if(response.respuesta_upload == false){
+	                	notification('Advertencia..!','Hubo problemas al cargar la informacion','error');
+	                }else{
+	                	
+	                	$('#contenido').html(response.contenido);
+
+	                	$('#modalUsuariosAsignados').modal({
+				            backdrop: 'static',
+				            keyboard: false
+				        });
+	                }
+
+	            },
+	            error: function(e){
+	                console.log(e);
+	                unBlockPage();
+	            }
+
+	        });
+
+		});
+
+		$('body').on('click','.tablaDocumento .btnEliminar',function(e){
+	  		e.preventDefault();
+
+	  		var id = $(this).attr('id');
+
+	  		var str = 'documento_id='+id+'&accion=anular';
+
+	        var url = 'ajax/documentos.ajax.php';
+	        
+	        deleteRow(url,table,str,'POST');
+
+		});
+
 	}
 		
 

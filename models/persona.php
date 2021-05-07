@@ -14,12 +14,15 @@ class PersonaModel extends Model{
 
         $select = "*";
         $join = "";
+
         if($datos['tipo']=='j'){
-            $select = "p.*, t.xvalor1 AS pais";
-            $join =" JOIN tabla_logica t ON t.id_tbl = p.cPais ";
+            //$select = "p.*, t.xvalor1 AS pais";
+            //$join =" JOIN tabla_logica t ON t.id_tbl = p.cPais ";
+            $select = "p.*,p.cPais AS pais";
         }elseif($datos['tipo']=='n'){
-            $select = "p.*, t.xvalor1 AS cargo";
-            $join =" JOIN tabla_logica t ON t.id_tbl = p.cTipCar ";
+            //$select = "p.*, t.xvalor1 AS cargo";
+            //$join =" JOIN tabla_logica t ON t.id_tbl = p.cTipCar ";
+            $select = "p.*,p.cTipCar AS cargo";
         }
 
         $sql = sprintf("SELECT %s FROM %s %s WHERE %s  %s",

@@ -66,7 +66,13 @@ class Enlaces{
                 $module = "views/modules/inicio.php";
 
             }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="consulta"){
-                $module = "views/modules/consulta/consulta.php";
+
+                $module = "views/modules/Consulta/consulta.php";
+
+            }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="ver"){
+                
+                $module = "views/modules/Consulta/visualizar.php";
+
             }else{
                 $module = "views/modules/ingreso.php";
             }

@@ -1,0 +1,1 @@
+<body class="theme-default main-menu-animated main-navbar-fixed main-menu-fixed no-main-menu">

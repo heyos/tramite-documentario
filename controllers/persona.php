@@ -29,7 +29,7 @@ class Persona extends Controller{
 
         }
 
-        $where .= sprintf(" p.xTipoPer = '%s' ",$datos['tipo']);
+        $where .= sprintf(" p.xTipoPer = '%s' AND p.deleted = '0' ",$datos['tipo']);
 
         //cantidad de registros
         $cantidad = PersonaModel::mostrarPersonaGeneralModel($where,$datos['tabla']);
@@ -61,13 +61,28 @@ class Persona extends Controller{
                         $apellidos = $valor['xApePat'].' '.$valor['xApeMat'];
                         $fechaNac = $valor['dFecNac'] !=''?date('d-m-Y',strtotime($valor['dFecNac'])):'';
 
+                        $cargo_id = $valor['cargo'] != '' ? $valor['cargo'] : 0 ;
+                        $cargo_label = '';
+
+                        if($cargo_id != 0){
+                            $where = array(
+                                'where' => array(
+                                    ['id_tbl',$cargo_id]
+                                ),
+                                'useDeleted' => '0'
+                            );
+                            $cargo = DatosTablaModel::firstOrAll('tabla_logica',$where,'first');
+                            $cargo_label = $cargo['xvalor1'];
+                        }
+                            
+
                         $contenido .= '
                             <tr>
                                 <td>'.$i.'</td>
                                 <td>'.$valor['nRutPer'].'</td>
                                 <td>'.$valor['xNombre'].'</td>
                                 <td>'.$apellidos.'</td>
-                                <td>'.$valor['cargo'].'</td>
+                                <td>'.$cargo_label.'</td>
                                 <td>'.$sexo.'</td>
                                 <td>'.$fechaNac.'</td>
                                 <td class="text-center">
@@ -76,6 +91,21 @@ class Persona extends Controller{
                         break;
 
                     case 'j':
+
+                        $pais_id = $valor['pais'] != '' ? $valor['pais'] : 0;
+                        $pais_label = '';
+                        if($pais_id != 0){
+                            $where = array(
+                                'where' => array(
+                                    ['id_tbl',$pais_id]
+                                ),
+                                'useDeleted' => '0'
+                            );
+                            $pais = DatosTablaModel::firstOrAll('tabla_logica',$where,'first');
+                            $pais_label = $pais['xvalor1'];
+                        }
+                            
+
                         $title = "Contactos y Direcciones";
                         $contenido .= '
                             <tr>
@@ -83,7 +113,7 @@ class Persona extends Controller{
                                 <td>'.$valor['nRutPer'].'</td>
                                 <td>'.$valor['xRazSoc'].'</td>
                                 <td>'.$valor['xActEco'].'</td>
-                                <td>'.$valor['pais'].'</td>
+                                <td>'.$pais_label.'</td>
                                 <td class="text-center">
                         ';
                         break;

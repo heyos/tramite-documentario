@@ -148,6 +148,8 @@ init.push(function () {
 		                	table.draw();
 		                }
 
+		                console.log(response);
+
 		            },
 		            error: function(e){
 		                console.log(e);
@@ -201,6 +203,8 @@ init.push(function () {
 
 	  		var id = $(this).attr('id');
 
+	  		$('#form-firma input').val('');
+
 			$('#id').val(id);
 			$('#txt_response').hide();
 
@@ -213,6 +217,71 @@ init.push(function () {
 	        });
 
 	    });
+	    //btnLista
+
+	    $('body').on('click','.tablaDocumento .btnLista',function(e){
+	  		e.preventDefault();
+
+	  		var id = $(this).attr('id');
+
+	  		var datos = new FormData();
+
+	        datos.append("documento_id",id);
+	        datos.append("accion",'historial');
+	        
+	        $.ajax({
+	        	beforeSend: function(){
+	        		blockPage();
+	        	},
+	            url:"ajax/documentos.ajax.php",
+	            method: "POST",
+	            data: datos,
+	            dataType: "json",
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function(response){
+
+	                unBlockPage();
+
+	                if(response.respuesta_upload == false){
+	                	notification('Advertencia..!','Hubo problemas al cargar la informacion','error');
+	                }else{
+	                	//notification('Exito..!','Archivo cargado exitosamente','success');
+	                	//table.draw();
+
+	                	$('#contenido').html(response.contenido);
+
+	                	$('#modalUsuariosAsignados').modal({
+				            backdrop: 'static',
+				            keyboard: false
+				        });
+	                }
+
+
+
+	            },
+	            error: function(e){
+	                console.log(e);
+	                unBlockPage();
+	            }
+
+	        });
+
+		});
+
+		$('body').on('click','.tablaDocumento .btnEliminar',function(e){
+	  		e.preventDefault();
+
+	  		var id = $(this).attr('id');
+
+	  		var str = 'documento_id='+id+'&accion=anular';
+
+	        var url = 'ajax/documentos.ajax.php';
+	        
+	        deleteRow(url,table,str,'POST');
+
+		});
 
 	    $('.updateDatatable').click(function(){
 	    	

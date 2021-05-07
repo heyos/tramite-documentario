@@ -39,7 +39,6 @@ require_once "controllers/estadodocumento.controller.php";
 
 require_once 'vendor/autoload.php';
 require_once 'controllers/firma_electronica.controller.php';
-//require_once 'library/SetaPDF/Autoload.php';
 
 $template = new Template();
 $template -> templateController();
@@ -57,125 +56,37 @@ $template -> templateController();
 
 // print_r($firma);
 
+// echo $_SERVER['SERVER_NAME'];
+
+// echo "<pre>";
+// print_r($_SERVER);
+// echo "</pre>";
+
+
 exit();
 
-$file = 2 ;
-$orden = $file+1;
-$file = '../files-firma/test'.$file.'.pdf';
+$zip = new ZipArchive();
+// Ruta absoluta
+$nombreArchivoZip = date('d.m.Y.H.i.s').".zip";
 
-// read certificate and private key from the PFX file
-$pkcs12 = array();
-$pfxRead = openssl_pkcs12_read(
-    file_get_contents('../files-firma/hreyes.pfx'),
-    $pkcs12,
-    'heyller3107'
-);
-
-// error handling
-if (false === $pfxRead) {
-    throw new Exception('The certificate could not be read.');
+if (!$zip->open($nombreArchivoZip, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+    exit("Error abriendo ZIP en $nombreArchivoZip");
 }
+// Si no hubo problemas, continuamos
+// Agregamos el script.js
+// Su ruta absoluta, como D:\documentos\codigo\script.js
+$rutaAbsoluta = "test.pdf";
+// Su nombre resumido, algo como "script.js"
+$nombre = basename($rutaAbsoluta);
+$zip->addFile($rutaAbsoluta, $nombre);
 
-// create e.g. a PAdES module instance
-$module = new SetaPDF_Signer_Signature_Module_Pades();
-// pass the certificate ...
-$module->setCertificate($pkcs12['cert']);
-// ...and private key to the module
-$module->setPrivateKey($pkcs12['pkey']);
-
-// pass extra certificates if included in the PFX file
-if (isset($pkcs12['extracerts']) && count($pkcs12['extracerts'])) {
-    $module->setExtraCertificates($pkcs12['extracerts']);
+// No olvides cerrar el archivo
+$resultado = $zip->close();
+if ($resultado) {
+    echo "Archivo creado";
+} else {
+    echo "Error creando archivo";
 }
-
-//NEW
-//--------------------------------------------
-// create a reader
-//$reader = new SetaPDF_Core_Reader_File($file);
-// create a temporary file writer
-$tempWriter = new SetaPDF_Core_Writer_TempFile();
-//-----------------------------------------
-
-// create a new document instance
-$document = SetaPDF_Core_Document::loadByFilename(
-    $file, $tempWriter
-);
-
-// create a signer instance
-$signer = new SetaPDF_Signer($document);
-
-$y = $orden*(-50)-(10*$orden);
-$signature = 'Signature '.$orden;
-
-// add a field with the name "Signature" to the top left of page 1
-$signer->addSignatureField(
-    $signature,                    // Name of the signature field
-    1,                              // put appearance on page 1
-    SetaPDF_Signer_SignatureField::POSITION_LEFT_TOP, //POSITION_RIGHT_TOP - POSITION_LEFT_TOP (original)
-    array('x' => 30, 'y' => $y),   // Translate the position (x 50, y -80 -> 50 points right, 80 points down)
-    160,                            // Width - 180 points
-    50                              // Height - 50 points
-);
-$signer->setSignatureFieldName($signature);
-
-// set some signature properties
-$signer->setReason("Just for testing");
-$signer->setLocation('setasign.com');
-
-
-// create a Signature appearance
-$visibleAppearance = new SetaPDF_Signer_Signature_Appearance_Dynamic($module);
-// create a font instance for the signature appearance
-$font = new SetaPDF_Core_Font_TrueType_Subset(
-    $document,
-    'library/fonts/dejavu-sans/DejaVuSans.ttf'
-);
-$visibleAppearance->setFont($font);
-
-// choose a document with a handwritten signature
-$signatureDocument = SetaPDF_Core_Document::loadByFilename('../files-firma/certificados/logo_default.pdf');
-$signatureXObject = $signatureDocument->getCatalog()->getPages()->getPage(1)->toXObject($document);
-// set the signature xObject as graphic
-$visibleAppearance->setGraphic($signatureXObject);
-
-// disable the distinguished name
-$visibleAppearance->setShow(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_DISTINGUISHED_NAME, false
-);
-
-// Translate the labels to german:
-$visibleAppearance->setShowTpl(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_REASON, 'Razon: %s'
-);
-
-$visibleAppearance->setShowTpl(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_LOCATION, 'Firmado en: %s'
-);
-
-$visibleAppearance->setShowTpl(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_DATE, 'Fecha: %s'
-);
-
-$visibleAppearance->setShowTpl(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_NAME,
-    'Firmado digitalmente por: %s'
-);
-
-// format the date
-$visibleAppearance->setShowFormat(
-    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_DATE, 'd.m.Y H:i:s'
-);
-
-// define the appearance
-$signer->setAppearance($visibleAppearance);
-
-// sign the document and send the final document to the initial writer
-$signer->sign($module);
-
-$file2 = '../files-firma/test'.$orden.'.pdf';
-copy($tempWriter->getPath(), $file2);
-echo "se firmo exitosamente el documento ".$file2;
-
 
 
 /*

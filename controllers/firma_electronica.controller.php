@@ -122,8 +122,8 @@ class FirmaElectronica {
 				$signer->setSignatureFieldName($signature);
 
 				// set some signature properties
-				$signer->setReason("Just for testing");
-				$signer->setLocation('setasign.com');
+				$signer->setReason($pathOut['codigo']);
+				$signer->setLocation("https://".$pathOut['dominio']);
 
 				// create a Signature appearance
 				$visibleAppearance = new SetaPDF_Signer_Signature_Appearance_Dynamic($module);
@@ -155,7 +155,7 @@ class FirmaElectronica {
 
 				// Translate the labels to german:
 				$visibleAppearance->setShowTpl(
-				    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_REASON, 'Razon: %s'
+				    SetaPDF_Signer_Signature_Appearance_Dynamic::CONFIG_REASON, 'Codigo: %s'
 				);
 
 				$visibleAppearance->setShowTpl(

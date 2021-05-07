@@ -5,14 +5,15 @@ require_once "../vendor/autoload.php";
 require_once "../controllers/firma_electronica.controller.php";
 require_once "../controllers/globales.php";
 
-
 require_once "../controllers/documentos.controller.php";
 require_once "../controllers/documento_usuario.controller.php";
 require_once "../controllers/usuario.php";
+require_once "../controllers/resumen_documento_usuario.controller.php";
 
 require_once "../models/documento_usuario.model.php";
 require_once "../models/documentos.model.php";
 require_once "../models/usuario.php";
+require_once "../models/resumen_documento_usuario.model.php";
 
 class FirmarDocumentoAjax{
 
