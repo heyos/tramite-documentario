@@ -29,6 +29,7 @@ require_once "models/tablaLogica.php";
 require_once "models/persona.php";
 require_once "models/direccion_contacto.php";
 require_once "models/tipo_documento.model.php";
+require_once "models/resumen_documento_usuario.model.php";
 
 require_once "controllers/datosTabla.php";
 require_once "controllers/tablaLogica.php";
@@ -36,6 +37,7 @@ require_once "controllers/persona.php";
 require_once "controllers/tipo_documento.controller.php";
 require_once "controllers/documentos.controller.php";
 require_once "controllers/estadodocumento.controller.php";
+require_once "controllers/resumen_documento_usuario.controller.php";
 
 require_once 'vendor/autoload.php';
 require_once 'controllers/firma_electronica.controller.php';

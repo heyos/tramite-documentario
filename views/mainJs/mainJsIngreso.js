@@ -142,6 +142,45 @@ init.push(function () {
 
     }
 
+    //dashboard
+    if($('.estado').length > 0){
+
+        $('body').on('click','.estado',function(){
+            var estado = $(this).data('estado');
+
+            var str = 'accion=generar&term='+estado;
+            
+            $.ajax({
+                beforeSend:function(){
+                    blockPage();
+                },
+                url: 'ajax/resumen_documento_usuario.ajax.php',
+                method: "POST",
+                cache: false,
+                dataType: "json",
+                data: str,
+                success: function(response){
+                    unBlockPage();
+
+                    if(response.respuesta==false){
+
+                      notification('Advertencia..!', response.message,'error');
+
+                    }else{
+                        window.location.href = 'index.php?action=firmar_documentos';
+                    }
+                    
+
+                },
+                error: function(e){
+                    unBlockPage();
+                    console.log(e);
+                }
+
+            });
+        });
+    }
+
 });
 
 async function visualizar(term){

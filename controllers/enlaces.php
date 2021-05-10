@@ -206,13 +206,15 @@ class Enlaces{
 
     public static function mostrarContenidoInicioController($datos){
 
-        if($datos == '1'){
+        // if($datos == '1'){
 
-            include 'views/modules/inicio/admin.php';
+        //     include 'views/modules/inicio/admin.php';
 
-        }else{
-            include 'views/modules/inicio/user.php';
-        }
+        // }else{
+        //     include 'views/modules/inicio/user.php';
+        // }
+
+        include 'views/modules/inicio/admin.php';
     }
 
 }

@@ -189,7 +189,7 @@ class ResumenDocumentoUsuarioController extends Controller {
 		$salidaJson = array(
 			'respuesta' => $respuestaOk,
 			'mensaje' => $mensajeError,
-			'data' => $estado.' firmas:'.$totalFirmas.' firmantes:'.$totalFirmantes
+			'data' => '' //$estado.' firmas:'.$totalFirmas.' firmantes:'.$totalFirmantes
 		);
 
 		return $salidaJson;

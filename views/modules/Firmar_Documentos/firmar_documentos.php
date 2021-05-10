@@ -71,15 +71,20 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                         <select name="estadoDoc" id="estadoDoc" class="form-control" required>
                             <option value="4" >Todos</option>
                             <?php
+                                $estado = isset($_SESSION['estadoDocumento']) ? $_SESSION['estadoDocumento'] : '';
+                                $selected = '';
+
                                 $respuesta = EstadoDocumentoController::allData();
 
                                 if($respuesta['respuesta']){
-                                    foreach ($respuesta['contenido'] as $key => $item) {
-                                        
-                                        echo '<option value="'.$item['id'].'" >'.$item['descripcion'].'</option>';
+                                    foreach ($respuesta['contenido'] as $item) {
+                                        $selected = $item['id'] == $estado ? 'selected' : '';
+                                        echo '<option value="'.$item['id'].'" '.$selected.' >'.$item['descripcion'].'</option>';
                                     }
                                     
                                 }
+
+                                unset($_SESSION['estadoDocumento']);
                             ?>
                         </select>
                     </div>
