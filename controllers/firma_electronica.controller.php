@@ -71,7 +71,7 @@ class FirmaElectronica {
 
 	}
 
-	public static function firmar($name,$clave,$documento,$orden,$pathOut){
+	public static function firmar($name,$clave,$pathDocumento,$orden,$pathOut){
 		
 		try {
 
@@ -97,11 +97,11 @@ class FirmaElectronica {
 				}
 
 				//ruta carpeta documentos
-				$documento = $rutaDocumento.$documento;
+				//$documento = $rutaDocumento.$documento;
 				// create a temporary file writer
 				$tempWriter = new SetaPDF_Core_Writer_TempFile();
 				$document = SetaPDF_Core_Document::loadByFilename(
-				    $documento, $tempWriter
+				    $pathDocumento, $tempWriter
 				);
 
 				// create a signer instance
@@ -196,7 +196,7 @@ class FirmaElectronica {
 				$respuestaOk = true;
 				$message = "Se firmo digitalmente";
 				$data = array(
-					'out'=>'definir la nueva ruta del archivo firmado'
+					'out'=> $pathOut['path'].'/'.$nameFile
 				);
 
 			}else{

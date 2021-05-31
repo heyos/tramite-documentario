@@ -16,10 +16,12 @@
 
                 <img src="views/assets/demo/avatars/1.jpg" alt="" class="">
                 <div class="btn-group">
-                    <a href="#" class="btn btn-xs btn-primary btn-outline dark"><i class="fa fa-envelope"></i></a>
+                    <!-- <a href="#" class="btn btn-xs btn-primary btn-outline dark"><i class="fa fa-envelope"></i></a>
                     <a href="#" class="btn btn-xs btn-primary btn-outline dark"><i class="fa fa-user"></i></a>
-                    <a href="#" class="btn btn-xs btn-primary btn-outline dark"><i class="fa fa-cog"></i></a>
-                    <a href="#" class="btn btn-xs btn-danger btn-outline dark"><i class="fa fa-power-off"></i></a>
+                    <a href="#" class="btn btn-xs btn-primary btn-outline dark"><i class="fa fa-cog"></i></a> -->
+                    <a href="index.php?action=salir" class="btn btn-xs btn-danger btn-outline dark">
+                        <i class="fa fa-power-off"></i>
+                    </a>
                 </div>
                 
             </div>

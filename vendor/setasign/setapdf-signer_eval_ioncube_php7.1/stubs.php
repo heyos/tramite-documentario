@@ -547,9 +547,9 @@ namespace
         /**
          * Draws a circle on the canvas.
          *
-         * @param float $x
-         * @param float $y
-         * @param float $r
+         * @param float $x Abscissa of center.
+         * @param float $y Ordinate of center.
+         * @param float $r Radius.
          * @param int $style
          * @return SetaPDF_Core_Canvas_Draw
          */
@@ -558,14 +558,24 @@ namespace
         /**
          * Draws an ellipse on the canvas.
          *
-         * @param float $x
-         * @param float $y
-         * @param float $rx
-         * @param float $ry
+         * @param float $x Abscissa of center.
+         * @param float $y Ordinate of center.
+         * @param float $rx Horizontal radius.
+         * @param float $ry Vertical radius.
          * @param int $style
          * @return SetaPDF_Core_Canvas_Draw
          */
         public function ellipse($x, $y, $rx, $ry, $style = self::STYLE_DRAW) {}
+
+        /**
+         * Draws a polygon on the canvas.
+         *
+         * @param float[] $points Array of the form (x1, y1, x2, y2, ..., xn, yn) where (x1, y1) is the starting point
+         *                        and (xn, yn) is the last one. Must contain at least 3 points.
+         * @param int $style
+         * @return SetaPDF_Core_Canvas_Draw
+         */
+        public function polygon(array $points, $style = self::STYLE_DRAW) {}
 
         /**
          * Call the specific path function depending on the used style.
@@ -2433,9 +2443,9 @@ namespace
         /**
          * Set the date by a DateTime object.
          *
-         * @param DateTime $dateTime
+         * @param DateTimeInterface $dateTime
          */
-        public function setByDateTime(\DateTime $dateTime) {}
+        public function setByDateTime(\DateTimeInterface $dateTime) {}
 
         /**
          * Get the PDF string object.
@@ -7807,7 +7817,7 @@ namespace
          * A link annotation instance can be created by an existing dictionary, indirect object/reference or by passing
          * the same parameter as for {@link createAnnotationDictionary()}.
          *
-         * @param bool|int|float|string|SetaPDF_Core_Type_AbstractType|SetaPDF_Core_Type_Dictionary|SetaPDF_Core_Type_IndirectObjectInterface $objectOrDictionary
+         * @param bool|int|float|string|SetaPDF_Core_Type_AbstractType|SetaPDF_Core_Type_Dictionary|SetaPDF_Core_Type_IndirectObjectInterface|SetaPDF_Core_DataStructure_Rectangle|array $objectOrDictionary
          * @throws InvalidArgumentException
          */
         public function __construct($objectOrDictionary) {}
@@ -7851,27 +7861,6 @@ namespace
          * @param SetaPDF_Core_Document_Action|SetaPDF_Core_Type_Dictionary $action
          */
         public function setAction($action) {}
-
-        /**
-         * Set the Quadpoints.
-         *
-         * @param int|float|array $x1OrArray
-         * @param int|float $y1
-         * @param int|float $x2
-         * @param int|float $y2
-         * @param int|float $x3
-         * @param int|float $y3
-         * @param int|float $x4
-         * @param int|float $y4
-         */
-        public function setQuadPoints($x1OrArray, $y1 = null, $x2 = null, $y2 = null, $x3 = null, $y3 = null, $x4 = null, $y4 = null) {}
-
-        /**
-         * Get the Quadpoints.
-         *
-         * @return array
-         */
-        public function getQuadPoints() {}
 
         /**
          * Get the border style object.
@@ -8306,6 +8295,39 @@ namespace
          * @throws InvalidArgumentException
          */
         public function setParent(\SetaPDF_Core_Document_Page_Annotation $annotation) {}
+
+    }
+}
+
+namespace
+{
+
+    /**
+     * Trait for handling the QuadPoints property in Annotations
+     *
+     * @copyright  Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
+     * @category   SetaPDF
+     * @package    SetaPDF_Core
+     * @subpackage Document
+     * @license    https://www.setasign.com/ Commercial
+     */
+    trait SetaPDF_Core_Document_Page_Annotation_QuadPointsTrait
+    {
+        /**
+         * Set the quad points.
+         *
+         * @param int[]|float[] $quadPoints An array of quad points (multiple of 8 values: TopLeft x/y, TopRight x/y,
+         *                                  BottomLeft x/y, BottomRight x/y - which is a contradiction to the PDF
+         *                                  specification but used by all common PDF viewer applications).
+         */
+        public function setQuadPoints($quadPoints) {}
+
+        /**
+         * Get the quad points.
+         *
+         * @return array
+         */
+        public function getQuadPoints() {}
 
     }
 }
@@ -8978,27 +9000,6 @@ namespace
          * @throws InvalidArgumentException
          */
         protected static function _createAnnotationDictionary($rect, $subtype) {}
-
-        /**
-         * Set the Quadpoints.
-         *
-         * @param int|float|array $x1OrArray
-         * @param int|float $y1
-         * @param int|float $x2
-         * @param int|float $y2
-         * @param int|float $x3
-         * @param int|float $y3
-         * @param int|float $x4
-         * @param int|float $y4
-         */
-        public function setQuadPoints($x1OrArray, $y1 = null, $x2 = null, $y2 = null, $x3 = null, $y3 = null, $x4 = null, $y4 = null) {}
-
-        /**
-         * Get the Quadpoints.
-         *
-         * @return array
-         */
-        public function getQuadPoints() {}
 
     }
 }
@@ -9857,11 +9858,11 @@ namespace
          * Get the annotation appearance stream.
          *
          * @param string $type
-         * @param null|string $subType
-         * @throws InvalidArgumentException
+         * @param null|string $subName
          * @return null|SetaPDF_Core_XObject_Form
+         *@throws InvalidArgumentException
          */
-        public function getAppearance($type = 'N', $subType = null) {}
+        public function getAppearance($type = 'N', $subName = null) {}
 
         /**
          * Set the annotation appearance stream.
@@ -10650,7 +10651,7 @@ namespace
          * {@link SetaPDF_Core_Document_Catalog_AdditionalActions} class that could be get with the
          * {@link getAdditionalActions()} method.
          *
-         * @param SetaPDF_Core_Document_Destination|SetaPDF_Core_Document_Action $openAction
+         * @param SetaPDF_Core_Document_Destination|SetaPDF_Core_Document_Action|null $openAction
          *          An {@link SetaPDF_Core_Document_Action} or {@link SetaPDF_Core_Document_Destination} object
          * @throws InvalidArgumentException
          * @throws SetaPDF_Core_SecHandler_Exception
@@ -12382,6 +12383,17 @@ namespace
          * @return float|integer|boolean
          */
         public function getHeight($box = SetaPDF_Core_PageBoundaries::CROP_BOX, $fallback = true) {}
+
+        /**
+         * Get a page boundary box of the page (wihtout logic for invalid values).
+         *
+         * @see getBoundary()
+         * @param string $box See {@link SetaPDF_Core_PageBoundaries::XXX_BOX} constants
+         * @param boolean $fallback Use the fallback box instead if box not exist
+         * @param boolean $asRect Return boundary box as {@link SetaPDF_Core_DataStructure_Rectangle}
+         * @return boolean|SetaPDF_Core_DataStructure_Rectangle|SetaPDF_Core_Type_Array
+         */
+        protected function _getBoundary($box = SetaPDF_Core_PageBoundaries::CROP_BOX, $fallback = true, $asRect = true) {}
 
         /**
          * Get a page boundary box of the page.
@@ -16913,7 +16925,7 @@ namespace
         /**
          * Get the bounding box.
          *
-         * @param boolean $recalc
+         * @param bool $recalc
          * @return array
          */
         public function getBoundingBox($recalc = false) {}
@@ -19713,14 +19725,6 @@ namespace
         protected function _getEncodingTable() {}
 
         /**
-         * Sorts an array by shifting the array values to the top of the resulting array.
-         *
-         * @param $array
-         * @return array
-         */
-        protected function _sortByArray($array) {}
-
-        /**
          * Get the map that maps character codes to unicode values.
          *
          * @return SetaPDF_Core_Font_Cmap|array|false
@@ -20070,11 +20074,9 @@ namespace
         protected $_tmpEncodingTable = [/** value is missing */];
 
         /**
-         * The Calcilated font bounding box.
-         *
          * @var array
          */
-        protected $_calcedFontBBox;
+        protected $_calculatedFontBBox;
 
         /**
          * The TTF/OTF parser of the embedded font file.
@@ -20171,13 +20173,9 @@ namespace
         public function getBaseEncodingTable() {}
 
         /**
-         * Returns the font bounding box.
-         *
-         * @param boolean $recalc Set to true, to re-calculate the font bounding box by analysing the metrics of all
-         *                        embedded glyphs.
-         * @return array
+         * @inheritDoc
          */
-        public function getFontBBox($recalc = false) {}
+        public function recalculateFontBBox() {}
 
         /**
          * Get the TTF/OTF parser for the embedded font programm.
@@ -20245,16 +20243,21 @@ namespace
         /**
          * The average width of glyphs in the font.
          *
-         * @var integer|float
+         * @var int|float
          */
         protected $_avgWidth;
 
         /**
-         * The Calcilated font bounding box.
+         * The font bounding box
          *
-         * @var array
+         * @var null|array
          */
-        protected $_calcedFontBBox;
+        protected $_fontBBox;
+
+        /**
+         * @var null|array
+         */
+        protected $_calculatedFontBBox;
 
         /**
          * The TTF/OTF parser of the embedded font file.
@@ -20347,11 +20350,14 @@ namespace
         /**
          * Returns the font bounding box.
          *
-         * @param boolean $recalc Set to true, to re-calculate the font bounding box by analysing the metrics of all
-         *                        embedded glyphs.
          * @return array
          */
-        public function getFontBBox($recalc = false) {}
+        public function getFontBBox() {}
+
+        /**
+         * @inheritDoc
+         */
+        public function recalculateFontBBox() {}
 
         /**
          * Get the TTF/OTF parser for the embedded font programm.
@@ -20462,14 +20468,14 @@ namespace
         /**
          * The font descriptor object
          *
-         * @var SetaPDF_Core_Font_Descriptor
+         * @var null|SetaPDF_Core_Font_Descriptor
          */
         protected $_fontDescriptor;
 
         /**
          * Glyph widths
          *
-         * @var array
+         * @var null|array
          */
         protected $_widths;
 
@@ -20479,6 +20485,13 @@ namespace
          * @var null|string
          */
         protected $_substituteCharacter;
+
+        /**
+         * The font bounding box
+         *
+         * @var null|array
+         */
+        protected $_fontBBox;
 
         /**
          * The constructor.
@@ -20664,14 +20677,19 @@ namespace
         /**
          * The font bounding box
          *
-         * @var array
+         * @var null|array
          */
         protected $_fontBBox;
 
         /**
+         * @var null|array
+         */
+        protected $_calculatedFontBBox;
+
+        /**
          * The average width of glyphs in the font.
          *
-         * @var integer|float
+         * @var int|float
          */
         protected $_avgWidth;
 
@@ -20749,13 +20767,16 @@ namespace
         /**
          * Returns the font bounding box.
          *
-         * @param boolean $recalc Set to true, to re-calculate the font bounding box by analysing the metrics of all
-         *                        embedded glyphs.
          * @return array
          * @throws SetaPDF_Core_Exception
          * @internal
          */
-        public function getFontBBox($recalc = false) {}
+        public function getFontBBox() {}
+
+        /**
+         * @inheritDoc
+         */
+        public function recalculateFontBBox() {}
 
         /**
          * Get the font descriptor object.
@@ -21207,11 +21228,14 @@ namespace
         /**
          * Set the lower left point of the rectangle.
          *
-         * If you don't move this point over the x of the lower right or the y of the upper left this point stay the lower left.
+         * If you don't move this point over the x of the lower right or the y of the upper left this point stay the lower
+         * left.
          *
-         * If you move this point over only one of them, this point will replace them and the other point will be lower left.
+         * If you move this point over only one of them, this point will replace them and the other point will be lower
+         * left.
          *
-         * If you move this point over both(x and y), this point will be the new upper right and upper right the new lower left.
+         * If you move this point over both(x and y), this point will be the new upper right and upper right the new lower
+         * left.
          *
          * @param int|float|SetaPDF_Core_Geometry_Point $a
          * @param int|float $b
@@ -21307,8 +21331,8 @@ namespace
          *
          * @param int|float $x
          * @param int|float $y
-         * @param boolean $ignoreEqual If the point lays on the border and this is true false will returned
-         * @return boolean
+         * @param bool $ignoreEqual If the point lays on the border and this is true false will returned
+         * @return bool
          */
         private function _pointInside($x, $y, $ignoreEqual = false) {}
 
@@ -21316,7 +21340,7 @@ namespace
          * Checks whether this rectangle contains another geometric object.
          *
          * @param SetaPDF_Core_Geometry_Point|SetaPDF_Core_Geometry_Rectangle $geometry
-         * @return boolean
+         * @return bool
          * @throws InvalidArgumentException
          */
         public function contains($geometry) {}
@@ -21325,7 +21349,7 @@ namespace
          * Checks whether the geometry shape intersect this rectangle.
          *
          * @param SetaPDF_Core_Geometry_Rectangle $geometry
-         * @return boolean
+         * @return bool
          * @throws InvalidArgumentException
          */
         public function intersect($geometry) {}
@@ -21464,7 +21488,7 @@ namespace
         /**
          * Multiply the vector with a float value or a matrix and return the resulting vector.
          *
-         * @param float|integer|SetaPDF_Core_Geometry_Matrix $with
+         * @param float|int|SetaPDF_Core_Geometry_Matrix $with
          * @return SetaPDF_Core_Geometry_Vector
          * @TODO Rewrite to 2 methods mulitply() and multiplyWithMatrix() with type hints.
          */
@@ -21473,7 +21497,7 @@ namespace
         /**
          * Devide the vector by a float value and return the resulting vector.
          *
-         * @param float|integer $by
+         * @param float|int $by
          * @return SetaPDF_Core_Geometry_Vector
          */
         public function divide($by) {}
@@ -23096,7 +23120,7 @@ namespace
         protected $_imageData;
 
         /**
-         * Defines wheter the image is interlaced or not
+         * Defines whether the image is interlaced or not
          *
          * @var bool
          */
@@ -23266,11 +23290,11 @@ namespace
          * Processes the stream until a specifc oprator is matched.
          *
          * This method can be used to disable the process method for a specific token range.
-         * For example an inline image can be ignored with this mehtod.
          *
          * @param string $operator
          * @return bool
          * @throws SetaPDF_Core_Exception
+         * @deprecated
          */
         public function skipUntil($operator) {}
 
@@ -25249,7 +25273,7 @@ namespace
 
         /**
          * Returns the resource type for the graphic state.
-         * 
+         *
          * @return string
          * @see SetaPDF_Core_Resource::getResourceType()
          */
@@ -26749,7 +26773,7 @@ namespace
          * Set the text color.
          *
          * @see SetaPDF_Core_DataStructure_Color::createByComponents()
-         * @param SetaPDF_Core_DataStructure_Color|SetaPDF_Core_Type_Array|array|number|string $color
+         * @param SetaPDF_Core_DataStructure_Color|SetaPDF_Core_Type_Array|array|number|string|null $color
          */
         public function setTextColor($color) {}
 
@@ -26821,7 +26845,7 @@ namespace
          * Set the border color.
          *
          * @see SetaPDF_Core_DataStructure_Color::createByComponents()
-         * @param SetaPDF_Core_DataStructure_Color|SetaPDF_Core_Type_Array|array|number|null $color
+         * @param SetaPDF_Core_DataStructure_Color|int|float|string|array|SetaPDF_Core_Type_Array|null $color
          */
         public function setBorderColor($color) {}
 
@@ -30272,8 +30296,15 @@ namespace
      * @subpackage Writer
      * @license    https://www.setasign.com/ Commercial
      */
-    class SetaPDF_Core_Writer_Http extends \SetaPDF_Core_Writer_String
+    class SetaPDF_Core_Writer_Http extends \SetaPDF_Core_Writer_TempStream
     {
+        /**
+         * Chunk size that is output at once.
+         *
+         * @var int
+         */
+        protected $_outputChunkSize = 4194304;
+
         /**
          * The document filename
          *
@@ -30303,6 +30334,16 @@ namespace
          * @param boolean $inline Defines if the document should be displayed inline or if a download should be forced
          */
         public function __construct($filename = 'document.pdf', $inline = false) {}
+
+        /**
+         * Set the chunk size of the data that is read from the internal stream and echoed.
+         *
+         * The default value is 4 MB. You may increase this which may speed up the delivery of large files but
+         * will also increase the memory usage respectively.
+         *
+         * @param int $outputChunkSize Size in bytes.
+         */
+        public function setOutputChunkSize($outputChunkSize) {}
 
         /**
          * This method is called when the writing process is finished.
@@ -30379,7 +30420,7 @@ namespace
         /**
          * The file stream resource
          *
-         * @var null|resource
+         * @var resource
          */
         protected $_handle;
 
@@ -30421,7 +30462,7 @@ namespace
         /**
          * Copies an existing stream into the target stream.
          *
-         * @param resource $source
+         * @param resource|SetaPDF_Core_Writer_Stream $source
          */
         public function copy($source) {}
 
@@ -30659,6 +30700,80 @@ namespace
          * @see SetaPDF_Core_Writer_WriterInterface::getStatus()
          */
         public function getStatus() {}
+
+    }
+}
+
+namespace
+{
+
+    /**
+     * A writer class for temporary streams
+     *
+     * @copyright  Copyright (c) 2020 Setasign GmbH & Co. KG (https://www.setasign.com)
+     * @category   SetaPDF
+     * @package    SetaPDF_Core
+     * @subpackage Writer
+     * @license    https://www.setasign.com/ Commercial
+     */
+    class SetaPDF_Core_Writer_TempStream extends \SetaPDF_Core_Writer_Stream
+    {
+        /**
+         * @var string
+         */
+        protected $_buffer = '';
+
+        /**
+         * @var int
+         */
+        protected $_bufferSize = 10000;
+
+        /**
+         * The constructor.
+         *
+         * @param null|int $memoryLimit Limit to use before writing to a temporary file. If null PHPs default (2 MB) is used.
+         * @param int $bufferSize The buffer size of which needs to be reached until the data is written to the stream.
+         */
+        public function __construct($memoryLimit = null, $bufferSize = 10000) {}
+
+        /**
+         * The deconstructor closes the file handle.
+         */
+        public function __destruct() {}
+
+        /**
+         * Write content to the stream or buffer.
+         *
+         * @param string $s
+         */
+        public function write($s) {}
+
+        /**
+         * Returns the current position.
+         *
+         * @return integer
+         */
+        public function getPos() {}
+
+        /**
+         * Finish methods flushes the buffer to the stream.
+         */
+        public function finish() {}
+
+        /**
+         * Gets the handle of the stream.
+         *
+         * This method is overwritten to ensure that the handle is only accessed when the writer instance has the status
+         * "finished".
+         *
+         * @return resource
+         */
+        public function getHandle() {}
+
+        /**
+         * Flushes the buffer to the stream and resets the buffer.
+         */
+        protected function _flush() {}
 
     }
 }
@@ -33378,7 +33493,7 @@ namespace
 
         /**
          * Array holding information about the font
-         * 
+         *
          * @var array
          */
         protected $_info = [/** value is missing */];
@@ -33424,6 +33539,11 @@ namespace
          * @var null|int|float
          */
         protected $_underlineThickness;
+
+        /**
+         * @var array<string,SetaPDF_Core_Geometry_Point>
+         */
+        protected $_fontBBoxVector = [/** value is missing */];
 
         /**
          * Release font instances by a document instance.
@@ -33689,6 +33809,22 @@ namespace
          * @param int|float $position
          */
         public function setUnderlinePosition($position) {}
+
+        /**
+         * Re-calculate the font bounding box by analysing the metrics of all embedded glyphs.
+         *
+         * @return false|array Format is [llx lly urx ury]. Returns false if the font isn't recalculatable
+         */
+        public function recalculateFontBBox() {}
+
+        /**
+         * Get a font bounding box vector.
+         *
+         * @param int $name
+         * @param float $fontSize
+         * @return SetaPDF_Core_Geometry_Vector
+         */
+        public function getFontBBoxVector($name, $fontSize) {}
 
     }
 }
@@ -34834,14 +34970,14 @@ namespace
         /**
          * Leap white spaces.
          *
-         * @return boolean
+         * @return bool
          */
         public function leapWhiteSpaces() {}
 
         /**
          * Check if the current byte is a regular character.
          *
-         * @return boolean
+         * @return bool
          */
         public function isCurrentByteRegularCharacter() {}
 
@@ -34902,10 +35038,11 @@ namespace
 
         /**
          * Return the color space.
-         * 
+         *
+         * @param bool $pdfValue
          * @return SetaPDF_Core_Type_Name|SetaPDF_Core_Type_Array|null
          */
-        public function getColorSpace() {}
+        public function getColorSpace($pdfValue = false) {}
 
         /**
          * Checks whether the transparency group is isolated.
@@ -36073,6 +36210,20 @@ namespace
         protected $_logger;
 
         /**
+         * The maximum count of how many tries the resolver does on error.
+         *
+         * @var int
+         */
+        protected $_maxTries = 5;
+
+        /**
+         * Defines how long the process sleeps until the next try on error in microseconds.
+         *
+         * @var int
+         */
+        protected $_sleeptimeAfterFailure = 500000;
+
+        /**
          * The constructor.
          *
          * @param array $curlOptions See https://www.php.net/curl-setopt
@@ -36108,6 +36259,26 @@ namespace
          * @return array
          */
         public function getCurlOptions() {}
+
+        /**
+         * @return int
+         */
+        public function getMaxTries() {}
+
+        /**
+         * @param int $maxTries
+         */
+        public function setMaxTries($maxTries) {}
+
+        /**
+         * @return int
+         */
+        public function getSleeptimeAfterFailure() {}
+
+        /**
+         * @param int $sleeptimeAfterFailure
+         */
+        public function setSleeptimeAfterFailure($sleeptimeAfterFailure) {}
 
         /**
          * @inheritDoc
@@ -36225,7 +36396,7 @@ namespace
         public function setLogger(\SetaPDF_Signer_ValidationRelatedInfo_LoggerInterface $logger);
 
         /**
-         * Checks wheter the resolver can resolve the given URI.
+         * Checks whether the resolver can resolve the given URI.
          *
          * @param string $uri
          * @return boolean
@@ -36899,6 +37070,12 @@ namespace
 
         const CONFIG_GRAPHIC_COLOR = 'graphicColor';
 
+        const CONFIG_GRAPHIC_ALIGN = 'graphicAlign';
+
+        const CONFIG_GRAPHIC_ALIGN_LEFT = 'left';
+
+        const CONFIG_GRAPHIC_ALIGN_RIGHT = 'right';
+
         const CONFIG_TEXT_ALIGN = 'textAlign';
 
         const CONFIG_TEXT_COLOR = 'textColor';
@@ -37001,7 +37178,7 @@ namespace
         public function getConfig($key) {}
 
         /**
-         * Set how and if a graphic is displayed on the left side of the appearance.
+         * Set how and if a graphic is displayed on the appearance.
          *
          * If a XObject is passed it will be used as the graphic, if true is passed the common name of the certificate
          * will be used. If false is passed no graphic will be shown.
@@ -37012,11 +37189,27 @@ namespace
         public function setGraphic($graphic) {}
 
         /**
-         * Get if and how the graphic on the left side is displayed.
+         * Get if and how the graphic on is displayed.
          *
          * @return mixed
          */
         public function getGraphic() {}
+
+        /**
+         * Set whether the graphic should be displayed on the left or right.
+         *
+         * @param string $align A self::CONFIG_GRAPHIC_ALIGN_* constant.
+         * @see self::CONFIG_GRAPHIC_ALIGN_RIGHT
+         * @see self::CONFIG_GRAPHIC_ALIGN_LEFT
+         */
+        public function setGraphicAlign($align) {}
+
+        /**
+         * Get whether the graphic should be displayed on the left or right.
+         *
+         * @return string
+         */
+        public function getGraphicAlign() {}
 
         /**
          * Set the graphic text color.
@@ -37326,7 +37519,7 @@ namespace
         /**
          * Get the original signing certificate argument
          *
-         * @var string
+         * @var string|SetaPDF_Signer_X509_Certificate
          */
         protected $_oCertificate;
 
@@ -37410,7 +37603,7 @@ namespace
         /**
          * Get the certificate value.
          *
-         * @return mixed
+         * @return string|SetaPDF_Signer_X509_Certificate
          */
         public function getCertificate() {}
 
@@ -37450,8 +37643,9 @@ namespace
         /**
          * Set the the private key or a path to the private key file and password argument.
          *
-         * @param resource|string|array $privateKey A key, returned by openssl_get_privatekey() or a PEM formatted key as a
-         *                                          string. Or a string having the format file://path/to/file.pem
+         * @param resource|OpenSSLAsymmetricKey|string|array $privateKey A key, returned by openssl_get_privatekey() or a
+         *                                                               PEM formatted key as a string. Or a string having
+         *                                                               the format file://path/to/file.pem
          * @param string $passphrase The optional parameter passphrase must be used if the specified key is encrypted
          *                           (protected by a passphrase).
          * @throws InvalidArgumentException
@@ -38811,6 +39005,13 @@ namespace
         protected $_crls;
 
         /**
+         * The OCSP client instance.
+         *
+         * @var Client
+         */
+        protected $_ocspClient;
+
+        /**
          * A logger instance.
          *
          * @var LoggerInterface
@@ -38970,6 +39171,13 @@ namespace
          * @throws \Psr\SimpleCache\InvalidArgumentException
          */
         protected function _processCertificate(\SetaPDF_Signer_ValidationRelatedInfo_Result $result, $sources = self::SOURCE_OCSP_OR_CRL, ?\DateTimeInterface $dateTime = null, ?\DateTimeZone $timeZone = null) {}
+
+        /**
+         * Get the OCSP client instance.
+         *
+         * @return SetaPDF_Signer_Ocsp_Client
+         */
+        public function getOcspClient() {}
 
         /**
          * Get validation related information by a certificate.
@@ -39133,6 +39341,13 @@ namespace
          * @var int
          */
         const STATUS_CADES_INVALID_SIGNING_CERTIFICATE = null;
+
+        /**
+         * Status if the eContent element is missing but required.
+         *
+         * @var int
+         */
+        const STATUS_MISSING_ENCAPSULATED_CONTENT = null;
 
         /**
          * The signature field.
@@ -39306,6 +39521,20 @@ namespace
          * @var int
          */
         protected $_depth = 0;
+
+        /**
+         * The flag that defines whether a log message is output directly.
+         *
+         * @var bool
+         */
+        protected $_directOutput = false;
+
+        /**
+         * Set a flag that defines whether a log message is output directly.
+         *
+         * @param boolean $directOutput
+         */
+        public function setDirectOutput($directOutput) {}
 
         /**
          * This increases the depth level which should be forward to new log entry instances.
@@ -41889,6 +42118,13 @@ namespace
         protected $_documentIdentification = [/** value is missing */];
 
         /**
+         * Hash of the last state of the intermediate document version.
+         *
+         * @var string
+         */
+        protected $_identficationHash;
+
+        /**
          * The byte range value
          *
          * @var array
@@ -41925,6 +42161,11 @@ namespace
          * @param SetaPDF_Core_Document $document
          */
         public function setDocumentIdentification(\SetaPDF_Core_Document $document) {}
+
+        /**
+         * Updates the identification hash of the intermediate document version.
+         */
+        public function updateIdentificationHash() {}
 
         /**
          * Get the SHA-256 hash by a document instance.
@@ -42025,7 +42266,7 @@ namespace
          *
          * @var string
          */
-        const VERSION = 'dev-rev-1507#Build #183 Rev 1507';
+        const VERSION = 'dev-rev-1597#Build #269 Rev 1597';
 
         /**
          * A float comparison precision
@@ -42071,7 +42312,7 @@ namespace
          *
          * @var string
          */
-        const VERSION = 'dev-rev-1507#Build #183 Rev 1507';
+        const VERSION = 'dev-rev-1597#Build #269 Rev 1597';
 
         /**
          * Property constant

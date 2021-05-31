@@ -1,13 +1,20 @@
 {
     "require": {
         "guzzlehttp/guzzle": "^6.0",
-        "kunalvarma05/dropbox-php-sdk": "^0.2.1"
-
+        "kunalvarma05/dropbox-php-sdk": "^0.2.1",
+        "google/apiclient": "^2.7",
+        "setasign/setapdf-signer_eval_ioncube_php7.1": "2.36.0.1597"
     },
     "repositories": [
         {
             "type": "composer",
             "url": "https://www.setasign.com/downloads/"
         }
-    ]
+    ],
+    "extra": {
+        "google/apiclient-services": [
+            "Drive",
+            "YouTube"
+        ]
+    }
 }

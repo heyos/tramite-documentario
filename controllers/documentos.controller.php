@@ -17,6 +17,9 @@ class DocumentoController extends Controller {
 		$params['estado_firma'] = $estadoFirma;
 		$codigo = uniqid();
 		$params['codigo'] = $codigo;
+		$rut_cliente = $params['rut_cliente'];
+
+		unset($params['rut_cliente']);
 
 		$textoQr ='http://'.$_SERVER['SERVER_NAME'].'/?action=ver&term='.$codigo;
 
@@ -24,7 +27,22 @@ class DocumentoController extends Controller {
 
 		if(count($usuariosFirma) > 0){
 
-			$data = $params;
+			//$data = $params;
+
+			//SUBIR A DRIVE
+			$fileIdDrive = '';
+			$fileName = '';
+
+			if($params['name_documento'] != ''){
+
+				$args = self::uploadToGoogleDrive($rut_cliente,$params['name_documento']);
+	          	$fileIdDrive = $args['fileIdDrive'];
+	          	$fileName = $args['fileName'];
+	          	$google_id = $args['google_id'];
+	          	$params['name_documento'] = $fileName != '' ? $fileName : $params['name_documento'];
+	          	$params['google_id'] = $google_id;
+			}
+			//FIN SUBIR A DRIVE
 
 			$respuesta = DocumentoModel::create('documento',$params);
 
@@ -85,11 +103,11 @@ class DocumentoController extends Controller {
 					$message = "Se guardo exitosamente el documento.";
 				}
 
-				$data = $usuariosFirma;
+				//$data = $usuariosFirma;
 
 				//GENERAR QR
 				$uploadDir = Config::rutas();
-    			$uploadQr = $uploadDir['qr'];
+				$uploadQr = $uploadDir['qr'];
 
     			if(!is_dir($uploadQr)){
 		          mkdir($uploadQr,0777,true);
@@ -101,6 +119,7 @@ class DocumentoController extends Controller {
 			}else{
 				$message = "Error al guardar el documento.";
 			}
+				
 
 		}else{
 			$message = 'Debe seleccionar almenos un usuario para firmar.';
@@ -123,11 +142,31 @@ class DocumentoController extends Controller {
 						$params['name_documento'] != '' ? '1' : '0'
 						: '0' ; //1:en proceso de firma - 0:pendiente
 		$params['estado_firma'] = $estadoFirma;
+		$rut_cliente = $params['rut_cliente'];
+
+		unset($params['rut_cliente']);
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
 		
 
 		if(count($usuariosFirma) > 0){
+
+			//SUBIR A DRIVE
+			$fileIdDrive = '';
+			$fileName = '';
+
+			if($params['google_id'] == ''){
+
+				$args = self::uploadToGoogleDrive($rut_cliente,$params['name_documento']);
+	          	$fileIdDrive = $args['fileIdDrive'];
+	          	$fileName = $args['fileName'];
+	          	$google_id = $args['google_id'];
+	          	$params['name_documento'] = $fileName != '' ? $fileName : $params['name_documento'];
+	          	$params['google_id'] = $google_id;
+			}else{
+				unset($params['google_id']);
+			}
+			//FIN SUBIR A DRIVE
 
 			$respuesta = DocumentoModel::update('documento',$params);
 
@@ -286,7 +325,8 @@ class DocumentoController extends Controller {
                 d.usuario_crea,
                 d.fecha_crea,
                 CONCAT(u.nombres,' ',u.apellidos),
-                r.descripcion
+                r.descripcion,
+                d.google_id
                 "; //columnas
 
         $params = array(
@@ -327,7 +367,8 @@ class DocumentoController extends Controller {
 	    		'cliente_full' => $documento[7].' '.$documento[8],
 	    		'paciente_full' => $documento[9].' '.$documento[10],
 	    		'usuario_crea_full' => $documento[16],
-	    		'rol_usuario_crea' => $documento[17]
+	    		'rol_usuario_crea' => $documento[17],
+	    		'google_id' => $documento[18]
 	    	);
 
 	    	$lista = json_decode($documento[6],true);
@@ -385,6 +426,66 @@ class DocumentoController extends Controller {
 
 	}
 
+	static public function uploadToGoogleDrive($folderSave,$file){
+
+		$fileIdDrive = '';
+		$nameFileOut = '';
+		
+		$dir = Config::rutas();
+		$dirFile = $dir['documento'];
+
+		if(!is_array($file)){
+
+			$pathFile = $dirFile.'/'.$file;
+
+			$arrName = explode('/',$file);
+			$nameNew = end($arrName);
+			$arrFile = array(
+				'nameNew' => $nameNew,
+				'type' => 'application/pdf',
+				'tmp_name' => $pathFile
+			);
+
+		}else{
+			$arrFile = $file;
+			$nameNew = array_key_exists('nameNew',$file) ? $file['nameNew'] : '';
+		}
+
+		$folderSave = str_replace('.','_',$folderSave);
+		$estructura = array(
+	    	'principal' => date('Y-m-d'), //date('Y-m-d'),
+	        'sub' => $folderSave
+	  	);
+
+      	$carpetaId_principal = GoogleDrive::crearCarpeta($estructura['principal']);
+      	$carpetaId_sub = '';
+          
+      	if($carpetaId_principal !=''){
+            $carpetaId_sub = GoogleDrive::crearCarpeta($estructura['sub'],$carpetaId_principal);
+        }
+
+        if($carpetaId_sub !='' && is_file($arrFile['tmp_name'])){
+            $fileIdDrive = GoogleDrive::uploadFile($arrFile,$carpetaId_sub);
+      	}
+
+      	$google_id = '';
+      	if($fileIdDrive != ''){
+      		$nameFileOut = $nameNew;
+      		unlink($arrFile['tmp_name']);
+
+      		$google_id = '{\"folder_id\" : \"'.$carpetaId_sub.'\",\"file_id\" : \"'.$fileIdDrive.'\"}';
+      	}
+
+      	$salida = array(
+      		'fileIdDrive' => $fileIdDrive,
+      		'fileName' => $nameNew,
+      		'folderId' => $carpetaId_sub,
+      		'google_id' => $google_id
+      	);
+
+      	return $salida;
+	}
+
 	static public function firmarDocumento($params){
 
 		$respuestaOk = false;
@@ -416,8 +517,11 @@ class DocumentoController extends Controller {
 			if($verificarPass){
 
 				$arrayDocs = json_decode($params['docus'],true);
+				$arrDir = Config::rutas();
+				$downloadDir = $arrDir['download'];
 
-				$message = count($arrayDocs);
+				//$message = count($arrayDocs);
+
 				foreach ($arrayDocs as $idDocumento) {
 
 					$where_documento = array(
@@ -426,101 +530,138 @@ class DocumentoController extends Controller {
 
 					$documento = self::detalleDocumento($where_documento);
 					$documentoPdf = $documento['data']['name_documento'];
+					$documentoDrive = $documento['data']['google_id'];
+					$arrDrive = json_decode($documentoDrive,true);
 					$orden = $documento['data']['orden_firmante'];
 					$codigo = $documento['data']['codigo'];
+					$rut_cliente = $documento['data']['rut_cliente'];
+					$rut_cliente = str_replace('.','_',$rut_cliente);
 
-					$dir = explode('/',$documentoPdf);
-					$dir[0] = date('Y-m-d');
-					$newDir = $dir[0].'/'.$dir[1];
+					$dir = date('Y-m-d');
+					$newDir = $dir.'/'.$rut_cliente;
+					
+					$pathDownload = $downloadDir.'/'.$newDir;
 
-					$file = explode(".",$dir[2]);					
-					$newName = $file[0]."-".$orden.".".$file[1];;
+					$inFolderId = $arrDrive['folder_id'];
+					$fileIdDrive = $arrDrive['file_id'];
 
-					$pathOut = ['path' => $newDir,
-								'pdf' => $newName,
-								'codigo' => $codigo,
-								'dominio' => $_SERVER['SERVER_NAME']
-							   ];
-					# code...
-					$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$documentoPdf,$orden,$pathOut);
-					$respuestaOk = $firmado['respuesta'];
-					$message = $firmado['message'];
-										
-					if ($respuestaOk == true) {
-						//Cantidad de firmantes
-						$where_documentoUsuario = array(
-							'table' => 'documento_usuario',							
-							'where' => array(
-								['documento_id',$idDocumento],
-								['deleted','0']
-							)
-						);
+					$fileDrive = GoogleDrive::downloadFile($documentoPdf,$pathDownload,$inFolderId);
+
+					if($fileDrive['data'] != ''){
+
+						$file = explode(".",$documentoPdf);					
+						$newName = $file[0]."-".$orden.".".$file[1];
+
+						$pathOut = ['path' => $newDir,
+									'pdf' => $newName,
+									'codigo' => $codigo,
+									'dominio' => $_SERVER['SERVER_NAME']
+								   ];
 						
-						$documentoUsuario = DocumentoUsuarioModel::firstOrAll('documento_usuario',$where_documentoUsuario,'all');
-						$cantDocUsuario = count($documentoUsuario);
+						$pathDocumento = $fileDrive['data'];
+						$firmado = FirmaElectronica::firmar($nameCertificadoTemp,$passCertificadoTemp,$pathDocumento,$orden,$pathOut);
+						$respuestaOk = $firmado['respuesta'];
+						$message = $firmado['message'];
+											
+						if ($respuestaOk == true) {
 
-						//Actualizar tabla DOCUMENTO_USUARIO (firmado,fecha_firma,usuario_modifica,fecha_modifica)
-						$where_updateDocUsuario = array(
-						 	'firmado'=>'1',						 	
-						 	'fecha_firma' => date('Y-m-d H:i:s'),
-						 	'ruta_firma' => $documentoPdf,
-						 	'usuario_modifica' => $params['user'],
-							'fecha_modifica' => date('Y-m-d H:i:s'),
-						 	'where' => array(
-						 		['documento_id',$idDocumento],
-						 		['usuario_id',$params['user_id']],
-						 		['deleted','0']
-						 	)
-						);
-						$updateDocUsuario = DocumentoUsuarioModel::update('documento_usuario',$where_updateDocUsuario);
-						
-						if ($updateDocUsuario > 0) {
-							if ($orden == $cantDocUsuario) {						
-								//actualizar tabla DOCUMENTO (usuario_modifica,fecha_modifica,estado_firma,orden_firmante)
-								//esatdo_firma 	0:pendiente | 1:en proceso de firma | 2: firmado por todos | 3:cancelado
-								$where_updateDocumento = array(
-									'name_documento' => $newDir."/".$newName,
-									'usuario_modifica' => $params['user'],
-									'fecha_modifica' => date('Y-m-d H:i:s'),
-								 	'estado_firma'=>'2',												 	
-								 	'id' => $idDocumento
-								);
-							}else{
-								$orden++;
-								$where_updateDocumento = array(
-									'name_documento' => $newDir."/".$newName,
-									'usuario_modifica' => $params['user'],
-									'fecha_modifica' => date('Y-m-d H:i:s'),
-								 	'orden_firmante' => $orden,
-								 	'id' => $idDocumento
-								);
-							}
+							$pathFileFirmado = $firmado['data']['out'];
+							$folderSave = $rut_cliente;
 
-							$updateDocumento = DocumentoModel::update('documento',$where_updateDocumento);
-							
-							if ($updateDocumento > 0) {
+							$upload = self::uploadToGoogleDrive($folderSave,$pathFileFirmado);
+
+							if($upload['fileIdDrive'] !=''){
+
+								//borramos file descargado
+								unlink($fileDrive['data']);
+								$google_id = $upload['google_id'];
+								$newName = $upload['fileName'];
+
+								//Cantidad de firmantes
+								$where_documentoUsuario = array(
+									'table' => 'documento_usuario',							
+									'where' => array(
+										['documento_id',$idDocumento],
+										['deleted','0']
+									)
+								);
 								
-								$old = array(
-					                'estado_old' => '1',
-					                'documento_id' => $idDocumento
-				              	);
+								$documentoUsuario = DocumentoUsuarioModel::firstOrAll('documento_usuario',$where_documentoUsuario,'all');
+								$cantDocUsuario = count($documentoUsuario);
 
-				              	$resumen = ResumenDocumentoUsuarioController::updateResumen($old);
-							}
+								//Actualizar tabla DOCUMENTO_USUARIO (firmado,fecha_firma,usuario_modifica,fecha_modifica)
+								$fileBeforeSign = '{\"fileName-before-sign\" : \"'.$documentoPdf.'\",\"sign_file_id\" : \"'.$fileIdDrive.
+								'\",\"old_folder_id\" : \"'.$inFolderId.'\"}';
+								
+								$where_updateDocUsuario = array(
+								 	'firmado'=>'1',						 	
+								 	'fecha_firma' => date('Y-m-d H:i:s'),
+								 	'ruta_firma' => $fileBeforeSign,
+								 	'usuario_modifica' => $params['user'],
+									'fecha_modifica' => date('Y-m-d H:i:s'),
+								 	'where' => array(
+								 		['documento_id',$idDocumento],
+								 		['usuario_id',$params['user_id']],
+								 		['deleted','0']
+								 	)
+								);
+								$updateDocUsuario = DocumentoUsuarioModel::update('documento_usuario',$where_updateDocUsuario);
+								
+								if ($updateDocUsuario > 0) {
+									if ($orden == $cantDocUsuario) {						
+										//actualizar tabla DOCUMENTO (usuario_modifica,fecha_modifica,estado_firma,orden_firmante)
+										//esatdo_firma 	0:pendiente | 1:en proceso de firma | 2: firmado por todos | 3:cancelado
+										$where_updateDocumento = array(
+											'name_documento' => $newName,
+											'google_id' => $google_id,
+											'usuario_modifica' => $params['user'],
+											'fecha_modifica' => date('Y-m-d H:i:s'),
+										 	'estado_firma'=>'2',												 	
+										 	'id' => $idDocumento
+										);
+									}else{
+										$orden++;
+										$where_updateDocumento = array(
+											'name_documento' => $newName,
+											'google_id' => $google_id,
+											'usuario_modifica' => $params['user'],
+											'fecha_modifica' => date('Y-m-d H:i:s'),
+										 	'orden_firmante' => $orden,
+										 	'id' => $idDocumento
+										);
+									}
 
+									$updateDocumento = DocumentoModel::update('documento',$where_updateDocumento);
+									
+									if ($updateDocumento > 0) {
+										
+										$old = array(
+							                'estado_old' => '1',
+							                'documento_id' => $idDocumento
+						              	);
+
+						              	$resumen = ResumenDocumentoUsuarioController::updateResumen($old);
+									}
+
+								}
+
+							}else{
+								$message .= 'Error al subir a google drive :'.$newName.'<br>';
+							}								
+							
 						}
-						
+						//actualizar documentos(orden, usuariomod,fecha_mod,estado_firma(2)-cuanto cant reg = cant (1)...,name_-documento), documento_usuario (fecha, mod, fecha_firma)
+					} else {
+						$message .= 'Aun no esta en drive :'.$documentoPdf.'<br>';
 					}
-					//actualizar documentos(orden, usuariomod,fecha_mod,estado_firma(2)-cuanto cant reg = cant (1)...,name_-documento), documento_usuario (fecha, mod, fecha_firma) 
 
 				}
 				
-
-			}else{
+			} else {
 				$message = "No se puede verificar la autenticidad del certificado.";
 			}
 
-		}else{
+		} else {
 			$message = "Certificado invalido para este usuario y/o no cuenta con uno.";
 		}
 
@@ -540,6 +681,11 @@ class DocumentoController extends Controller {
 		$arr = json_decode($params['documentos'],true);
 		$salida = [];
 		$ruta = '';
+		$rut_cliente = '';
+		$argsDrive = '';
+
+		$arrDir = Config::rutas();
+		$downloadDir = $arrDir['download'];
 
 		foreach ($arr as $id) {
 			
@@ -550,16 +696,26 @@ class DocumentoController extends Controller {
 				)
 			);
 			$detalle = self::itemDetail($data);
-			$ruta = $detalle['data']['name_documento'];
-			$arrName = explode('/',$ruta);
-			$name = end($arrName);
+			$documentoPdf = $detalle['data']['name_documento'];
+						
+			$arrDrive = json_decode($detalle['data']['google_id'],true);
+			$inFolderId = $arrDrive['folder_id'];
 
-			$salida = array(
-				'ruta' => $ruta,
-				'name_doc' => $name
-			);
+			$fileDrive = GoogleDrive::downloadFile($documentoPdf,$downloadDir,$inFolderId);
+			$ruta = $fileDrive['data'];
 
-			array_push($arrayRutas, $salida);
+			if($ruta != ''){
+				$arrName = explode('/',$ruta);
+				$name = end($arrName);
+
+				$salida = array(
+					'ruta' => $ruta,
+					'name_doc' => $name
+				);
+
+				array_push($arrayRutas, $salida);
+			}
+				
 		}
 
 		return $arrayRutas;

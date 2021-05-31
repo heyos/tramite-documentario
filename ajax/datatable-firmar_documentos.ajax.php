@@ -28,7 +28,8 @@ class DatatableTipoDocumento  {
                 d.usuario_modifica,
                 d.orden_firmante,
                 du.orden_firma,
-                DATE(d.fecha_crea)
+                DATE(d.fecha_crea),
+                d.codigo
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
@@ -119,6 +120,7 @@ class DatatableTipoDocumento  {
       $orden_firma = '';
       $check = '';
       $fechaCrea = '';
+      $codigo = '';
 
       foreach ($records as $row) {
 
@@ -136,6 +138,7 @@ class DatatableTipoDocumento  {
         $orden_firmante = $row[13];
         $orden_firma = $row[14];
         $fechaCrea = date('d/m/Y',strtotime($row[15]));
+        $codigo = $row[16];
 
         $txt = "";
         $css = "";
@@ -186,7 +189,7 @@ class DatatableTipoDocumento  {
             $txt = 'En proceso de firma';
 
             $button .=  "
-              <button title='Ver documento' name_docu = ".$name_docu." class='btn btn-primary btn-sm btnVer' id='".$id."'>
+              <button title='Ver documento' name_docu = ".$name_docu." codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
                 <i class='fas fa-eye'></i>
               </button>
             ";
@@ -215,7 +218,7 @@ class DatatableTipoDocumento  {
             $txt = 'Firmado por todos';
 
             $button .=  "
-              <button title='Ver documento' name_docu = '".$name_docu."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
+              <button title='Ver documento' name_docu = '".$name_docu."' codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
                 <i class='fas fa-eye'></i>
               </button>
             ";
@@ -230,6 +233,7 @@ class DatatableTipoDocumento  {
                 <button title='Descargar documento' class='btn btn-success btn-sm btnDownload' 
                   id='".$id."'
                   name_docu = ".$name_docu."
+                  codigo='".$codigo."'
                 >
                   <i class='fa fa-download'></i>
                 </button>

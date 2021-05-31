@@ -10,6 +10,7 @@ require_once "../models/resumen_documento_usuario.model.php";
 
 require_once "../vendor/autoload.php";
 require_once "../library/phpqrcode/qrlib.php";
+require_once "../controllers/drive.controller.php";
 
 class DocumentoAjax{
 
@@ -65,6 +66,10 @@ class DocumentoAjax{
     $message = '';
     $respuesta_upload = false;
     $resumen = [];
+    $fileIdDrive = "";
+    $id_principal = '';
+    $id_sub = '';
+    $fileIdDrive = '';
 
     $oldFile = array_key_exists('oldFile', $this->params) ? $this->params['oldFile'] : '';
     $id = array_key_exists('id', $this->params) ? $this->params['id'] : 0; //parametro desde mainJsFirmaDocumentos.js
@@ -94,37 +99,72 @@ class DocumentoAjax{
 
       $allowedfileExtensions = array('pdf');
 
+      $newFileName = $name_documento.'.'.$fileExtension;
+
       if (in_array($fileExtension, $allowedfileExtensions)) {
         
-        $newFileName = $name_documento.'.'.$fileExtension;
-
         //TEMP
         $uploadDir = Config::rutas();
         $uploadRoot = $uploadDir['documento'].'/';
-        $uploadFileDir = $uploadRoot.date('Y-m-d').'/'.$rut_cliente;
-        $dest_path = $uploadFileDir .'/'. $newFileName;
+        $uploadFileDir = date('Y-m-d').'/'.$rut_cliente;
+        $dest_path = $uploadRoot.$uploadFileDir .'/'. $newFileName;
 
-        if(!is_dir($uploadFileDir)){
-          mkdir($uploadFileDir,0777,true);
-        }
+        if($id == 0) {
 
-        if(move_uploaded_file($fileTmpPath, $dest_path)){
-          $message ='File is successfully uploaded.';
-          $respuestaOk = true;
+          $uploadFileDir = $uploadRoot.$uploadFileDir;
 
-          if($oldFile !='' && file_exists($uploadFileDir.'/'.$oldFile)){
-            unlink($uploadFileDir.'/'.$oldFile); //eliminamos antiguo archivo
+          if(!is_dir($uploadFileDir)){
+            mkdir($uploadFileDir,0777,true);
           }
 
-          $path = str_replace($uploadRoot,'',$dest_path);
+          if(move_uploaded_file($fileTmpPath, $dest_path)){
+            $message ='File is successfully uploaded.';
+            $respuestaOk = true;
 
-          //verificamos que es de un documento creado
-          if($id != 0){
+            if($oldFile !='' && file_exists($uploadFileDir.'/'.$oldFile)){
+              unlink($uploadFileDir.'/'.$oldFile); //eliminamos antiguo archivo
+            }
+
+            $path = str_replace($uploadRoot,'',$dest_path);
+
+          }else{
+            $message = 'There was some error moving the file to upload directory. 
+            Please make sure the upload directory is writable by web server.';
+          }
+        
+        }else{
+
+          $this->file['nameNew'] = $newFileName;
+
+          $estructura = array(
+            'principal' => date('Y-m-d'), //date('Y-m-d'),
+            'sub' => $rut_cliente
+          );
+
+          $carpetaId_principal = GoogleDrive::crearCarpeta($estructura['principal']);
+          $carpetaId_sub = '';
+          
+          if($carpetaId_principal !=''){
+            
+            $carpetaId_sub = GoogleDrive::crearCarpeta($estructura['sub'],$carpetaId_principal);
+
+          }
+
+          if($carpetaId_sub !=''){
+            $fileIdDrive = GoogleDrive::uploadFile($this->file,$carpetaId_sub);
+          }
+
+          if($fileIdDrive !=''){
+
+            $respuestaOk = true;
+            $path = $this->file['nameNew'];
+            $google_id = '{\"folder_id\" : \"'.$carpetaId_sub.'\",\"file_id\" : \"'.$fileIdDrive.'\"}';
 
             $params = array(
               'id'=>$id,
               'estado_firma' => '1',
               'name_documento' => $path,
+              'google_id' => $google_id,
               'usuario_modifica' => $user,
               'fecha_carga_doc' => date('Y-m-d')
             );
@@ -142,19 +182,17 @@ class DocumentoAjax{
 
               $resumen = ResumenDocumentoUsuarioController::updateResumen($old);
 
+            }else {
+              $respuestaOk = false;
+              $message = "Error al actualizar la subida del documento";
             }
-              
-          }             
+            
+          }else{
+            $message = 'There was some error moving the file to upload directory in DRIVE';
+          }
 
-        }else{
-          $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
-        }
-
-        //DRIVE
-        // $uploadFileDir = date('YYYY-m-d').'/'.$rut_cliente;
-        // $dest_path = '/'.$uploadFileDir .'/'. $newFileName;
-        // $respuestaOk = DropboxController::upload($fileTmpPath, '/'.$newFileName);
-
+        }          
+        
       }else{
         $message = "Solo se permite PDF";
       }
@@ -168,7 +206,8 @@ class DocumentoAjax{
       'respuesta'=>$respuestaOk,
       'mensaje'=>$message,
       'respuesta_upload' => $respuesta_upload,
-      'resumen' => $resumen
+      'resumen' => $resumen,
+      'drive' => $fileIdDrive
     )); 
 
   }
@@ -223,14 +262,17 @@ class DocumentoAjax{
     $name = '';
     $file = '';
     $arr = [];
+    $downloadDir = '';
 
     $dir = Config::rutas();
     $dirName = $dir['documento'].'/';
 
+    $ruta = '';
 
     if(isset($this->params['name'])){
 
       $file = $this->params['name'];
+      $ruta = $dirName.$file.'.pdf';
       
     }elseif (isset($this->params['term'])) {
       //buscar por codigo del documento
@@ -241,25 +283,36 @@ class DocumentoAjax{
 
       if($documento['respuesta']){
 
-        $file = $documento['data']['name_documento'];
-        $file = str_replace('.pdf','',$file);
+        //$file = str_replace('.pdf','',$file);
+        $downloadDir = $dir['download'];
+
+        $documentoPdf = $documento['data']['name_documento'];
+            
+        $arrDrive = json_decode($documento['data']['google_id'],true);
+        $inFolderId = $arrDrive['folder_id'];
+
+        $fileDrive = GoogleDrive::downloadFile($documentoPdf,$downloadDir,$inFolderId);
+        $ruta = $fileDrive['data'];
 
       }
     }
 
-    $ruta = $dirName.$file.'.pdf';
-    
     if(file_exists($ruta)){
 
-      $arr = explode('/',$file);
-      $name = $arr[count($arr)-1].'.pdf';
+      $arr = explode('/',$ruta);
+      $name = end($arr);
 
       header("Content-type: application/pdf");
       header("Content-Disposition: inline; filename=".$name);
 
       readfile($ruta);
 
+      if(isset($this->params['term'])){
+        unlink($ruta);
+      }
+
     }else{
+      echo $ruta;
       echo "<h1><b>ERROR:>> Documento no encontrado y/o aun no se adjunta uno</b></h1>";
     }
   }
@@ -363,14 +416,20 @@ class DocumentoAjax{
     
     $file = '';
     foreach ($arrRutas as $documento) {
-      $file = $rutaAbsoluta."/".$documento['ruta'];
+      //$file = $rutaAbsoluta."/".$documento['ruta'];
+      $file = $documento['ruta'];
       $zip->addFile($file, $documento['name_doc']);
-      echo $file.'<br>';
+      //echo $file.'<br>';
+
     }
 
     $resultado = $zip->close();
     
     if ($resultado) {
+
+      foreach ($arrRutas as $documento) {
+        unlink($documento['ruta']);
+      }
 
       header('Content-Type: application/octet-stream');
       header("Content-Transfer-Encoding: Binary");

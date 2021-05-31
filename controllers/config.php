@@ -15,7 +15,9 @@ class Config {
 		$rutas = array(
 			'certificado' => $rootFolder[$out].'certificados',
 			'documento' => $rootFolder[$out].'documentos',
-			'qr' => $rootFolder[$out].'qr'
+			'qr' => $rootFolder[$out].'qr',
+			'google' => $rootFolder[$out].'google',
+			'download' => $rootFolder[$out].'download'
 		);
 
 		return $rutas;

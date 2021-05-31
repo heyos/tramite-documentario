@@ -30,7 +30,7 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
         ),
         'p' => 
         array (
-            'phpseclib\\' => 10,
+            'phpseclib3\\' => 11,
         ),
         'T' => 
         array (
@@ -49,8 +49,8 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
-            'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
+            'ParagonIE\\ConstantTime\\' => 23,
         ),
         'M' => 
         array (
@@ -79,7 +79,7 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
         array (
             0 => __DIR__ . '/..' . '/setasign/composer-ioncube-license-installer/src',
         ),
-        'phpseclib\\' => 
+        'phpseclib3\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
@@ -119,13 +119,13 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-client/src',
-        ),
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'ParagonIE\\ConstantTime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
         ),
         'Monolog\\' => 
         array (

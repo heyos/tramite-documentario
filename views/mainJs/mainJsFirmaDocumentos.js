@@ -165,20 +165,18 @@ init.push(function () {
 	  	$('body').on('click','.tablaDocumento .btnVer',async function(e){
 	  		e.preventDefault();
 			var name = $(this).attr('name_docu');
+			var codigo = $(this).attr('codigo');
 
-			if(name == ''){
+			if(codigo == ''){
 				notification('Error..!','Documento no encontrado','error');
 				return;
 			}
 
 			blockPage();
 
-			name = name.replace('.pdf','');
-			var datos = 'accion=readfile&name='+name;
-
 			var formData = new FormData();
 	    	formData.append('accion','readfile');
-	    	formData.append('name',name);
+	    	formData.append('term',codigo);
 
 	    	var url = 'ajax/documentos.ajax.php';
 	    	const response = await fetch(url,{

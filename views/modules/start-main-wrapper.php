@@ -86,10 +86,7 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
                                         <div class="notifications-list" id="main-navbar-notifications">
 
                                             <div class="notification" style="<?php echo $displaySec; ?>" >
-                                                <div class="notification-title text-default">NO TIENE NOTIFICACIONES NUEVAS</div>
-                                                <!-- <div class="notification-description">You have <strong>9</strong> new orders.</div>
-                                                <div class="notification-ago">12h ago</div> -->
-                                                <!-- <div class="notification-icon fa fa-truck bg-info"></div> -->
+                                                <div class="notification-title text-default">TIENE 0 DOCUMENTO PENDIENTES DE FIRMA</div>
                                             </div>
 
                                             <div data-estado="1" class="notification estado" style="<?php  echo $displayPrin;  ?> cursor: pointer;" >
@@ -107,7 +104,7 @@ $vistaMenu = ($vistaMenu =='')?"menu_lateral":$vistaMenu;
 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
-                                        <img src="views/assets/demo/avatars/1.jpg" alt="">
+                                        <!-- <img src="views/assets/demo/avatars/1.jpg" alt=""> -->
                                         <span><?php echo $_SESSION["fullname"]; ?></span>
                                     </a>
                                     <ul class="dropdown-menu">

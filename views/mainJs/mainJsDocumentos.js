@@ -279,6 +279,7 @@ init.push(function () {
 		var tipo = $(this).val();
 		var name_tipo_doc = $(form+' #tipoDocumento_id option:selected').text();
 		$(form+' #name_tipo_doc').val(name_tipo_doc);
+		console.log('cargo');
 		cargarRolesPorTipoDocumento(tipo);
 	});
 
@@ -434,8 +435,11 @@ init.push(function () {
                 	notification('Advertencia..!',response.mensaje,'error');
                 }else{
                 	$('.name_documento').val(response.data);
+                	$('.name_drive').val(response.drive);
                 	$(form +' .tieneDocumento').fadeIn();
 					$(form+' .noTieneDocumento').hide();
+					$(form+' #codigo').val('');
+					$(form+' #google_id').val('');
                 }
 
             },
@@ -451,18 +455,24 @@ init.push(function () {
 	$('#ver').click(async function(){
 
 		var name = $(form+' #name_documento').val();
+		var id = $(form+' #idDocumento').val();
+		var codigo = $(form+' #codigo').val();
 
 		if(name == ''){
 			notification('Error..!','Documento no encontrado','error');
 			return;
 		}
 
-		name = name.replace('.pdf','');
-		var datos = 'accion=readfile&name='+name;
-
 		var formData = new FormData();
     	formData.append('accion','readfile');
-    	formData.append('name',name);
+    	
+    	if(codigo == ''){
+    		name = name.replace('.pdf','');
+    		formData.append('name',name);
+    	}else {
+    		formData.append('term',codigo);
+    	}
+    	
 
     	blockPage();
 
@@ -524,6 +534,7 @@ init.push(function () {
 
 	//EDITAR
 	//carga inicial si se edita
+	
 	if($('#idDocumento').length > 0 && $('#idDocumento').val() != '0'){
 		var id = $('#idDocumento').val();
 		var str = 'accion=detalle&id='+id;
@@ -535,8 +546,8 @@ init.push(function () {
 				cargarRolesPorTipoDocumento(data.tipoDocumento_id);
 				$(form +' .users-aptos').html(data.users_aptos);
 				$(form+' #lista_aptos').val(data.lista_aptos);
-
-				if(data.name_documento != null){
+				
+				if(![null,''].includes(data.name_documento)){
 					$(form +' .tieneDocumento').show();
 					$(form+' .noTieneDocumento').hide();
 
@@ -544,6 +555,7 @@ init.push(function () {
 					$(form +' .tieneDocumento').hide();
 					$(form+' .noTieneDocumento').show();
 				}
+				
 			}
 		});
 
@@ -651,20 +663,18 @@ init.push(function () {
 	  	$('body').on('click','.tablaDocumento .btnVer',async function(e){
 	  		e.preventDefault();
 			var name = $(this).attr('name_docu');
+			var codigo = $(this).attr('codigo');
 
-			if(name == ''){
+			if(codigo == ''){
 				notification('Error..!','Documento no encontrado','error');
 				return;
 			}
 
 			blockPage();
 
-			name = name.replace('.pdf','');
-			var datos = 'accion=readfile&name='+name;
-
 			var formData = new FormData();
 	    	formData.append('accion','readfile');
-	    	formData.append('name',name);
+	    	formData.append('term',codigo);
 
 	    	var url = 'ajax/documentos.ajax.php';
 	    	const response = await fetch(url,{

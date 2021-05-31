@@ -518,34 +518,35 @@ class Controller {
 
     public static function itemDetail($params){
 
-      $respuestaOk = false;
-      $mensajeError = "No se puede ejecutar la aplicacion";
-      $contenidoOk = [];
+        $respuestaOk = false;
+        $mensajeError = "No se puede ejecutar la aplicacion";
+        $contenidoOk = [];
 
-      if(array_key_exists('table',$params)){
+        if(array_key_exists('table',$params)){
 
-          $tabla = $params['table'];
+            $tabla = $params['table'];
 
-          $datos = Model::firstOrAll($tabla,$params,'first');
+            $datos = Model::firstOrAll($tabla,$params,'first');
 
-          if(!empty($datos)){
+            if(!empty($datos)){
 
-              $respuestaOk = true;
-              $contenidoOk = $datos;
-          }else{
+                $respuestaOk = true;
+                $contenidoOk = $datos;
+
+            }else{
               $mensajeError = "Parametros incorrectos.";
-          }
+            }
 
-      }else{
+        }else{
           $mensajeError = "Parametros incorrectos.";
-      }
+        }
 
-      $salidaJson = array('respuesta'=>$respuestaOk,
+        $salidaJson = array('respuesta'=>$respuestaOk,
                           'mensaje'=>$mensajeError,
                           'data'=>$contenidoOk);
 
-      return $salidaJson;
-
+        return $salidaJson;
+    
     }
 
     public static function updateItem($params){

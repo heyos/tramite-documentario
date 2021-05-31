@@ -24,7 +24,7 @@ class SetaPDF_Core
      *
      * @var string
      */
-    const VERSION = '2.35.0.1507';
+    const VERSION = '2.36.0.1597';
 
     /**
      * A float comparison precision

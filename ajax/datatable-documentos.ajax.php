@@ -144,7 +144,7 @@ class DatatableTipoDocumento  {
 
           if(!in_array($estado, ['0','3'])){
             $button .=  "
-              <button title='Ver documento' name_docu = '".$name_docu."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
+              <button title='Ver documento' name_docu = '".$name_docu."' codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
                 <i class='fas fa-eye'></i>
               </button>
             ";

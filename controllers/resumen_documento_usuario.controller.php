@@ -41,7 +41,7 @@ class ResumenDocumentoUsuarioController extends Controller {
 		);
 
 		$datos = ResumenDocumentoUsuarioModel::firstOrAll($table,$where,'first');
-
+		
 		return $datos;
 	}
 
@@ -157,29 +157,36 @@ class ResumenDocumentoUsuarioController extends Controller {
 			foreach ($usuarios as $item) {
 
 				$resumen = self::detalleResumen($item['usuario_id']);
-
-				$cantidad = !empty($resumen) ? $resumen[$column] + 1 : 0;
+				
+				$cantidad = !empty($resumen) ? $resumen[$column] + 1 : 1;
 				$cantidad_old = !empty($resumen) ? $resumen[$column_old] - 1 : 0;
 
 				$cantidad_old = $cantidad_old > 0 ? $cantidad_old : 0;
 				
 				$descripcion = $column.' | documento_id:'.$params['documento_id'];
-				$update = array(
-					$column_old => $cantidad_old,
-					$column => $cantidad,
-					'descripcion' => $descripcion,
-					'fecha_modificacion' => date('Y-m-d'),
-					'where' => array(
-						['usuario_id',$item['usuario_id']]
-					),
-					'useDeleted' => '0'
-				);
 
-				$resumen = ResumenDocumentoUsuarioModel::createOrUpdate('resumen_documento_usuario',$update);			
+				if($column_old != $column) {
 
-				if($resumen > 0){
-					$i++;
-				}
+					$update = array(
+						$column_old => $cantidad_old,
+						$column => $cantidad,
+						'descripcion' => $descripcion,
+						'fecha_modificacion' => date('Y-m-d'),
+						'usuario_id' => $item['usuario_id'],
+						'where' => array(
+							['usuario_id',$item['usuario_id']]
+						),
+						'useDeleted' => '0'
+					);
+
+					$resumen = ResumenDocumentoUsuarioModel::createOrUpdate('resumen_documento_usuario',$update);
+
+					if($resumen > 0){
+						$i++;
+					}
+				}								
+
+				
 			}
 				
 			$respuestaOk = $i == count($usuarios) ? true : false;

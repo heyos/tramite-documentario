@@ -413,9 +413,10 @@ class Model {
         if(count($params) > 0){
 
             foreach ($params as $key => $item) {
-
+                
                 if($item == ''){
-                    $item = 'null';
+                    
+                    $item = $item == '0' ? '0' : 'null';
                     $values .= sprintf(" %s, ",$item);
                 }else{
                     $item = $item;
@@ -439,8 +440,10 @@ class Model {
                 $id = $con->lastInsertId();
 
             }else {
-                echo 'create function Error :>> ';
+                echo 'create function Error :>> <br>';
+                echo $sql.' <br>';
                 echo $query -> errorInfo()[2];
+                echo ' <br>';
             }
 
             $con = null;

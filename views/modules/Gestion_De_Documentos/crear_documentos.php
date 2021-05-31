@@ -44,32 +44,34 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     Datos Principales
                     <span class="wizard-step-description">Ingresar datos del documento</span>
                   </span>
-                </li
-                ><li data-target="#firmantes"> <!-- ! Remove space between elements by dropping close angle -->
+                </li>
+                <li data-target="#firmantes"> <!-- ! Remove space between elements by dropping close angle -->
                   <span class="wizard-step-number">2</span>
                   <span class="wizard-step-caption">
                     Seleccionar Firmante
                     <span class="wizard-step-description">Seleccionar uno o mas firmantes</span>
                   </span>
-                </li
-                ><li data-target="#subirPdf"> <!-- ! Remove space between elements by dropping close angle -->
+                </li>
+                <li data-target="#subirPdf"> <!-- ! Remove space between elements by dropping close angle -->
                   <span class="wizard-step-number">3</span>
                   <span class="wizard-step-caption">
-                    Cargar Documento
+                    Cargar Documento y Guardar
                     <span class="wizard-step-description">Cargar documento en fomato PDF para ser firmado</span>
                   </span>
-                </li
-                ><li data-target="#wizard-example-step4"> <!-- ! Remove space between elements by dropping close angle -->
+                </li>
+                <!-- <li data-target="#wizard-example-step4">
                   <span class="wizard-step-number">4</span>
                   <span class="wizard-step-caption">
                     Guardar Documento
                   </span>
-                </li>
+                </li> -->
               </ul>
             </div>
             <form id="formDocumento" class="form-horizontal">
 
               <input type="hidden" name="id" id="idDocumento" value="<?php echo $id; ?>">
+              <input type="hidden" id="codigo" >
+              <input type="hidden" id="google_id" name="google_id" >
 
               <div class="wizard-content panel">
                 <div class="wizard-pane" id="datos">
@@ -107,7 +109,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
       								<div class="form-group no-margin-hr">
       									<label class="control-label">RUT Cliente</label>
       									<div class="input-group">
-                          <input type="text" id="rut_cliente" class="form-control rut_cliente valid">
+                          <input type="text" id="rut_cliente" name="rut_cliente" class="form-control rut_cliente valid">
                           <span class="input-group-btn">
                             <button type="button" data-show="add-cliente" data-input="rut_cliente" data-type="cliente" data-display="xRazSoc"
                               data-displayId = "cliente_id" class="btn btn-primary search search-cliente">
@@ -153,7 +155,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             }
                           ?>
                         <select>
-                        <input type="" id="name_tipo_doc">
+                        <input type="hidden" id="name_tipo_doc">
       								</div>
                     </div>
                     <div class="col-sm-4"></div>
@@ -194,10 +196,10 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
 
                   </div>
-                  <input type="" id="lista_aptos" name="lista_usuarios_firma" class="valid">
-                  <input type="" id="rol_activo">
-                  <input type="" id="detalle_rol_activo">
-                  <input type="" id="lista_roles_aptos">
+                  <input type="hidden" id="lista_aptos" name="lista_usuarios_firma" class="valid">
+                  <input type="hidden" id="rol_activo">
+                  <input type="hidden" id="detalle_rol_activo">
+                  <input type="hidden" id="lista_roles_aptos">
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
                   <button type="button" data-div="firmantes" class="btn btn-primary wizard-next-step-btn">Next</button>
@@ -210,6 +212,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
                       <input type="file" id="file" style="display: none;">
                       <input type="hidden" id="name_documento" name="name_documento" class="name_documento">
+                      <!-- <input type="hidden" id="google_id" name="google_id" class="google_id"> -->
 
                       <div class="btn-group btn-group-justified">
                         <div class="btn-group" role="group">
@@ -239,15 +242,15 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
 
                   <br><br>
                   <button type="button" class="btn wizard-prev-step-btn">Atras</button>
-                  <button type="button" class="btn btn-primary wizard-next-step-btn"></button>
-                </div>
-
-                <div class="wizard-pane" id="wizard-example-step4" style="display: none;">
-                  Verifique los datos antes de guardar el documento<br><br>
-                  <button type="button" class="btn wizard-prev-step-btn">Atras</button>
-                  <!-- <button class="btn btn-success wizard-go-to-step-btn">Go to Step 2</button> -->
+                  <!-- <button type="button" class="btn btn-primary wizard-next-step-btn"></button> -->
                   <button type="button" id="guardarDocumento" class="btn btn-primary wizard-next-step-btn finish">Guardar Documento</button>
                 </div>
+
+                <!-- <div class="wizard-pane" id="wizard-example-step4" style="display: none;">
+                  Verifique los datos antes de guardar el documento<br><br>
+                  <button type="button" class="btn wizard-prev-step-btn">Atras</button>
+                  <button type="button" id="guardarDocumento" class="btn btn-primary wizard-next-step-btn finish">Guardar Documento</button>
+                </div> -->
 
               </div>
               <input type="hidden" name="usuario" value="<?php echo $_SESSION['user'] ?>">
