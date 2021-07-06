@@ -17,12 +17,14 @@ class Ajax{
 
     public function guardarMenuAjax(){
 
-        $datos = array("descripcion"=>ucwords($this->nombreMenu),
-                        "icono"=>$this->icono,
-                        "urlMenu"=>str_replace(" ", "_", $this->urlMenu),
-                        "visible"=>$this->visible,
-                        "descripcionSub"=>$this->nombreSub,
-                        "urlSub"=>$this->urlSub);
+        $datos = array(
+                    "descripcion"=>ucfirst($this->nombreMenu),
+                    "icono"=>$this->icono,
+                    "urlMenu"=>str_replace(" ", "_", Globales::sanearData($this->urlMenu)),
+                    "visible"=>$this->visible,
+                    "descripcionSub"=>$this->nombreSub,
+                    "urlSub"=>$this->urlSub
+                );
 
         $respuesta = Menu::guardarMenuController($datos);
 
@@ -48,9 +50,9 @@ class Ajax{
     public function actualizarEliminarMenuAjax(){
 
         $datos = array("id_menu"=>$this->idMenu,
-                        "descripcion"=>ucwords($this->nombreMenu),
+                        "descripcion"=>ucfirst($this->nombreMenu),
                         "icono"=>$this->icono,
-                        "urlMenu"=>str_replace(" ", "_", $this->urlMenu),
+                        "urlMenu"=>str_replace(" ", "_", Globales::sanearData($this->urlMenu)),
                         "visible"=>$this->visible);
 
         switch ($this->accion) {
@@ -90,8 +92,9 @@ class Ajax{
 
         $datos = array("id_menu"=>$this->idMenu,
                         "id_sub_menu"=>$this->idSubMenu,
-                        "descripcion"=>ucwords($this->nombreSub),
-                        "urlSub"=>$this->urlSub);
+                        "descripcion"=>ucfirst($this->nombreSub),
+                        "urlSub"=>str_replace(" ", "_", Globales::sanearData($this->urlSub))
+                    );
 
         switch ($this->accion) {
 

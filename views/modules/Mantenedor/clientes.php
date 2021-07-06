@@ -91,12 +91,12 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     </div>
                     <div class="form-group">
                         <label>Razón Social</label>
-                        <input name="xRazSoc" id="xRazSoc" class="form-control alpha" maxlength="30" type="text" required>
+                        <input name="xRazSoc" id="xRazSoc" class="form-control alpha" maxlength="100" type="text" required>
                     </div>
 
                     <div class="form-group">
                         <label>Actividad Económica</label>
-                        <input name="xActEco" id="xActEco" class="form-control alpha" type="text" maxlength="10" required>
+                        <input name="xActEco" id="xActEco" class="form-control alpha" type="text" maxlength="100" required>
                     </div>
 
                     <div class="form-group">

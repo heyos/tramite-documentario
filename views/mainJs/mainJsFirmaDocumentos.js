@@ -334,6 +334,7 @@ init.push(function () {
 		            								'<img src="views/images/empresa/contratodigital.jpg">'+
 		            							'</div>'+
 		            						'</div>');
+		           	$('#firmar').remove();
 		          }
 		          console.log(response);
 		        },

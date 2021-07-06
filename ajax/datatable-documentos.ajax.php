@@ -45,6 +45,21 @@ class DatatableTipoDocumento  {
       5 => 'tp.descripcion'
     ]; //columnas para ordenar
 
+    $inicio = !empty($this->request['inicio']) ? date('Y-m-d',strtotime($this->request['inicio'])) : date('Y-m-d');
+    $fin = !empty($this->request['fin']) ? date('Y-m-d',strtotime($this->request['fin'])) : $inicio;
+
+    $filtro_fecha = sprintf("date(d.fecha_crea) BETWEEN '%s' AND '%s'",$inicio,$fin);
+
+    $where = array(
+      [$filtro_fecha]
+    );
+
+    $tipo = isset($this->request['tipoDoc']) ? $this->request['tipoDoc'] : '0';
+    $filtro_tipo = $tipo != '0' ? array_push($where, ['d.tipoDocumento_id',$tipo]) : '' ;
+
+    $estado = isset($this->request['estadoDoc']) ? $this->request['estadoDoc'] : '4';
+    $filtro_estado = $estado != '4' ? array_push($where, ['d.estado_firma',$estado]) : '' ;
+
     $params = array(
       "table"=>"documento d",
       "columns"=>$columns,
@@ -55,6 +70,7 @@ class DatatableTipoDocumento  {
         ['persona p','p.id','d.paciente_id'],
         ['tipo_documento tp','tp.id','d.tipoDocumento_id']
       ),
+      'where' => $where,
       'order' => 'd.fecha_crea',
       'dir' => 'DESC'
     );
@@ -163,6 +179,12 @@ class DatatableTipoDocumento  {
               <button title='Editar' class='btn btn-warning btnEditar btn-sm' id='".$id."'><i class='fas fa-edit'></i></button>
             ";
           }
+
+          $button .= "
+            <button title='Consultar' class='btn btn-info btnConsulta btn-sm' codigo='".$codigo."' id='".$id."'>
+              <i class='fa fa-search'></i>
+            </button>
+          ";
 
           if($estado != '3'){
             $button .= "

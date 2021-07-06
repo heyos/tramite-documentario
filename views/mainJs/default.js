@@ -56,6 +56,20 @@ init.push(function () {
 
     });
 
+    $('body').on('click','.btnConsulta',function(e){
+
+        e.preventDefault();
+        var codigo = $(this).attr('codigo');
+
+        if(codigo == ''){
+            notification('Error..!','Documento no encontrado','error');
+            return;
+        }
+
+        searchDocument(codigo);
+
+    });
+
 });
 
 //funcion que carga la informacion paginada
@@ -138,18 +152,18 @@ function blockPage(){
 		// 		baseZ: 2000
     // });
 
-		$.blockUI({
-        message: '<div class="semibold">&nbsp; Cargando ...</div>',
-        css: {
-					border: 'none',
-					padding: '15px',
-					backgroundColor: '#000',
-					'-webkit-border-radius': '10px',
-					'-moz-border-radius': '10px',
-					opacity: .5,
-					color: '#fff'
-				},
-				baseZ: 2000
+	$.blockUI({
+    message: '<div class="semibold">&nbsp; Cargando ...</div>',
+    css: {
+    		border: 'none',
+    		padding: '15px',
+    		backgroundColor: '#000',
+    		'-webkit-border-radius': '10px',
+    		'-moz-border-radius': '10px',
+    		opacity: .5,
+    		color: '#fff'
+	   },
+	   baseZ: 2000
     });
 
 }
@@ -307,4 +321,75 @@ function deleteRow(url,table,params,type){
         className: "bootbox-sm modal-dialog-centered-custom"
     });
 
+}
+
+function searchDocument(codigo){
+
+    var str = 'accion=redirigir_consulta&term='+codigo;
+
+    $.ajax({
+        beforeSend:function(){
+            blockPage();
+        },
+        url: 'ajax/documentos.ajax.php',
+        cache: false,
+        type: 'post',
+        dataType: "json",
+        data: str,
+        success: function(data){
+
+            unBlockPage();
+
+            if(data.response==false){
+                
+                notification('Advertencia..!', data.message,'error');
+            }else{
+                window.location.href = 'index.php?action=consulta';
+            }
+            console.log(data);
+
+        },
+        error: function(e){
+            unBlockPage();
+            console.log(e);
+        }
+
+    });
+
+}
+
+function verificarHost(host,callback=null){
+
+    const base_url = $('#base_url').val();
+    var str = 'accion=verificar&origin='+host;
+
+    $.ajax({
+        beforeSend: function(){
+            //preloader();
+            $('.messageError').hide();
+            $('.mostrar').hide();
+        },
+        type: "POST",
+        url: base_url+"ajax/consulta_externa.ajax.php",
+        data: str,
+        dataType:'json',
+        cache: false,
+        success: function(data) {
+
+            hidePreloader();
+
+            if(data.response == false){
+                $('.mostrar').hide();
+                $('.messageError').show();
+                $('#textError').html(data.message);
+            }else{
+                $('.mostrar').show();
+            }
+            
+            console.log(data);
+        },
+        error: function(e){
+            console.log(e);
+        }
+    });
 }

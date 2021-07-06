@@ -23,6 +23,17 @@ init.push(function () {
 
     });
 
+    $('#rutUser').Rut({
+        on_error: function () {
+            $('#rutUser').parent().addClass('has-error');
+
+        },
+        on_success: function () {
+            $('#rutUser').parent().removeClass('has-error');
+        },
+        format_on: 'keyup'
+    });
+
 
     //ROL USUARIO
     $("#formRol").validate({

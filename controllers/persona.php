@@ -401,5 +401,35 @@ class Persona extends Controller{
         return $contenido;
     }
 
+    public static function datosPersonaCtr($datos){
+
+        $respuesta = false;
+        $data = [];
+        $message = '';
+
+        if(is_array($datos)){
+
+            $where = array 
+                (
+                    'where' => $datos,
+                    'useDeleted' => '0'
+                );
+            $persona = DatosTablaModel::firstOrAll('persona',$where,'first');
+
+            if(!empty($persona)){
+                $respuesta = true;
+                $data = $persona;
+            }
+        }else{
+            $message = 'parametros tiene que ser un arreglo de datos';
+        }
+
+        return array(
+            'response' => $respuesta,
+            'data' => $data,
+            'message' => $message
+        );
+    }
+
     
 }

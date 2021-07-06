@@ -506,15 +506,13 @@ class DocumentoController extends Controller {
 		$hashPassCertificado = $usuarioFirma['respuesta'] ? $usuarioFirma['data']['pass_certificado'] : '';
 		
 		$nameCertificadoTemp = $params['user'];
-		$passCertificadoTemp = $params['name'];
+		$passCertificadoTemp = $hashPassCertificado; // $params['name'];
 
 		$verificarCerficado = Globales::verificar($nameCertificadoTemp,$hashCertificado);
 		
 		if($verificarCerficado){
 
-			$verificarPass = Globales::verificar($passCertificadoTemp,$hashPassCertificado);
-
-			if($verificarPass){
+			if($passCertificadoTemp != ''){
 
 				$arrayDocs = json_decode($params['docus'],true);
 				$arrDir = Config::rutas();

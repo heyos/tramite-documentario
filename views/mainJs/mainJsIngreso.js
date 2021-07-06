@@ -2,6 +2,9 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 	hidePreloader();
 });
 
+const base_url = $('#base_url').val();
+var view = $('#action').length > 0 ? $('#action').val() : '';
+
 init.push(function () {
 
     $("#signin-form_id").validate({
@@ -68,62 +71,48 @@ init.push(function () {
     });
 
     //action=consulta
+    
+    
+    var urlExterna = location.hostname;
+
+    if(view == 'externo'){
+        verificarHost(urlExterna);
+    }
+
     if($('#form-consulta').length > 0){
 
-        $('#form-consulta').submit(function(e){
-            e.preventDefault();
+        if($('#term').val() != '') {
+
+            enviar();
+
+        }else{
+            //$('#form-consulta').submit(enviar(event));
+            if(view == 'externo'){
+                $('#principal').hide();
+                console.log('hide');
+            }
+        }
+
+        $('#term').keypress(function(e){
+            
+            //e.preventDefault();
+
+            var code = e.keyCode || e.charCode;
+
+            if(code == 13){
+                enviar(e);
+            }
+        });
+
+        $('#btn-buscar').click(function(){
 
             if($('#term').val() == ''){
-                notification('Adevertencia..!','Ingrese un codigo valido','warning');
 
+                notification('Error','Codigo no puede estar vacio','warning')
                 return;
             }
-            
-            var str = $(this).serialize();
-            str += '&accion=consulta_reporte';
 
-            $.ajax({
-                beforeSend:function(){
-                    blockPage();
-                    $('.default').show();
-                    $('#qr').hide().html('');
-                    $('.temp').remove();
-                    $('#name_tipo_doc').html('TIPO DOCUMENTO');
-                    $('#cliente_full').html('-');
-                    $('#paciente_full').html('-');
-                },
-                url: 'ajax/documentos.ajax.php',
-                method: "POST",
-                cache: false,
-                dataType: "json",
-                data: str,
-                success: function(response){
-                    unBlockPage();
-                    if(response.respuesta==false){
-                      notification('Advertencia..!', response.message,'error');
-                    }else{
-                        var data = response.data;
-                        $('.default').hide();
-                        $('#name_tipo_doc').html(data.name_tipo_doc);
-                        $('#cliente_full').html(data.cliente_full);
-                        $('#paciente_full').html(data.paciente_full);
-                        $('#afterFirmantes').after(data.firmantes);
-                        $('#afterCreacion').after(data.crea);
-                        $('#qr').show().html(data.qr);
-                    }
-                    console.log(response.data);
-
-                },
-                error: function(e){
-                    unBlockPage();
-                    console.log(e);
-                }
-
-            });
-            
-
-            return;
-
+            enviar();
         });
 
     }
@@ -199,4 +188,79 @@ async function visualizar(term){
 
     window.location.href = blobUrl;
     
+}
+
+function enviar(e = null){
+
+    if(e){
+        e.preventDefault();
+    }
+    
+
+    if($('#term').val() == ''){
+        notification('Adevertencia..!','Ingrese un codigo valido','warning');
+
+        return;
+    }
+    
+    var str = 'term='+$('#term').val();
+    str += '&accion=consulta_reporte';
+
+
+
+    $.ajax({
+        beforeSend:function(){
+            blockPage();
+            $('.default').show();
+            $('#qr').hide().html('');
+            $('.temp').remove();
+            $('#name_tipo_doc').html('TIPO DOCUMENTO');
+            $('#cliente_full').html('-');
+            $('#paciente_full').html('-');
+
+            if(view =='externo'){
+                $('#principal').hide();
+            }
+            
+        },
+        url: base_url+'/ajax/documentos.ajax.php',
+        method: "POST",
+        cache: false,
+        dataType: "json",
+        data: str,
+        success: function(response){
+            unBlockPage();
+            if(response.respuesta==false){
+                notification('Advertencia..!', response.message,'error');
+                if(view =='externo'){
+                    $('#principal').hide();
+                }
+            }else{
+                var data = response.data;
+                $('.default').hide();
+                $('#name_tipo_doc').html(data.name_tipo_doc);
+                $('#cliente_full').html(data.cliente_full);
+                $('#paciente_full').html(data.paciente_full);
+                $('#afterFirmantes').after(data.firmantes);
+                $('#afterCreacion').after(data.crea);
+                $('#qr').show().html(data.qr);
+
+                if(view =='externo'){
+                    console.log(view);
+                    $('#principal').show();
+                }
+            }
+            //console.log(response.data);
+
+        },
+        error: function(e){
+            unBlockPage();
+            console.log(e);
+        }
+
+    });
+    
+
+    return;
+
 }

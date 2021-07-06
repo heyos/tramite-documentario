@@ -79,9 +79,10 @@ if(isset($_SESSION["termUsuario"])){
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">DNI:</label>
+                            <label class="col-sm-4 control-label">RUT:</label>
                             <div class="col-sm-8">
-                                <input name="dni" id="dni" class="form-control validarNum" minlength="8" maxlength="8" type="text" value="<?php echo $dni; ?>" required>
+                                <input name="dni" id="rutUser" 
+                                class="form-control" type="text" value="<?php echo $dni; ?>" required>
                             </div>
                         </div>
                         <div class="form-group">

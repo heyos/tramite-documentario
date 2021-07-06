@@ -1,0 +1,17 @@
+{
+    "name": "devskiller/php-race-game",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": {
+            "": "app/"
+        }
+    },
+    "require": {
+        "php": ">=7.2.10",
+        "phpunit/phpunit": "7.5.*",
+        "psr/log": "1.0.0"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

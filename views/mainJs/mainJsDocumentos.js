@@ -565,23 +565,32 @@ init.push(function () {
 
 	if($('.tablaDocumento').length > 0){
 
+		$('body').on('click','#buscar_documento',function(e){
+			table.draw();
+			//$("input[type=checkbox]").prop("checked", false);
+		});
+
 		var table = $('.tablaDocumento').DataTable( {
 	      	"ajax": {
 	          url:"ajax/datatable-documentos.ajax.php",
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
+	              d.inicio = $('#fecha_inicio').val();
+	              d.fin = $('#fecha_fin').val();
+	              d.tipoDoc = $('#tipoDoc').val();
+	              d.estadoDoc = $('#estadoDoc').val();
 	          },
 	          complete: function(res){
 	              //console.log(res);
 	              hidePreloader();
 	              unBlockPage();
 	      	}
-	      },
-	      "deferRender": true,
-	      "retrieve": true,
-	      "processing": true,
-	      "serverSide":true,
-	      columns: [
+	      	},
+	      	"deferRender": true,
+	      	"retrieve": true,
+	      	"processing": true,
+	      	"serverSide":true,
+	      	columns: [
 
 	          {data: 'DT_RowIndex', name: 'DT_RowIndex',className:'text-center',searchable: false},
 	          {data: 'codigo', name: 'codigo',className:'text-center',orderable: false},
@@ -594,8 +603,8 @@ init.push(function () {
 	          {data: 'fechaCrea', name: 'fechaCrea',className:'text-center',searchable: false},
 	          {data: 'action', name: 'action', className:'text-center',orderable: false, searchable: false},
 
-	      ],
-	      "language": {
+	      	],
+	      	"language": {
 
 	          "sProcessing":     "Procesando...",
 	          "sLengthMenu":     "Por Pagina _MENU_",
@@ -620,7 +629,7 @@ init.push(function () {
 	            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
 	          }
 
-	      }
+	      	}
 
 	    });
 

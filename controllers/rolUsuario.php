@@ -118,7 +118,7 @@ class RolUsuario{
 
             foreach ($respuesta as $row => $value) {
 
-                if($datos == $value["descripcion"]){
+                if($datos == $value["id_rol"]){
                     $salida .= '<option value="'.$value["id_rol"].'" selected>'.$value["descripcion"].'</option>';
                 }else{
                     $salida .= '<option value="'.$value["id_rol"].'">'.$value["descripcion"].'</option>';

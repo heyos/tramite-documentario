@@ -4,11 +4,12 @@ class File{
 
     public static function listarFilesController(){
 
+        $enlaces = isset($_GET["action"]) ? $_GET["action"] : '';
+
         if(isset($_GET["action"]) && !empty($_GET["action"]) && isset($_SESSION['validar']) ){
 
             $type = "";
 
-            $enlaces = $_GET["action"];
             $enlaces = Globales::sanearData($enlaces);
             $url = $enlaces;
 
@@ -42,21 +43,25 @@ class File{
             if(count($respuesta) > 0){ //si cumple porque manda un array con los datos
 
                 foreach ($respuesta as $row => $item) {
-
-                    echo '<script src="views/mainJs/'.$item[2].'"></script>';
+                    $str = 'views/mainJs/'.$item[2];
+                    echo '<script src="'.assetsR($str).'"></script>';
                 }
 
             }else if($enlaces == 'ingreso'){
-                echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
+                echo '<script src="'.assetsR('views/mainJs/mainJsIngreso.js').'"></script>';
             }else if($enlaces == 'inicio'){
-                echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
+                echo '<script src="'.assetsR('views/mainJs/mainJsIngreso.js').'"></script>';
                 //luego poner script dashboard
+            }else if($enlaces == 'consulta_externa'){
+                echo '<script src="'.assetsR("views/mainJs/mainJsDescargarDocumentos.js").'"></script>';
             }else{
-              echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
+              echo '<script src="'.assetsR("views/mainJs/mainJsIngreso.js").'"></script>';
             }
 
+        }else if($enlaces == 'consulta_externa'){
+            echo '<script src="'.assetsR("views/mainJs/mainJsDescargarDocumentos.js").'"></script>';
         }else{
-            echo '<script src="views/mainJs/mainJsIngreso.js"></script>';
+            echo '<script src="'.assetsR('views/mainJs/mainJsIngreso.js').'"></script>';
         }
 
 

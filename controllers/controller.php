@@ -543,7 +543,10 @@ class Controller {
 
         $salidaJson = array('respuesta'=>$respuestaOk,
                           'mensaje'=>$mensajeError,
-                          'data'=>$contenidoOk);
+                          'data'=>$contenidoOk,
+                          'message' => $mensajeError,
+                          'response' => $respuestaOk
+                    );
 
         return $salidaJson;
     

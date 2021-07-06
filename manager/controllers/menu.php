@@ -424,7 +424,9 @@ class Menu{
 
                         foreach ($descripcionSub as $key => $subMenu) {
 
-                            $datosController = array('descripcion'=>ucwords($subMenu),'urlSub'=>$urlSub[$key],"id_menu"=>$idMenu);
+                            $subMenu = Globales::sanearData($subMenu);
+                            $url = str_replace(" ", "_", Globales::sanearData($urlSub[$key]));
+                            $datosController = array('descripcion'=>ucfirst($subMenu),'urlSub'=>$urlSub[$key],"id_menu"=>$idMenu);
 
                             $respuestaSub = MenuModel::guardarSubMenuModel($datosController,"sub_menu");
 

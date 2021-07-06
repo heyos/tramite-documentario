@@ -228,6 +228,14 @@ class Model {
         }
         //----------------------------------------------------
 
+        // GROUP BY
+        $group = "";
+        if(array_key_exists("group",$params)){
+            $group = sprintf(" GROUP BY %s ",$params['group']);
+        }
+
+        //----------------------------------------------------
+
         $columns = array_key_exists('columns',$params) ? $params['columns']:'*';
 
         $deletedParam = "deleted = '0'";
@@ -241,8 +249,14 @@ class Model {
             $where = !empty($where) ? $deletedParam.' AND '.$where : $deletedParam;
         }
 
-        $sql = sprintf("SELECT %s FROM %s %s WHERE %s %s %s",
-                        $columns,$params['table'],$join,$where,$orderBy,$limit);
+        $sql = sprintf("SELECT %s 
+                FROM %s %s 
+                WHERE %s %s
+                %s %s",
+                $columns,
+                $params['table'],$join,
+                $where,$group,
+                $orderBy,$limit);
 
         $query = Conexion::conectar()->prepare($sql);
 

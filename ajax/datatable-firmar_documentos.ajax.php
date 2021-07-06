@@ -1,4 +1,9 @@
 <?php
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 require_once "../controllers/documentos.controller.php";
 require_once "../models/documentos.model.php";
 
@@ -12,6 +17,7 @@ class DatatableTipoDocumento  {
     session_start();
     $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 0 ;
     $user = isset($_SESSION['user']) ? $_SESSION['user'] : '';
+    $rutCliente = isset($this->request['rutCliente']) ? $this->request['rutCliente'] : '';
         
     $columns = "d.id,
                 d.cliente_id,
@@ -64,8 +70,16 @@ class DatatableTipoDocumento  {
     );
     
     $general = isset($this->request['general']) ? $this->request['general'] : '';
-    if($general != 'consultar_documentos'){
-      array_push($where,['du.usuario_id',$usuario_id]);
+
+    switch ($general){
+      case 'consulta_externa':
+        array_push($where,['c.nRutPer',$rutCliente]);
+        break;
+      case 'consultar_documentos':
+        break;
+      default:
+        array_push($where,['du.usuario_id',$usuario_id]);
+        break;
     }
 
     $tipo = isset($this->request['tipoDoc']) ? $this->request['tipoDoc'] : '0';
@@ -73,9 +87,12 @@ class DatatableTipoDocumento  {
 
     $estado = isset($this->request['estadoDoc']) ? $this->request['estadoDoc'] : '4';
     $view = isset($this->request['view']) ? $this->request['view'] : 'firma';
-    $estado = isset($this->request['view']) ? 
-              $this->request['view'] == 'descargar' ? '2' : $estado : 
-              $estado;
+    $estado = $view == 'descargar' ? '2' : $estado ;
+
+    if($general == 'consulta_externa' || $general == 'consultar_documentos'){
+      $estado = $this->request['estadoDoc'];
+    }
+
     $filtro_estado = $estado != '4' ? array_push($where, ['d.estado_firma',$estado]) : '' ;
 
     $params = array(
@@ -93,6 +110,15 @@ class DatatableTipoDocumento  {
       'order' => 'd.fecha_crea',
       'dir' => 'DESC'
     );
+
+    if($general == 'consulta_externa' || $general == 'consultar_documentos'){
+      $params['group'] = "du.documento_id";
+    }
+
+    if($general == 'consulta_externa'){
+      $params['order'] = "paciente";
+      $params['dir'] = "ASC";
+    }
 
     $options = DocumentoController::dataTable($this->request,$params,'options');
     $records = DocumentoController::dataTable($this->request,$params,'data');
@@ -158,7 +184,13 @@ class DatatableTipoDocumento  {
           */
         }
 
-        if($view == 'firma' && $estado != '3'){
+        $acceso = array(
+          'firma',
+          'consulta',
+          'descargar'
+        );
+
+        if($general != 'consulta_externa' && $estado != '3'){
           $button .=  "
             <button title='Ver usuarios firmantes' class='btn btn-warning btn-sm btnLista' id='".$id."'>
               <i class='fas fa-list-alt'></i>
@@ -171,30 +203,36 @@ class DatatableTipoDocumento  {
             $css = "label-warning";
             $txt = 'Pendiente';
 
-            $button .=  "
-              <button title='Subir documento' class='btn btn-success btn-sm btnUpload' 
-                id='".$id."'
-                rut_cliente='".$rutCliente."'
-                nombre_paciente='".$nomPaciente."'
-                tipo_doc_des='".$tipoDocumento_des."'
-              >
-                <i class='fas fa-file-upload'></i>
-              </button>
-              <input type='file' id='file_".$id."' style='display:none;'>
-            ";
+            if($view == 'firma'){
+
+              $button .=  "
+                <button title='Subir documento' class='btn btn-success btn-sm btnUpload' 
+                  id='".$id."'
+                  rut_cliente='".$rutCliente."'
+                  nombre_paciente='".$nomPaciente."'
+                  tipo_doc_des='".$tipoDocumento_des."'
+                >
+                  <i class='fas fa-file-upload'></i>
+                </button>
+                <input type='file' id='file_".$id."' style='display:none;'>
+              ";
+
+            }
 
             break;
           case '1':
             $css = "label-info";
             $txt = 'En proceso de firma';
 
-            $button .=  "
-              <button title='Ver documento' name_docu = ".$name_docu." codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
-                <i class='fas fa-eye'></i>
-              </button>
-            ";
+            if($general != 'consulta_externa'){
+              $button .=  "
+                <button title='Ver documento' name_docu = '".$name_docu."' codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
+                  <i class='fas fa-eye'></i>
+                </button>
+              ";
+            }
 
-            if($orden_firmante == $orden_firma){
+            if($orden_firmante == $orden_firma && $view == 'firma'){
               $button .= "
                 <button title='Firmar documento' class='btn btn-success btn-sm btnFirmar' 
                   id='".$id."'
@@ -217,11 +255,13 @@ class DatatableTipoDocumento  {
             $css = "label-success";
             $txt = 'Firmado por todos';
 
+           
             $button .=  "
               <button title='Ver documento' name_docu = '".$name_docu."' codigo='".$codigo."' class='btn btn-primary btn-sm btnVer' id='".$id."'>
                 <i class='fas fa-eye'></i>
               </button>
             ";
+                      
 
             if($view == 'descargar'){
               //
@@ -249,6 +289,14 @@ class DatatableTipoDocumento  {
           default:
             
             break;
+        }
+
+        if($general != 'consulta_externa'){
+          $button .= "
+            <button title='Consultar' class='btn btn-info btnConsulta btn-sm' codigo='".$codigo."' id='".$id."'>
+              <i class='fa fa-search'></i>
+            </button>
+          ";
         }
 
         //verificamos si es el ultimo usuario en modificar para darle la accion de eliminar

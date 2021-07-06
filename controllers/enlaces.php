@@ -72,7 +72,8 @@ class Enlaces{
             }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="ver"){
                 
                 $module = "views/modules/Consulta/visualizar.php";
-
+            }else if(isset($_GET["action"]) && !empty($_GET["action"]) && $_GET["action"]=="consulta_externa"){
+                $module = "views/modules/Consulta/consulta_externa.php";
             }else{
                 $module = "views/modules/ingreso.php";
             }

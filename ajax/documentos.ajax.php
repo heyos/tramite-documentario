@@ -1,4 +1,8 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 require_once "../controllers/config.php";
 require_once "../controllers/globales.php";
 require_once "../controllers/documentos.controller.php";
@@ -339,6 +343,29 @@ class DocumentoAjax{
     echo json_encode($documento);
   }
 
+  public function generarSesionCodigoDocumentoAjax(){
+
+    $params = $this->params;
+    $codigo = $params['term'];
+
+    $where = array(
+      'table' => 'documento',
+      'where' => array(
+        ['codigo',$codigo]
+      )
+    );
+
+    $documento = DocumentoController::itemDetail($where);
+
+    if($documento['respuesta']){
+      session_start();
+      $_SESSION['codigoDocumento'] = $codigo;
+      unset($documento['data']);
+    }
+
+    echo json_encode($documento);
+  }
+
   public function historialUsuariosFirmaAjax(){
 
     $params = $this->params;
@@ -495,6 +522,10 @@ if(isset($_POST)){
 
     case 'redirigir':
       $a -> generarSesionIdDocumentoAjax();
+      break;
+
+    case 'redirigir_consulta':
+      $a -> generarSesionCodigoDocumentoAjax();
       break;
 
     case 'historial':

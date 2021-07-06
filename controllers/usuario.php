@@ -381,6 +381,8 @@ class Usuario extends Controller {
         
         if(isset($firma['tmp_name'])){
 
+            list($width, $height, $type, $attr) = getimagesize($firma['tmp_name']);
+
             $arrTypeFileFirma = explode('.', $firma['name']);
             $typeFile = strtolower(end($arrTypeFileFirma));
 
@@ -395,9 +397,9 @@ class Usuario extends Controller {
 
                     if(is_dir($dir)){
 
-                        $pdf = new FPDF('L', 'mm', array(48.7,30.7));
+                        $pdf = new FPDF('L', 'mm',array(40.7,30.7)); //, array(48.7,30.7)
                         $pdf->AddPage();
-                        $pdf->image($dirImgFirma,0,0,48.7,30.7); //directorio,posX,posY,ancho,alto
+                        $pdf->image($dirImgFirma,0,0,40.7,30.7); //directorio,posX,posY,ancho,alto
                         
                         $pdf->Output('F',$dirImgFirmaPdf);
 
@@ -442,7 +444,7 @@ class Usuario extends Controller {
 
                         $update = array(
                             'name_certificado' => Globales::encriptar($nameCert),
-                            'pass_certificado' => Globales::encriptar($params['clave']),
+                            'pass_certificado' => $params['clave'],
                             'tiene_certificado' => '1',
                             'where' => array(
                                 ['id_usuario', $params['term'] ]

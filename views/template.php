@@ -29,38 +29,29 @@ $enlaces = new Enlaces();
 
 	<!-- Pixel Admin's stylesheets -->
 	<!-- <link href="views/css/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
-	<link href="views/assets/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<link href="views/assets/stylesheets/pixel-admin.min.css" rel="stylesheet" type="text/css">
-	<link href="views/assets/stylesheets/widgets.min.css" rel="stylesheet" type="text/css">
-	<link href="views/assets/stylesheets/pages.min.css" rel="stylesheet" type="text/css">
-	<link href="views/assets/stylesheets/rtl.min.css" rel="stylesheet" type="text/css">
-	<link href="views/assets/stylesheets/themes.min.css" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/bootstrap.min.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/pixel-admin.min.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/widgets.min.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/pages.min.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/rtl.min.css'); ?>" rel="stylesheet" type="text/css">
+	<link href="<?php assets('views/assets/stylesheets/themes.min.css'); ?>" rel="stylesheet" type="text/css">
 	<!--<link rel="stylesheet" type="text/css" href="views/css/font-awesome-4.7.0/css/font-awesome.min.css">-->
-	<link rel="stylesheet" type="text/css" href="views/css/fontawesome-5.3.1/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="views/css/select2.min.css">
-	<link rel="stylesheet" type="text/css" href="views/css/custom.css">
-	<link rel="stylesheet" type="text/css" href="views/css/sweetalert.css">
-	<!-- <link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/dataTables.bootstrap.min.css"> -->
-	<!-- <link rel="stylesheet" type="text/css" href="views/css/datatables.net-bs/css/responsive.bootstrap.min.css"> -->
-	<link rel="stylesheet" href="views/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="<?php assets('views/css/fontawesome-5.3.1/css/all.min.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php assets('views/css/select2.min.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php assets('views/css/custom.css'); ?>">
+	<link rel="stylesheet" type="text/css" href="<?php assets('views/css/sweetalert.css'); ?>">
+	<link rel="stylesheet" href="<?php assets('views/css/styles.css'); ?>">
 
 	<!-- Pixel Admin's javascripts -->
-	<script src="views/js/jquery-2.0.3.min.js"></script>
-	<!-- <script src="views/assets/javascripts/jquery-ui-extras.min.js"></script> -->
-	<script src="views/assets/javascripts/bootstrap.min.js"></script>
-	<script src="views/js/select2.min.js"></script>
-	<script src="views/assets/javascripts/pixel-admin.min.js"></script>
-	<!-- <script src="views/js/jquery.dataTables.js"></script> -->
-	<!-- <script src="views/js/datatables.net/js/jquery.dataTables.min.js"></script> -->
-  <!-- <script src="views/js/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-  <script src="views/js/datatables.net-bs/js/dataTables.responsive.min.js"></script>
-  <script src="views/js/datatables.net-bs/js/responsive.bootstrap.min.js"></script> -->
-	<script src="views/js/jquery.alphanum.js"></script>
-	<script src="views/js/sweetalert.min.js"></script>
-	<script src="views/js/jquery_Rut_min.js"></script>
-	<script src="views/js/jquery.blockUI.js"></script>
-	<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
-
+	<script src="<?php assets('views/js/jquery-2.0.3.min.js'); ?>"></script>
+	<script src="<?php assets('views/assets/javascripts/bootstrap.min.js'); ?>"></script>
+	<script src="<?php assets('views/js/select2.min.js'); ?>"></script>
+	<script src="<?php assets('views/assets/javascripts/pixel-admin.min.js'); ?>"></script>
+	<script src="<?php assets('views/js/jquery.alphanum.js'); ?>"></script>
+	<script src="<?php assets('views/js/sweetalert.min.js'); ?>"></script>
+	<script src="<?php assets('views/js/jquery_Rut_min.js'); ?>"></script>
+	<script src="<?php assets('views/js/jquery.blockUI.js'); ?>"></script>
+	
 	<!--[if lt IE 9]>
 		<script src="views/assets/javascripts/ie.min.js"></script>
 	<![endif]-->
@@ -69,20 +60,18 @@ $enlaces = new Enlaces();
 
 <script>var init = [];</script>
 <!-- Demo script -->
-<script src="views/assets/demo/demo.js"></script>
+<script src="<?php assets('views/assets/demo/demo.js'); ?>"></script>
 <!-- / Demo script -->
 
 	<?php
 
 		$enlaces -> enlaceController();
 
-
-
 	?>
 	<!-- PRELOADER -->
+	<input type="hidden" id="base_url" value="<?php echo BASE_URL; ?>">
 
-
-	<script src="views/mainJs/default.js"></script>
+	<script src="<?php assets('views/mainJs/default.js'); ?>"></script>
 
 	<?php
 

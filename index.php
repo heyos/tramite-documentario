@@ -1,5 +1,9 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 //error_reporting(E_ALL);
 
 require_once "models/enlaces.php" ;
@@ -45,9 +49,11 @@ require_once "controllers/documentos.controller.php";
 
 require_once 'vendor/autoload.php';
 require_once 'controllers/firma_electronica.controller.php';
+require_once 'helpers/helper.php';
 
-$template = new Template();
-$template -> templateController();
+Template::baseUrl();
+Template::templateController();
+
 
 // $clave = 'heyller3107';
 // $name = Globales::encriptar($clave);

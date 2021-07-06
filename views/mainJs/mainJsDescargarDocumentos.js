@@ -5,7 +5,17 @@ $(window).on('load', function() { // makes sure the whole site is loaded
 init.push(function () {
 
 	const urlParams = new URLSearchParams(window.location.search);
-	const action = urlParams.get('action');
+	const action = urlParams.get('action') ? urlParams.get('action') : $('#action').val() ;
+	const term = urlParams.get('term') ? urlParams.get('term') : $('#term').val();
+
+	const base_url = $('#base_url').val();
+	var urlExterna = location.hostname;
+
+	var view = $('#action').val();
+
+	if(view == 'consulta_externa'){
+		verificarHost(urlExterna);
+	}
 
 	if($('.tablaDocumento').length > 0){
 
@@ -16,22 +26,35 @@ init.push(function () {
 
 		var table = $('.tablaDocumento').DataTable( {
 	      	"ajax": {
-	          url:"ajax/datatable-firmar_documentos.ajax.php",
+	          url:base_url+"ajax/datatable-firmar_documentos.ajax.php",
 	          data: function(d){
 	              d.mantenimiento = $('.mantenimiento').val(); //enviar parametros personalizados
 	              d.idDocus = localStorage.getItem('arrId') ? localStorage.getItem('arrId') : JSON.stringify([]) ;
 	              d.inicio = $('#fecha_inicio').val();
 	              d.fin = $('#fecha_fin').val();
 	              d.tipoDoc = $('#tipoDoc').val();
-	              //d.estadoDoc = $('#estadoDoc').val();
-	              d.view = 'descargar';
+	              
+	              d.view = action == 'consultar_documentos' ? 'consulta' :'descargar';
 	              d.general = action;
-	              //console.log(d);
+	              
+	              //cuando viene del WordPress
+	              if(term != ''){
+	              	d.rutCliente = term;
+	              }
+
+	              if($('#estadoDoc').length > 0){
+	              	d.estadoDoc = $('#estadoDoc').val();
+	              }
+	              
 	          },
 	          complete: function(res){
 	              //console.log(res);
 	              hidePreloader();
 	              unBlockPage();
+
+              	if(action == 'consultar_documentos'){
+					$('.ocultar').hide();
+				}
 	      	}
 	      },
 	      "deferRender": true,
@@ -48,7 +71,7 @@ init.push(function () {
 	          {data: 'tipoDocumento', name: 'tipoDocumento',className:'text-center'},
 	          {data: 'estado', name: 'estado',className:'text-center'},
 	          {data: 'fechaCrea', name: 'fechaCrea',className:'text-center'},
-	          {data: 'descargar', name: 'descargar',className:'text-center',orderable: false,searchable: false},
+	          {data: 'descargar', name: 'descargar',className:'text-center ocultar',orderable: false,searchable: false},
 	          {data: 'action', name: 'action', className:'text-center',orderable: false, searchable: false},
 
 	      ],
@@ -80,8 +103,9 @@ init.push(function () {
 	      }
 
 	    });
-
-	    $('#DataTables_Table_0_wrapper .table-caption').text('Lista de Documentos Firmados');
+		
+		var text = view == 'consulta_externa' ? 'Lista de Documentos': 'Lista de Documentos Firmados';
+	    $('#DataTables_Table_0_wrapper .table-caption').text(text);
 	  	$('#DataTables_Table_0_wrapper .dataTables_filter input').attr('placeholder', 'Buscar...');
 
 	  	$('.px').on('click',function(){
@@ -119,7 +143,7 @@ init.push(function () {
 				formData.append('accion','download_lote');
 				formData.append('documentos',JSON.stringify(arrId));
 
-				var url = 'ajax/documentos.ajax.php';
+				var url = base_url+'ajax/documentos.ajax.php';
 
 				await descargarDocumento(formData,url,'documentos.zip');
 
@@ -146,7 +170,7 @@ init.push(function () {
 	    	formData.append('accion','readfile');
 	    	formData.append('term',codigo);
 
-			var url = 'ajax/documentos.ajax.php';
+			var url = base_url+'ajax/documentos.ajax.php';
 
 			await descargarDocumento(formData,url,nameFile);
 
@@ -168,7 +192,7 @@ init.push(function () {
 	    	formData.append('accion','readfile');
 	    	formData.append('term',codigo);
 
-	    	var url = 'ajax/documentos.ajax.php';
+	    	var url = base_url+'ajax/documentos.ajax.php';
 	    	const response = await fetch(url,{
 					            method: 'post',
 					            body: formData,
@@ -185,6 +209,59 @@ init.push(function () {
 	    	unBlockPage();
 
 	    });
+
+	    $('body').on('click','.tablaDocumento .btnLista',function(e){
+	  		e.preventDefault();
+
+	  		var id = $(this).attr('id');
+
+	  		var datos = new FormData();
+
+	        datos.append("documento_id",id);
+	        datos.append("accion",'historial');
+	        
+	        $.ajax({
+	        	beforeSend: function(){
+	        		blockPage();
+	        	},
+	            url:"ajax/documentos.ajax.php",
+	            method: "POST",
+	            data: datos,
+	            dataType: "json",
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function(response){
+
+	                unBlockPage();
+
+	                if(response.respuesta_upload == false){
+	                	notification('Advertencia..!','Hubo problemas al cargar la informacion','error');
+	                }else{
+	                	//notification('Exito..!','Archivo cargado exitosamente','success');
+	                	//table.draw();
+
+	                	$('#contenido').html(response.contenido);
+
+	                	$('#modalUsuariosAsignados').modal({
+				            backdrop: 'static',
+				            keyboard: false
+				        });
+	                }
+
+
+
+	            },
+	            error: function(e){
+	                console.log(e);
+	                unBlockPage();
+	            }
+
+	        });
+
+		});
+
+	    
  	}
 
 
