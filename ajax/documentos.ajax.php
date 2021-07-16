@@ -4,6 +4,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 require_once "../controllers/config.php";
+require_once "../controllers/template.php";
 require_once "../controllers/globales.php";
 require_once "../controllers/documentos.controller.php";
 require_once "../controllers/documento_usuario.controller.php";
@@ -486,6 +487,8 @@ class DocumentoAjax{
   }
 
 }
+
+Template::baseUrl();
 
 if(isset($_POST)){
 

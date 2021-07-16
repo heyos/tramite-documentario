@@ -75,6 +75,7 @@ class DatatableTipoDocumento  {
       case 'consulta_externa':
         array_push($where,['c.nRutPer',$rutCliente]);
         break;
+      case 'descargar_documentos':
       case 'consultar_documentos':
         break;
       default:
@@ -111,7 +112,7 @@ class DatatableTipoDocumento  {
       'dir' => 'DESC'
     );
 
-    if($general == 'consulta_externa' || $general == 'consultar_documentos'){
+    if($general == 'consulta_externa' || $general == 'consultar_documentos' || $general == 'descargar_documentos'){
       $params['group'] = "du.documento_id";
     }
 

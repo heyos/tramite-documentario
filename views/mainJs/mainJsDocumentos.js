@@ -520,7 +520,8 @@ init.push(function () {
 				}else{
 					notification('Exito..!',response.mensaje,'success');
 
-					window.location.href = 'index.php?action=lista_de_documentos';
+					//window.location.href = 'index.php?action=lista_de_documentos';
+					window.location.href = 'index.php?action=consultar_documentos';
 				}
 				
 			},

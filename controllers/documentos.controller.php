@@ -21,7 +21,7 @@ class DocumentoController extends Controller {
 
 		unset($params['rut_cliente']);
 
-		$textoQr ='http://'.$_SERVER['SERVER_NAME'].'/?action=ver&term='.$codigo;
+		$textoQr = BASE_URL.'?action=ver&term='.$codigo;
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
 
