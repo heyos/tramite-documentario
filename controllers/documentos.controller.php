@@ -21,9 +21,12 @@ class DocumentoController extends Controller {
 
 		unset($params['rut_cliente']);
 
-		$textoQr = BASE_URL.'?action=ver&term='.$codigo;
+		$url = str_replace('ajax/','',BASE_URL);
+		$textoQr = $url.'?action=ver&term='.$codigo;
 
 		$usuariosFirma = array_key_exists('lista_usuarios_firma', $params) ? json_decode($params['lista_usuarios_firma'],true) : [];
+		
+		$data = $textoQr;
 
 		if(count($usuariosFirma) > 0){
 
@@ -106,15 +109,17 @@ class DocumentoController extends Controller {
 				//$data = $usuariosFirma;
 
 				//GENERAR QR
-				$uploadDir = Config::rutas();
-				$uploadQr = $uploadDir['qr'];
+				// $uploadDir = Config::rutas();
+				// $uploadQr = $uploadDir['qr'];
 
-    			if(!is_dir($uploadQr)){
-		          mkdir($uploadQr,0777,true);
-		        }
+				// if(!is_dir($uploadQr)){
+				// 	mkdir($uploadQr,0777,true);
+				// }
 
-		        $dirQr = $uploadQr.'/'.$codigo.'.png';
-				QRcode::png($textoQr, $dirQr, 'H', 5);
+				// $textoQr = "test";
+
+				// $dirQr = $uploadQr.'/'.$codigo.'.png';
+				// QRcode::png($textoQr, $dirQr, 'H', 5);
 
 			}else{
 				$message = "Error al guardar el documento.";
@@ -767,7 +772,17 @@ class DocumentoController extends Controller {
     		$dirQr = $dir['qr'].'/';
     		$dirImgQr = $dirQr.$documento['codigo'].'.png';
     		$imageData = '';
-    		
+
+    		//GENERAR QR
+			if(!is_dir($dirQr)){
+	          mkdir($dirQr,0777,true);
+	        }
+
+	        $url = str_replace('ajax/','',BASE_URL);
+			$textoQr = $url.'?action=ver&term='.$documento['codigo'];
+
+	        QRcode::png($textoQr, $dirImgQr, 'H', 5);
+		
     		if(!file_exists($dirImgQr)){
     			$dirImgQr = 'views/images/no_disponible.png';
     		}else{
