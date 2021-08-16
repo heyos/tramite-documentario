@@ -89,7 +89,7 @@ init.push(function () {
             //$('#form-consulta').submit(enviar(event));
             if(view == 'externo'){
                 $('#principal').hide();
-                console.log('hide');
+                
             }
         }
 
@@ -113,6 +113,28 @@ init.push(function () {
             }
 
             enviar();
+        });
+
+        $('#verDocumento').click(async function(){
+
+            var codigo = $(this).attr('term');
+
+            if(codigo == 0){
+                notification('Error','Codigo no puede estar vacio','warning')
+                return;
+            }
+
+            blockPage();
+
+            var res = await visualizar(codigo,{out:'url'});
+
+            if(res.type && res.type == 'application/pdf'){
+                window.open(res.url, "Visualizar", "width=900,height=1000");
+            }else{
+                notification('Error..!','Documento no encontrado o aun no se adjunta uno','error');
+            }
+
+            unBlockPage();
         });
 
     }
@@ -172,7 +194,7 @@ init.push(function () {
 
 });
 
-async function visualizar(term){
+async function visualizar(term,data = {out : 'blob'}){
 
     var formData = new FormData();
     formData.append('accion','readfile');
@@ -186,7 +208,25 @@ async function visualizar(term){
     var blob = await response.blob();
     var blobUrl = URL.createObjectURL(blob);
 
-    window.location.href = blobUrl;
+    switch (data.out){
+        case 'window':
+            window.open(blobUrl, "Visualizar", "width=900,height=1000");
+            break;
+
+        case 'url':
+
+            var res = {
+                type : blob.type,
+                url : blobUrl
+            }
+            return res;
+
+            break;
+
+        default:
+            window.location.href = blobUrl;
+            break;
+    }
     
 }
 
@@ -203,7 +243,8 @@ function enviar(e = null){
         return;
     }
     
-    var str = 'term='+$('#term').val();
+    var term = $('#term').val();
+    var str = 'term='+term;
     str += '&accion=consulta_reporte';
 
 
@@ -217,6 +258,8 @@ function enviar(e = null){
             $('#name_tipo_doc').html('TIPO DOCUMENTO');
             $('#cliente_full').html('-');
             $('#paciente_full').html('-');
+            $('#containerBtnVer').hide();
+            $('#verDocumento').attr('term',0);
 
             if(view =='externo'){
                 $('#principal').hide();
@@ -244,9 +287,10 @@ function enviar(e = null){
                 $('#afterFirmantes').after(data.firmantes);
                 $('#afterCreacion').after(data.crea);
                 $('#qr').show().html(data.qr);
+                $('#containerBtnVer').show();
+                $('#verDocumento').attr('term',term);
 
                 if(view =='externo'){
-                    console.log(view);
                     $('#principal').show();
                 }
             }

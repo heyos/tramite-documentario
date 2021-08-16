@@ -189,6 +189,15 @@ $hide = $origin == 'externo' ? 'display:none;':'';
 
                             <div class="col-sm-8">
                                 <div class="row">
+                                    <div class="col-sm-7"></div>
+                                    <div class="col-sm-5 text-center">
+                                        <div class="form-group" id="containerBtnVer" style="display: none;">
+                                            <button type="button" class="btn btn-primary" term="0" id="verDocumento">Visualizar Documento</button>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-7">
                                         <!-- <embed src="../files-firma/test3.pdf" type="application/pdf" width="100%" height="600px" /> -->
                                         
