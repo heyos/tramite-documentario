@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
+class ComposerStaticInit25c88a7cd219ba0be1c7bc24d97ef2a8
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -167,6 +167,7 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
             'SetaPDF_' => 
             array (
                 0 => __DIR__ . '/..' . '/setasign/setapdf-signer_eval_ioncube_php7.1/library',
+                1 => __DIR__ . '/..' . '/setasign/setapdf-stamper_eval_ioncube_php7.1/library',
             ),
         ),
         'G' => 
@@ -210,10 +211,10 @@ class ComposerStaticInit8512bfa27e5816c9f38510e27be56da3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8512bfa27e5816c9f38510e27be56da3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8512bfa27e5816c9f38510e27be56da3::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8512bfa27e5816c9f38510e27be56da3::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8512bfa27e5816c9f38510e27be56da3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit25c88a7cd219ba0be1c7bc24d97ef2a8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit25c88a7cd219ba0be1c7bc24d97ef2a8::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit25c88a7cd219ba0be1c7bc24d97ef2a8::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit25c88a7cd219ba0be1c7bc24d97ef2a8::$classMap;
 
         }, null, ClassLoader::class);
     }

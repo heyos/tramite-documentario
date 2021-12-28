@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38581a9716ad62c35230e27b87a72c77",
+    "content-hash": "5a6768639d8ca64fb092e3ec49022ede",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -1012,6 +1012,54 @@
                     "setasign/setapdf-signer_eval_ioncube_php5.4",
                     "setasign/setapdf-signer_eval_ioncube_php5.6",
                     "setasign/setapdf-signer_eval_ioncube_php7.1"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ]
+        },
+        {
+            "name": "setasign/setapdf-stamper_eval_ioncube_php7.1",
+            "version": "2.38.3.1671",
+            "dist": {
+                "type": "zip",
+                "url": "https://www.setasign.com/downloads/3351491/SetaPDF-Stamper_2.38.3.1671_Ioncubed-PHP7.1-without-demos.zip"
+            },
+            "require": {
+                "setasign/setapdf-stamper_ioncube_license": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SetaPDF_": "library/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "support": {
+                "email": "support@setasign.com"
+            },
+            "time": "2021-12-06T00:00:00+00:00"
+        },
+        {
+            "name": "setasign/setapdf-stamper_ioncube_license",
+            "version": "1.0.3394419",
+            "dist": {
+                "type": "zip",
+                "url": "https://www.setasign.com/downloads/eval/10192/ioncube/SetaPDF-Stamper-License.zip"
+            },
+            "require": {
+                "setasign/composer-ioncube-license-installer": "*"
+            },
+            "type": "ioncube-license",
+            "extra": {
+                "licenseValidFor": [
+                    "setasign/setapdf-stamper_eval_ioncube_php5",
+                    "setasign/setapdf-stamper_eval_ioncube_php5.3",
+                    "setasign/setapdf-stamper_eval_ioncube_php5.4",
+                    "setasign/setapdf-stamper_eval_ioncube_php5.6",
+                    "setasign/setapdf-stamper_eval_ioncube_php7.1"
                 ]
             },
             "license": [

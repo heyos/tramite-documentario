@@ -51,8 +51,10 @@ require_once 'vendor/autoload.php';
 require_once 'controllers/firma_electronica.controller.php';
 require_once 'helpers/helper.php';
 
-Template::baseUrl();
-Template::templateController();
+//require_once 'library/SetaPDF/Autoload.php';
+
+// Template::baseUrl();
+// Template::templateController();
 
 
 // $clave = 'heyller3107';
@@ -82,6 +84,35 @@ Template::templateController();
 
 // $a = ResumenDocumentoUsuarioController::updateResumen($where);
 
+// create a writer
+$writer = new SetaPDF_Core_Writer_Http('png.pdf', true);
+// get a document instance
+$document = SetaPDF_Core_Document::loadByFilename(
+    'test.pdf', $writer
+);
+
+// create a stamper instance
+$stamper = new SetaPDF_Stamper($document);
+
+// get an image instance
+$image = SetaPDF_Core_Image::getByPath('../files-firma/qr.png');
+// initiate the stamp
+$stamp = new SetaPDF_Stamper_Stamp_Image($image);
+// set height (and width until no setWidth is set the ratio will retain)
+$stamp->setHeight(23);
+
+// add stamp to stamper on position left top for all pages with a specific translation
+$stamper->addStamp($stamp, array(
+    'translateX' => 43,
+    'translateY' => -38
+));
+
+// stamp the document
+$stamper->stamp();
+
+// save and send it to the client
+$document->save()->finish();
+
 
 
 exit();
@@ -109,15 +140,3 @@ if ($resultado) {
     echo "Error creando archivo";
 }
 
-
-/*
-require __DIR__ . '/vendor/autoload.php';
-
-use Kunnu\Dropbox\Dropbox;
-use Kunnu\Dropbox\DropboxApp;
-use Kunnu\Dropbox\DropboxFile;
-
-//enlace para utilizar
-//https://stackoverflow.com/questions/56445545/upload-files-to-dropbox-with-php-dropbox-sdk-php
-
-*/

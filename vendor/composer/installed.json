@@ -1050,6 +1050,58 @@
         ]
     },
     {
+        "name": "setasign/setapdf-stamper_eval_ioncube_php7.1",
+        "version": "2.38.3.1671",
+        "version_normalized": "2.38.3.1671",
+        "dist": {
+            "type": "zip",
+            "url": "https://www.setasign.com/downloads/3351491/SetaPDF-Stamper_2.38.3.1671_Ioncubed-PHP7.1-without-demos.zip"
+        },
+        "require": {
+            "setasign/setapdf-stamper_ioncube_license": "*"
+        },
+        "time": "2021-12-06T00:00:00+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SetaPDF_": "library/"
+            }
+        },
+        "license": [
+            "proprietary"
+        ],
+        "support": {
+            "email": "support@setasign.com"
+        }
+    },
+    {
+        "name": "setasign/setapdf-stamper_ioncube_license",
+        "version": "1.0.3394419",
+        "version_normalized": "1.0.3394419.0",
+        "dist": {
+            "type": "zip",
+            "url": "https://www.setasign.com/downloads/eval/10192/ioncube/SetaPDF-Stamper-License.zip"
+        },
+        "require": {
+            "setasign/composer-ioncube-license-installer": "*"
+        },
+        "type": "ioncube-license",
+        "extra": {
+            "licenseValidFor": [
+                "setasign/setapdf-stamper_eval_ioncube_php5",
+                "setasign/setapdf-stamper_eval_ioncube_php5.3",
+                "setasign/setapdf-stamper_eval_ioncube_php5.4",
+                "setasign/setapdf-stamper_eval_ioncube_php5.6",
+                "setasign/setapdf-stamper_eval_ioncube_php7.1"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "proprietary"
+        ]
+    },
+    {
         "name": "symfony/polyfill-intl-idn",
         "version": "v1.22.1",
         "version_normalized": "1.22.1.0",
