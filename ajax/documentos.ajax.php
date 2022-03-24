@@ -13,9 +13,10 @@ require_once "../models/documentos.model.php";
 require_once "../models/documento_usuario.model.php";
 require_once "../models/resumen_documento_usuario.model.php";
 
-require_once "../vendor/autoload.php";
+require_once "../vendor/autoload.php"; //cargar la ruta de la libreria
 require_once "../library/phpqrcode/qrlib.php";
 require_once "../controllers/drive.controller.php";
+require_once "../controllers/seta-stamper.controller.php";
 
 class DocumentoAjax{
 
@@ -307,10 +308,12 @@ class DocumentoAjax{
       $arr = explode('/',$ruta);
       $name = end($arr);
 
-      header("Content-type: application/pdf");
-      header("Content-Disposition: inline; filename=".$name);
+      // header("Content-type: application/pdf");
+      // header("Content-Disposition: inline; filename=".$name);
 
-      readfile($ruta);
+      // readfile($ruta);
+      $pathImg = DocumentoController::createQr($this->params['term']);
+      Stamper::incrustarImg ($ruta,$pathImg);
 
       if(isset($this->params['term'])){
         unlink($ruta);

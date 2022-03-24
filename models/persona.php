@@ -39,9 +39,11 @@ class PersonaModel extends Model{
 
     public static function mostrarPersonaGeneralModel($datos,$tabla){
 
-        $query = Conexion::conectar()->prepare("SELECT *
-                                                    FROM $tabla
-                                                    WHERE $datos ");
+        $sql = "SELECT * FROM $tabla WHERE $datos ";
+
+        //echo $sql;
+
+        $query = Conexion::conectar()->prepare($sql);
 
         $query -> execute();
 

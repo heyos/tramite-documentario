@@ -19,11 +19,20 @@ init.push(function () {
 
         resetFormulario('formPaciente');
 
+        $('.temp').show();
+        $('.valor input').prop('required',false);
+        $('.valor').hide();
+
         $('#formPaciente input[name=accion]').val('add');
 
         $('#myModalLabel').html("Registrar Paciente");
         $('#modalTabla').modal("show");
 
+    });
+
+    $('#nTipPer').change(function(){
+        let option = $(this).val();
+        changeTipoPaciente(option);
     });
 
     $('#nRutPer').Rut({
@@ -123,8 +132,10 @@ init.push(function () {
         if(accion == 'editar'){
             resetFormulario('formPaciente');
             cargarDataFormulario(term);
+
             $('#myModalLabel').html("Editar Paciente");
             $('#modalTabla').modal("show");
+            
         }else{
             if(accion=='delete'){
                 eliminarElemento(term);
@@ -271,6 +282,8 @@ function cargarDataFormulario(term,form='',accion=''){
                     }
                 });
 
+                let option = $('#nTipPer').val();
+                changeTipoPaciente(option,'edit');
             }
         },
         error: function(e){
@@ -378,4 +391,38 @@ function cargarDataDirecciones(term,accion,div){
 
         }
     });
+}
+
+function changeTipoPaciente(option,accion='add'){
+
+    let txt = $('#nTipPer option[value="'+option+'"]:selected').text();
+    let value = "";
+    
+    if(txt=='Nacional'){
+        value = $('#nRutPer').val();
+    }else{
+        value = $('#xPasaporte').val();
+    }
+    console.log(value);
+    $('.valor input').prop('required',false);
+    $('.valor input').val('');
+    $('.valor').hide();
+
+    if(accion == 'edit'){
+        if(txt=='Nacional'){
+            $('#nRutPer').val(value);
+        }else{
+            $('#xPasaporte').val(value);
+        }
+    }
+        
+    if(['Nacional','Extranjero'].includes(txt.trim())){
+        $('.temp').hide();
+        $('.'+txt).show();
+        $('.'+txt+' input').prop('required',true);
+        $('#nTipPerDesc').val(txt);
+    }else{
+        $('.temp').show();
+        $('#nTipPerDesc').val('')
+    }
 }

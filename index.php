@@ -53,9 +53,10 @@ require_once 'helpers/helper.php';
 
 //require_once 'library/SetaPDF/Autoload.php';
 
-// Template::baseUrl();
-// Template::templateController();
+Template::baseUrl();
+Template::templateController();
 
+exit();
 
 // $clave = 'heyller3107';
 // $name = Globales::encriptar($clave);
@@ -86,6 +87,7 @@ require_once 'helpers/helper.php';
 
 // create a writer
 $writer = new SetaPDF_Core_Writer_Http('png.pdf', true);
+$tempWriter = new SetaPDF_Core_Writer_TempFile();
 // get a document instance
 $document = SetaPDF_Core_Document::loadByFilename(
     'test.pdf', $writer
@@ -112,6 +114,8 @@ $stamper->stamp();
 
 // save and send it to the client
 $document->save()->finish();
+// $document->save();
+
 
 
 

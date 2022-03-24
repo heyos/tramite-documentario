@@ -73,7 +73,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">
                                     <i class="fa fa-license-card"></i> Estado Documento
@@ -93,14 +93,15 @@
                                     ?>                  
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
+
                         <div class="form-group col-md-2">
                             <label>&nbsp;&nbsp;</label>
                             <div class="input-group">                    
                                 <button type="button" id="buscar_documento" class="btn btn-success"> <i class="fa fa-search"></i></button>
                             </div>                                    
                         </div>
-
+                        <div class="col-md-2"></div>
                         <div class="col-md-2">
                             <div class="form-group pull-right">
                                 <label>&nbsp;&nbsp;</label>

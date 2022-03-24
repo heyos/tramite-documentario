@@ -18,6 +18,12 @@ class Controller {
             unset($datos['outType']);
         }
 
+        $nTipPerDesc = "Nacional";
+        if(array_key_exists('nTipPerDesc',$datos)){
+            $nTipPerDesc = $datos['nTipPerDesc'];
+            unset($datos['nTipPerDesc']);
+        }
+
 
         unset($datos['accion']);
         unset($datos['id']);
@@ -60,35 +66,44 @@ class Controller {
 
                 switch ($table) {
                     case 'persona':
+                        $xPasaporte = isset($_POST['xPasaporte']) ? $_POST['xPasaporte'] : '';
 
-                        if($_POST['nRutPer'] != ''){
+                        // if($_POST['nRutPer'] != ''){
 
-                            if(strlen($_POST['nRutPer']) > 1){
+                            if(strlen($_POST['nRutPer']) > 1 || strlen($xPasaporte) > 1){
 
-                                $validarRut = Globales::valida_rut($_POST['nRutPer']);
+                                $validarRut = $nTipPerDesc == 'Nacional' ? Globales::valida_rut($_POST['nRutPer']) : true;
 
-                                if($validarRut==false){
+                                if($validarRut==false && $nTipPerDesc == 'Nacional'){
                                     $mensajeError = "RUT invalido";
                                     $error++;
                                 }else{
                                     // $verificar = Model::detalleDatosMdl($table,'nRutPer',$_POST['nRutPer']);
-                                    $where = array('nRutPer'=>$_POST['nRutPer'],'xTipoPer'=>$_POST['xTipoPer']);
+                                    $where = array('xTipoPer'=>$_POST['xTipoPer']);
+                                    
+                                    if($nTipPerDesc =='Nacional'){
+                                        $where['nRutPer'] = $_POST['nRutPer'];
+                                    }else{
+                                        $where['xPasaporte'] = $_POST['xPasaporte'];
+                                    }
+
                                     $verificar = Model::detalleDatosCustomMdl($table,$where);
                                     if(count($verificar) > 0){
-                                        $mensajeError = "RUT ya se encuentra registrado";
+                                        $mensajeError = $nTipPerDesc == 'Nacional' ? 
+                                        "RUT ya se encuentra registrado":"Pasaporte ya se encuentra registrado";
                                         $error++;
                                     }
                                 }
 
                             }else{
                                 $error++;
-                                $mensajeError = "RUT invalido";
+                                $mensajeError = $nTipPerDesc == 'Nacional' ? "RUT invalido" : "Pasaporte invalido";
                             }
 
-                        }else{
-                            $error++;
-                            $mensajeError = "Rut no puede estar vacio.";
-                        }
+                        // }else{
+                        //     $error++;
+                        //     $mensajeError = "Rut no puede estar vacio.";
+                        // }
 
 
 
@@ -125,13 +140,15 @@ class Controller {
 
                 if($error == 0){
                     $respuesta = Model::guardarDatosMdl($table,$columns,$values);
-
+                    
                     if($respuesta ==  true){
                         $respuestaOk = true;
                         $mensajeError = "Se guardo exitosamente.";
                     }else{
                         $mensajeError = "No se guardo el registro";
                     }
+
+                    //$mensajeError = $table.' | '.$columns.' | '.$values;
                 }
 
             }else{
@@ -209,6 +226,12 @@ class Controller {
 
         unset($datos['accion']);
 
+        $nTipPerDesc = "Nacional";
+        if(array_key_exists('nTipPerDesc',$datos)){
+            $nTipPerDesc = $datos['nTipPerDesc'];
+            unset($datos['nTipPerDesc']);
+        }
+
         if(count($datos) > 0){
 
             $columns = '';
@@ -245,31 +268,44 @@ class Controller {
 
                 $error = 0;
                 $oldrut = '';
+                $oldPasaporte = '';
                 $columnId = 'id';
 
                 switch ($table) {
                     case 'persona':
+                        $xPasaporte = isset($_POST['xPasaporte']) ? $_POST['xPasaporte'] : '';
+                        // if($_POST['nRutPer'] != ''){
 
-                        if($_POST['nRutPer'] != ''){
-
-                            if(strlen($_POST['nRutPer']) > 1){
+                            if(strlen($_POST['nRutPer']) > 1 || strlen($xPasaporte) > 1){
                                 $old = Model::detalleDatosMdl($table,'id',$id);
                                 if(count($old) > 0){
 
-                                    $validarRut = Globales::valida_rut($_POST['nRutPer']);
+                                    $validarRut = $nTipPerDesc =='Nacional' ? Globales::valida_rut($_POST['nRutPer']) : true;
 
-                                    if($validarRut==false){
+                                    if($validarRut==false && $nTipPerDesc =='Nacional'){
+
                                         $mensajeError = "RUT invalido";
                                         $error++;
-                                    }else{
-                                        $oldrut = $old[0]['nRutPer'];
-                                        if($oldrut != $_POST['nRutPer']){
 
-                                            // $verificar = Model::detalleDatosMdl($table,'nRutPer',$_POST['nRutPer']);
-                                            $where = array('nRutPer'=>$_POST['nRutPer'],'xTipoPer'=>$_POST['xTipoPer']);
+                                    }else{
+
+                                        $oldrut = $old[0]['nRutPer'];
+                                        $oldPasaporte = $old[0]['xPasaporte'];
+
+                                        if($oldrut != $_POST['nRutPer'] || $oldPasaporte != $xPasaporte){
+
+                                            $where = array('xTipoPer'=>$_POST['xTipoPer']);
+                                    
+                                            if($nTipPerDesc =='Nacional'){
+                                                $where['nRutPer'] = $_POST['nRutPer'];
+                                            }else{
+                                                $where['xPasaporte'] = $_POST['xPasaporte'];
+                                            }
+
                                             $verificar = Model::detalleDatosCustomMdl($table,$where);
                                             if(count($verificar) > 0){
-                                                $mensajeError = "RUT ya se encuentra registrado";
+                                                $mensajeError = $nTipPerDesc == 'Nacional' ? 
+                                                "RUT ya se encuentra registrado":"Pasaporte ya se encuentra registrado";
                                                 $error++;
                                             }
                                         }
@@ -280,13 +316,13 @@ class Controller {
                                 }
                             }else{
                                 $error++;
-                                $mensajeError = "RUT invalido";
+                                $mensajeError = $nTipPerDesc == 'Nacional' ? "RUT invalido" : "Pasaporte invalido";
                             }
 
-                        }else{
-                            $error++;
-                            $mensajeError = "Rut no puede estar vacio.";
-                        }
+                        // }else{
+                        //     $error++;
+                        //     $mensajeError = "Rut no puede estar vacio.";
+                        // }
 
                         $columnId = 'id';
 

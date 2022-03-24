@@ -18,6 +18,8 @@ class Model {
             $respuesta = true;
         }else{
             $respuesta = false;
+
+            echo $query -> errorInfo()[2];
         }
 
         return $respuesta;

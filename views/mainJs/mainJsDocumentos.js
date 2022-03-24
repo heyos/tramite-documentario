@@ -91,6 +91,14 @@ init.push(function () {
   	});
 
 	//*****************************************************
+	let opt = $('#nTipPer').val();
+	changeTipoPaciente(opt);
+
+	$('#nTipPer').change(function(){
+        let option = $(this).val();
+        changeTipoPaciente(option);
+    });
+
 	$('.rut_paciente').Rut({
       on_error: function () {
 
@@ -133,6 +141,7 @@ init.push(function () {
 		var type = $(this).attr('data-type');
 		var displayId = $(this).attr('data-displayId');
 		var display = $(this).attr('data-display');
+		var opt = $('#nTipPerDesc').val();
 
 		if($(this).parent().parent().parent().hasClass('has-error')){
 			notification('Advertencia','RUT invalido','error');
@@ -140,16 +149,31 @@ init.push(function () {
 			return false;
 		}
 
-		if($('.rut_cliente').val() == $('.rut_paciente').val()){
-			var val = type=='cliente' ? 'paciente' : 'cliente';
-			notification('Advertencia','RUT '+type+' no puede ser igual a RUT '+val,'error');
-			$('#'+display).val('');
-			$('#'+displayId).val('');
-			return false;
-		}
+		if(opt == 'Nacional'){
+			if($('.rut_cliente').val() == $('.rut_paciente').val()){
+				var val = type=='cliente' ? 'paciente' : 'cliente';
+				notification('Advertencia','RUT '+type+' no puede ser igual a RUT '+val,'error');
+				$('#'+display).val('');
+				$('#'+displayId).val('');
+				return false;
+			}
+		}			
 
 		var value = $('#'+input).val();
-		var str = 'accion=search&type='+type+'&rut='+value;
+		var str = 'accion=search&type='+type;
+
+		if(type=='paciente'){
+			if(opt == 'Nacional'){
+				str += '&rut='+value
+			}else{
+				str += '&value='+value;
+			}
+
+			str += '&nTipPerDesc='+opt;
+		}else{
+			str += '&rut='+value;
+		}
+			
 
 		$.ajax({
 			beforeSend: function(){
@@ -167,7 +191,8 @@ init.push(function () {
 
 				if(response.respuesta == false){
 					$('.'+addBtn).show();
-					notification('Advertencia..!','RUT no registrado como '+type,'error');
+					let tip = opt == 'Nacional' ? 'RUT' : 'N° Pasaporte'
+					notification('Advertencia..!',tip+' no registrado como '+type,'error');
 				}else{
 					$('#'+display).val(response.data.fullname);
 					$('#'+displayId).val(response.data.id);
@@ -185,27 +210,46 @@ init.push(function () {
 
 	//REGISTRAR PERSONA
 	$('.add-persona').click(function(){
-		var inputRut = $(this).attr('data-input');
-		var rut = $('#'+inputRut).val();
+		var input = $(this).attr('data-input');
+		var value = $('#'+input).val();
 		var type = $(this).attr('data-type');
 		var title = type == 'cliente' ? 'Registrar Cliente' : 'Registrar Paciente';
 		var tipoPersona = type == 'cliente' ? 'j' : 'n'; //cliente:j - paciente:n
+		var opt = $('#nTipPerDesc').val();
 
 		resetFormulario('formPersona');
 
 		$('#myModalLabel').html(title);
-		$('#formPersona #nRutPer').val(rut);
 		$('#formPersona #xTipoPer').val(tipoPersona);
+		$('.Nacional input').prop('required',false);
+		$('.Nacional').hide();
+		$('.Nacional input').removeClass('valid');
+		$('.Extranjero input').prop('required',false);
+		$('.Extranjero').hide();
+		$('.Extranjero input').removeClass('valid');
+
 		if(type == 'cliente'){
 			$('.natural').hide();
 			$('.juridica').show();
 			$('.juridica input').addClass('valid');
 			$('.natural input').removeClass('valid');
+			$('.Nacional input').prop('required',true);
+			$('.Nacional').show();
+			$('#formPersona #nRutPer').val(value);
 		}else{
+			//paciente
 			$('.natural').show();
 			$('.juridica').hide();
 			$('.juridica input').removeClass('valid');
 			$('.natural input').addClass('valid');
+			$('.'+opt+' input').prop('required',true);
+			$('.'+opt+' input').addClass('valid');
+			$('.'+opt).show();
+			if(opt == 'Nacional'){
+				$('#formPersona #nRutPer').val(value);
+			}else{
+				$('#formPersona #xPasaporte').val(value);
+			}
 		}
 
 		$('#modalReg').modal('show');
@@ -237,8 +281,14 @@ init.push(function () {
 	    var inputName = tipo == 'j' ? $(form+' #xRazSoc') : $(form+' #xNombrePaciente');
 	    var inputId = tipo == 'j' ? $(form+' #cliente_id') : $(form+' #paciente_id');
 	    var ocultar = tipo == 'j' ? '.add-cliente' : '.add-paciente';
+	    var opt = $('#nTipPerDesc').val();
+	    var optVal = $('#nTipPer').val();
 
 	    var str = $(formPersona).serialize()+'&accion=add';
+
+	    if(tipo == 'n'){
+	    	str += '&nTipPer='+optVal+'&nTipPerDesc='+opt;
+	    }
 
 	    $.ajax({
 			beforeSend: function(){
@@ -279,7 +329,7 @@ init.push(function () {
 		var tipo = $(this).val();
 		var name_tipo_doc = $(form+' #tipoDocumento_id option:selected').text();
 		$(form+' #name_tipo_doc').val(name_tipo_doc);
-		console.log('cargo');
+		//console.log('cargo');
 		cargarRolesPorTipoDocumento(tipo);
 	});
 
@@ -842,4 +892,24 @@ function listUsersPerRol(rol){
 		}
 	});
 
+}
+
+function changeTipoPaciente(option){
+
+    let txt = $('#nTipPer option[value="'+option+'"]:selected').text(); 
+    
+    $('.valor input').prop('required',false);
+    $('.valor input').removeClass('valid')
+    $('.valor input').val('');
+    $('.valor').hide();
+    $('#nTipPerDesc').val('');
+    $('.add-paciente').hide();
+    $('.search-paciente').prop('disabled',false);
+        
+    if(['Nacional','Extranjero'].includes(txt.trim())){
+        
+        $('.'+txt).show();
+        $('.'+txt+' input').prop('required',true);
+        $('#nTipPerDesc').val(txt);
+    }
 }

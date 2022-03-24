@@ -320,7 +320,7 @@ class DatosTabla{
         $salida_reg_error = '';
 
         $xidelem = $datos['xidelem'];
-        $tab_id = $xidelem['TAB_ID']; //CODIGO
+        $tab_id = array_key_exists('TAB_ID', $xidelem) ? $xidelem['TAB_ID'] : uniqid(); //CODIGO
         $label = $datos['label'];
         $cidtabla = mb_strtoupper($datos['cidtabla'],'UTF-8');
 
@@ -329,9 +329,10 @@ class DatosTabla{
         $cidtabla = $datos['cidtabla'];
 
         //VALIDAR CODIGO REGISTRO
-        if($xidelem["TAB_ID"] != ''){
+        //if($xidelem["TAB_ID"] != ''){
+        if($tab_id != ''){
 
-            $value = $xidelem["TAB_ID"];
+            $value = $tab_id; //$xidelem["TAB_ID"];
             $value = mb_strtoupper($value,'UTF-8');
             $estructura = $value.'@TAB_ID@'.$cidtabla;
 
@@ -389,7 +390,7 @@ class DatosTabla{
                 if($count_reg_validos > 0 && $salida_reg_error == ''){
                     $mensajeError = "Se guardo correctamente el registro.";
                 }else{
-                    $mensajeError = "Se guardo el registro, menos estos valores:<br>".$salida_reg_error;
+                    $mensajeError = "Se guardo el registro, menos estos valores:<br>".$salida_reg_error.$salida_reg_error;
                 }
 
             }else{
@@ -540,9 +541,11 @@ class DatosTabla{
 
         $id_tbl = $datos['id_tbl'];
         $xidelem = $datos['xidelem'];
-        $tab_id = $xidelem['TAB_ID'];
+        $tab_id = array_key_exists('TAB_ID', $xidelem) ? $xidelem['TAB_ID'] : '' ;
         $label = $datos['label'];
         $cidtabla = mb_strtoupper($datos['cidtabla'],'UTF-8');
+
+        //print_r($id_tbl); exit();
 
         //VALIDAR CAMPOS
         $estructura = '';

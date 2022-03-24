@@ -76,9 +76,18 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
               <div class="wizard-content panel">
                 <div class="wizard-pane" id="datos">
                   <div class="row">
-
-                    <div class="col-sm-3">
-      								<div class="form-group no-margin-hr">
+                    <div class="col-sm-2">
+                      <div class="form-group no-margin-hr">
+                        <label class="control-label">Tipo Paciente</label>
+                        <select class="form-control" id="nTipPer" required="">
+                          <?php echo Persona::listaSelectCtr('TIPOPERSONA',false); ?>
+                        </select>
+                      </div>
+                      <input type="" id="nTipPerDesc">
+                    </div>
+                    
+                    <div class="col-sm-2">
+      								<div class="form-group no-margin-hr valor Nacional">
                         <label class="control-label">RUT Paciente</label>
       									<div class="input-group">
                           <input type="text" id="rut_paciente" class="form-control rut_paciente valid">
@@ -94,8 +103,26 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                             </button>
                           </span>
                         </div>
-                        <input type="hidden" name="paciente_id" id="paciente_id" value="0" required>
                       </div>
+                      <div class="form-group no-margin-hr valor Extranjero" style="display:none;">
+                        <label class="control-label">N° Pasaporte</label>
+                        <div class="input-group">
+                          <input type="text" id="xPasaporte" class="form-control xPasaporte alphanum">
+                          <span class="input-group-btn">
+                            <button type="button" data-show="add-paciente" 
+                            data-input="xPasaporte" data-type="paciente" data-display="xNombrePaciente"
+                              data-displayId = "paciente_id"
+                              class="btn btn-primary search search-paciente">
+                              <i class="fas fa-search"></i>
+                            </button>
+                            <button type="button" data-show="search-paciente" data-display="xNombrePaciente" data-displayId = "paciente_id"
+                              data-input="xPasaporte" data-type="paciente" style="display:none;" class="btn btn-success add-persona add add-paciente">
+                              <i class="fas fa-user-plus"></i>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                      <input type="hidden" name="paciente_id" id="paciente_id" value="0" required>
       							</div>
 
       							<div class="col-sm-3">
@@ -105,7 +132,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
       								</div>
       							</div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
       								<div class="form-group no-margin-hr">
       									<label class="control-label">RUT Cliente</label>
       									<div class="input-group">
@@ -274,10 +301,17 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
             <div class="modal-body">
               <form id="formPersona" class="form-horizontal">
                 <input type="hidden" name="xTipoPer" id="xTipoPer" class="form-control" required>
-                <div class="form-group">
+                <div class="form-group Nacional">
                   <label class="col-sm-4 control-label">RUT</label>
                   <div class="col-sm-6">
                       <input name="nRutPer" id="nRutPer" class="form-control rut_persona" type="text" required>
+                  </div>
+                </div>
+
+                <div class="form-group Extranjero">
+                  <label class="col-sm-4 control-label">Pasaporte</label>
+                  <div class="col-sm-6">
+                      <input name="xPasaporte" id="xPasaporte" class="form-control alphanum" type="text">
                   </div>
                 </div>
 

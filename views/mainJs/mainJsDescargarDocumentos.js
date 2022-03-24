@@ -46,6 +46,9 @@ init.push(function () {
 	              	d.estadoDoc = $('#estadoDoc').val();
 	              }
 	              
+	              if(view == 'consulta_externa'){
+	              	d.estadoDoc = '2';
+	              }
 	          },
 	          complete: function(res){
 	              //console.log(res);

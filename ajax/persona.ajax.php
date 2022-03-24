@@ -9,11 +9,25 @@ class PersonaAjax {
 
   public function getDataPersonaAjax(){
 
+    $request = $this->request;
     $type = $this->request['type'] == 'paciente' ? 'n' : 'j' ;
     $params = array(
       'table'=>'persona',
-      'where'=>[['nRutPer',$this->request['rut']],['xTipoPer',$type]]
+      'where'=>[['xTipoPer',$type]]
     );
+
+    if($type == 'n'){
+
+      if($request['nTipPerDesc'] == 'Nacional'){
+        $params['where'][] = ['nRutPer',$request['rut']];
+      }else{
+        $params['where'][] = ['xPasaporte',$request['value']];
+      }
+
+    }else{
+      $params['where'][] = ['nRutPer',$request['rut']];
+    }
+
     $respuesta = Persona::itemDetail($params);
 
     if($respuesta['respuesta']){
@@ -46,12 +60,26 @@ class PersonaAjax {
 
     if($respuesta['respuesta']){
 
+      $type = $params['xTipoPer'];
+
       $where = array(
         'table' => 'persona',
         'where' => array(
-          ['nRutPer',$this->request['nRutPer']],['xTipoPer',$this->request['xTipoPer']]
+          ['xTipoPer',$type]
         )
       );
+
+      if($type == 'n'){
+
+        if($params['nTipPerDesc'] == 'Nacional'){
+          $where['where'][] = ['nRutPer',$params['nRutPer']];
+        }else{
+          $where['where'][] = ['xPasaporte',$params['xPasaporte']];
+        }
+
+      }else{
+        $where['where'][] = ['nRutPer',$params['nRutPer']];
+      }
 
       $persona = Persona::itemDetail($where);
 
@@ -76,7 +104,7 @@ class PersonaAjax {
     echo json_encode(array(
         'respuesta' => $respuesta['respuesta'],
         'mensaje' => $respuesta['mensaje'],
-        'data' => $persona['data']
+        'data' => $respuesta['respuesta'] ? $persona['data'] : []
       )
     );
 

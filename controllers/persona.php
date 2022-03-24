@@ -21,15 +21,18 @@ class Persona extends Controller{
 
         if($buscar != ''){
             if($datos['tipo']=='n'){
-                $where ="  CONCAT(p.nRutPer,' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat,' ',t.xvalor1) LIKE  '%".$buscar."%' AND ";
+                //$where ="  CONCAT(p.nRutPer,' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat,' ',t.xvalor1) LIKE  '%".$buscar."%' AND "; //old
+                $where ="  CONCAT(p.nRutPer,' ',p.xPasaporte,' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat) LIKE  '%".$buscar."%' AND ";
             }elseif ($datos['tipo']=='j') {
-
-                $where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',t.xvalor1,' ',p.xActEco) LIKE  '%".$buscar."%' AND ";
+                //$where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',t.xvalor1,' ',p.xActEco) LIKE  '%".$buscar."%' AND "; //old
+                $where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',p.xActEco) LIKE  '%".$buscar."%' AND ";
             }
 
         }
 
         $where .= sprintf(" p.xTipoPer = '%s' AND p.deleted = '0' ",$datos['tipo']);
+
+        //echo $where;
 
         //cantidad de registros
         $cantidad = PersonaModel::mostrarPersonaGeneralModel($where,$datos['tabla']);
@@ -74,12 +77,22 @@ class Persona extends Controller{
                             $cargo = DatosTablaModel::firstOrAll('tabla_logica',$where,'first');
                             $cargo_label = $cargo['xvalor1'];
                         }
+
+                        $xDocumento = "";
+
+                        if($valor['nRutPer'] != ''){
+                            $xDocumento = 'Rut | '.$valor['nRutPer'];
+                        }
+
+                        if($valor['xPasaporte']){
+                            $xDocumento = 'Pas. | '.$valor['xPasaporte'];
+                        }
                             
 
                         $contenido .= '
                             <tr>
                                 <td>'.$i.'</td>
-                                <td>'.$valor['nRutPer'].'</td>
+                                <td>'.$xDocumento.'</td>
                                 <td>'.$valor['xNombre'].'</td>
                                 <td>'.$apellidos.'</td>
                                 <td>'.$cargo_label.'</td>
@@ -156,7 +169,7 @@ class Persona extends Controller{
 
                 $thead .='
                         <th>#</th>
-                        <th>Rut</th>
+                        <th>N° Documento</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
                         <th>Tipo Cargo</th>
@@ -370,15 +383,19 @@ class Persona extends Controller{
         return $salida;
     }
 
-    public static function listaSelectCtr($table){
-
-        $contenido = '<option value=""></option>';
+    public static function listaSelectCtr($table,$vacio = true){
+        echo ''.$vacio;
+        $contenido = $vacio ? '<option value="">-Seleccionar-</option>' : '';
+        $i = 0;
+        $selected = '';
 
         $data = TablaCustomModel::mostrarDatosTablaMdl($table);
 
         if(count($data) > 0){
             foreach ($data as $key => $value) {
-                $contenido .= sprintf('<option value="%d">%s</option>',$value['id_tbl'],$value['xvalor1']) ;
+                $selected = $vacio == false && $i == 0 ? 'selected' : '';
+                $contenido .= sprintf('<option value="%d" %s>%s</option>',$value['id_tbl'],$selected,$value['xvalor1']) ;
+                $i++;
             }
         }
 

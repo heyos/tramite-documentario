@@ -812,4 +812,30 @@ class DocumentoController extends Controller {
 
 	}
 
+	public static function createQr($codigo){
+
+		//qr
+		$dir = Config::rutas();
+		$dirQr = $dir['qr'].'/';
+		$dirImgQr = $dirQr.$codigo.'.png';
+		$imageData = '';
+
+		//GENERAR QR
+		if(!is_dir($dirQr)){
+          mkdir($dirQr,0777,true);
+        }
+
+        $url = str_replace('ajax/','',BASE_URL);
+		$textoQr = $url.'?action=ver&term='.$codigo;
+
+        QRcode::png($textoQr, $dirImgQr, 'H', 5);
+
+        if(!file_exists($dirImgQr)){
+			$dirImgQr = '../views/images/no_disponible.png';
+		}
+
+		return $dirImgQr;
+
+	}
+
 }

@@ -86,9 +86,37 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                     <input type="hidden" name="id" id="id" value="0">
                     <input type="hidden" name="xTipoPer" id="xTipoPer" value="n">
                     <div class="form-group">
-                        <label>RUT</label>
-                        <input name="nRutPer" id="nRutPer" class="form-control" type="text" required>
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <div class="form-group">
+                                    <label>Tipo Paciente</label>
+                                    <select class="form-control" name="nTipPer" id="nTipPer" required="">
+                                        <?php echo Persona::listaSelectCtr('TIPOPERSONA'); ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" name="nTipPerDesc" id="nTipPerDesc">
+                            <div class="col-sm-7 col-xs-12 temp">
+                                <label style="color:#fff">-</label>
+                                <input class="form-control" type="text" disabled>
+                            </div>
+                            <div class="col-sm-7 col-xs-12 valor Nacional" style="display: none;">
+                                <div class="form-group">
+                                    <label>RUT</label>
+                                    <input name="nRutPer" id="nRutPer" class="form-control" type="text">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-7 col-xs-12 valor Extranjero" style="display: none;">
+                                <div class="form-group">
+                                    <label>Pasaporte</label>
+                                    <input name="xPasaporte" id="xPasaporte" class="form-control alphanum" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
+                    
                     <div class="form-group">
                         <label>Nombre</label>
                         <input name="xNombre" id="xNombre" class="form-control alpha" type="text" maxlength="40" required>
