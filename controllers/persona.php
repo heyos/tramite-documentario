@@ -384,7 +384,7 @@ class Persona extends Controller{
     }
 
     public static function listaSelectCtr($table,$vacio = true){
-        echo ''.$vacio;
+        //echo ''.$vacio;
         $contenido = $vacio ? '<option value="">-Seleccionar-</option>' : '';
         $i = 0;
         $selected = '';
@@ -394,7 +394,8 @@ class Persona extends Controller{
         if(count($data) > 0){
             foreach ($data as $key => $value) {
                 $selected = $vacio == false && $i == 0 ? 'selected' : '';
-                $contenido .= sprintf('<option value="%d" %s>%s</option>',$value['id_tbl'],$selected,$value['xvalor1']) ;
+                $txt = $value['xvalor1'];
+                $contenido .= sprintf('<option value="%d" %s data-txt="%s">%s</option>',$value['id_tbl'],$selected,$txt,$txt) ;
                 $i++;
             }
         }

@@ -331,7 +331,9 @@ class DocumentoController extends Controller {
                 d.fecha_crea,
                 CONCAT(u.nombres,' ',u.apellidos),
                 r.descripcion,
-                d.google_id
+                d.google_id,
+                p.xPasaporte,
+                p.nTipPer
                 "; //columnas
 
         $params = array(
@@ -373,7 +375,9 @@ class DocumentoController extends Controller {
 	    		'paciente_full' => $documento[9].' '.$documento[10],
 	    		'usuario_crea_full' => $documento[16],
 	    		'rol_usuario_crea' => $documento[17],
-	    		'google_id' => $documento[18]
+	    		'google_id' => $documento[18],
+	    		'xPasaporte' => $documento[19],
+	    		'nTipPer' => $documento[20]
 	    	);
 
 	    	$lista = json_decode($documento[6],true);

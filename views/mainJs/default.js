@@ -233,7 +233,7 @@ function cargarDataModal(url,type,str,modal,form,callback=null){
                     }
                 });
 
-				console.log(response)
+				//console.log(response)
 
                 if(modal != ''){
                     $(modal).modal('show');

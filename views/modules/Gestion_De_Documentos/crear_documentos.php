@@ -83,7 +83,7 @@ $mantenimiento = $enlaces->mantenimientoDatosController();
                           <?php echo Persona::listaSelectCtr('TIPOPERSONA',false); ?>
                         </select>
                       </div>
-                      <input type="" id="nTipPerDesc">
+                      <input type="hidden" id="nTipPerDesc">
                     </div>
                     
                     <div class="col-sm-2">

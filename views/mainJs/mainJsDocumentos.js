@@ -592,7 +592,7 @@ init.push(function () {
 		var url = "ajax/documentos.ajax.php";
 
 		cargarDataModal(url,'',str,'',form,function(result,data){
-
+			
 			if(result){
 				cargarRolesPorTipoDocumento(data.tipoDocumento_id);
 				$(form +' .users-aptos').html(data.users_aptos);
@@ -606,6 +606,9 @@ init.push(function () {
 					$(form +' .tieneDocumento').hide();
 					$(form+' .noTieneDocumento').show();
 				}
+
+				let opt = data.nTipPer;
+				changeTipoPaciente(opt,'edit');
 				
 			}
 		});
@@ -894,9 +897,19 @@ function listUsersPerRol(rol){
 
 }
 
-function changeTipoPaciente(option){
+function changeTipoPaciente(option,accion='add'){
 
-    let txt = $('#nTipPer option[value="'+option+'"]:selected').text(); 
+    let txt = $('#nTipPer option[value="'+option+'"]:selected').text();
+
+    let value = '';
+
+    if(txt=='Nacional'){
+        value = $('#nRutPer').val();
+    }else{
+        value = $('#xPasaporte').val();
+    }
+
+    console.log('value',txt,value);
     
     $('.valor input').prop('required',false);
     $('.valor input').removeClass('valid')
@@ -905,6 +918,14 @@ function changeTipoPaciente(option){
     $('#nTipPerDesc').val('');
     $('.add-paciente').hide();
     $('.search-paciente').prop('disabled',false);
+
+    if(accion == 'edit'){
+        if(txt=='Nacional'){
+            $('#nRutPer').val(value);
+        }else{
+            $('#xPasaporte').val(value);
+        }
+    }
         
     if(['Nacional','Extranjero'].includes(txt.trim())){
         

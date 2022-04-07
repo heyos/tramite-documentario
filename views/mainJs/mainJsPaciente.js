@@ -283,6 +283,10 @@ function cargarDataFormulario(term,form='',accion=''){
                 });
 
                 let option = $('#nTipPer').val();
+                option = option == "" ? 'Nacional' : option;
+                if(option == 'Nacional'){
+                    $(form+' #nTipPer option[data-txt="Nacional"]').prop('selected',true);
+                }
                 changeTipoPaciente(option,'edit');
             }
         },
@@ -395,7 +399,8 @@ function cargarDataDirecciones(term,accion,div){
 
 function changeTipoPaciente(option,accion='add'){
 
-    let txt = $('#nTipPer option[value="'+option+'"]:selected').text();
+    let arrTipoPer = ['Nacional','Extranjero'];
+    let txt = arrTipoPer.includes(option) ? option : $('#nTipPer option[value="'+option+'"]:selected').text();
     let value = "";
     
     if(txt=='Nacional'){
@@ -403,7 +408,7 @@ function changeTipoPaciente(option,accion='add'){
     }else{
         value = $('#xPasaporte').val();
     }
-    console.log(value);
+    //console.log(value);
     $('.valor input').prop('required',false);
     $('.valor input').val('');
     $('.valor').hide();

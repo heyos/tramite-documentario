@@ -124,7 +124,7 @@
                                     <th>#</th>
                                     <th>RUT Empresa</th>
                                     <th>Nombre Empresa</th>
-                                    <th>RUT Paciente</th>
+                                    <th>N° Doc. Paciente</th>
                                     <th>Nombre Paciente</th>
                                     <th>Tipo de Documento</th>
                                     <th>Estado</th>

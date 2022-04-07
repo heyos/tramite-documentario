@@ -35,7 +35,8 @@ class DatatableTipoDocumento  {
                 d.orden_firmante,
                 du.orden_firma,
                 DATE(d.fecha_crea),
-                d.codigo
+                d.codigo,
+                p.xPasaporte
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
@@ -47,7 +48,8 @@ class DatatableTipoDocumento  {
       'tp.descripcion',
       'c.xRazSoc',
       'c.nRutPer',
-      'p.nRutPer'
+      'p.nRutPer',
+      'p.xPasaporte'
     ]; //columnas donde generar la busqueda
 
     $orderColumns = [
@@ -148,6 +150,7 @@ class DatatableTipoDocumento  {
       $check = '';
       $fechaCrea = '';
       $codigo = '';
+      $xPasaporte = '';
 
       foreach ($records as $row) {
 
@@ -166,6 +169,17 @@ class DatatableTipoDocumento  {
         $orden_firma = $row[14];
         $fechaCrea = date('d/m/Y',strtotime($row[15]));
         $codigo = $row[16];
+        $xPasaporte = $row[17];
+
+        $xDocumento = "";
+
+        if($rutPaciente != ''){
+          $xDocumento = 'Rut | '.$rutPaciente;
+        }
+
+        if($xPasaporte){
+          $xDocumento = 'Pas. | '.$xPasaporte;
+        }
 
         $txt = "";
         $css = "";
@@ -317,7 +331,7 @@ class DatatableTipoDocumento  {
           "DT_RowIndex" => $i,
           "rutCliente" => $rutCliente,
           "nomCliente" => $nomCliente,
-          "rutPaciente" => $rutPaciente,
+          "rutPaciente" => $xDocumento,//$rutPaciente,
           "nomPaciente" => $nomPaciente,
           "tipoDocumento" => $tipoDocumento_des,
           "estado" => $labelEstado,
