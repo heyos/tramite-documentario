@@ -22,7 +22,8 @@ class Persona extends Controller{
         if($buscar != ''){
             if($datos['tipo']=='n'){
                 //$where ="  CONCAT(p.nRutPer,' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat,' ',t.xvalor1) LIKE  '%".$buscar."%' AND "; //old
-                $where ="  CONCAT(p.nRutPer,' ',p.xPasaporte,' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat) LIKE  '%".$buscar."%' AND ";
+                $where ="  CONCAT(IFNULL(p.nRutPer,''),' ',IFNULL(p.xPasaporte,''),' ',p.xNombre,' ',p.xApePat,' ',p.xApeMat) 
+                LIKE  '%".$buscar."%' AND ";
             }elseif ($datos['tipo']=='j') {
                 //$where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',t.xvalor1,' ',p.xActEco) LIKE  '%".$buscar."%' AND "; //old
                 $where ="  CONCAT(p.nRutPer,' ',p.xRazSoc,' ',p.xActEco) LIKE  '%".$buscar."%' AND ";

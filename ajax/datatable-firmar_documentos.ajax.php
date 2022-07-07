@@ -27,7 +27,7 @@ class DatatableTipoDocumento  {
                 d.estado_firma,
                 c.nRutPer,
                 c.xRazSoc,
-                p.nRutPer,
+                IFNULL(p.nRutPer,''),
                 CONCAT(p.xNombre,' ',p.xApePat,' ',p.xApeMat) as paciente,
                 tp.descripcion,
                 du.firmado,
@@ -36,7 +36,7 @@ class DatatableTipoDocumento  {
                 du.orden_firma,
                 DATE(d.fecha_crea),
                 d.codigo,
-                p.xPasaporte
+                IFNULL(p.xPasaporte,'')
                 "; //columnas
 
     $mantenimiento = isset($this->request['mantenimiento']) && !empty($this->request['mantenimiento']) ? $this->request['mantenimiento'] : 0;
@@ -48,8 +48,8 @@ class DatatableTipoDocumento  {
       'tp.descripcion',
       'c.xRazSoc',
       'c.nRutPer',
-      'p.nRutPer',
-      'p.xPasaporte'
+      'IFNULL(p.nRutPer,"")',
+      'IFNULL(p.xPasaporte,"")'
     ]; //columnas donde generar la busqueda
 
     $orderColumns = [

@@ -218,6 +218,7 @@ class GoogleDrive {
 
 		$responseOk = false;
 		$data = '';
+		$message = "";
 
 		$routes = Config::rutas();
 
@@ -283,11 +284,14 @@ class GoogleDrive {
 			
 			fclose($fp);
 
+		}else{
+			$message = "No existe en drive";
 		}
 
 		$return = array(
 			'response' => $responseOk,
-			'data' => $data
+			'data' => $data,
+			'message' => $message
 		);
 
 		return $return;

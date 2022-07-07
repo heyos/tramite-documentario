@@ -28,6 +28,8 @@ class PersonaModel extends Model{
         $sql = sprintf("SELECT %s FROM %s %s WHERE %s  %s",
                         $select,$tabla,$join,$where,$limit);
 
+        //echo $sql;
+
         $query = Conexion::conectar()->prepare($sql);
 
         $query -> execute();
